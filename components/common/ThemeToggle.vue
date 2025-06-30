@@ -9,7 +9,7 @@
       }"
       :aria-label="`Toggle theme, currently ${themeLabel} mode`"
     >
-      <!-- Icon transition with Heroicons -->
+      <!-- Icon transition with Heroicons - Fixed sizing to match original -->
       <transition name="theme-toggle" mode="out-in">
         <MoonIcon v-if="isDarkMode" class="w-5 h-5" aria-hidden="true" />
         <SunIcon v-else-if="currentTheme === 'light'" class="w-5 h-5" aria-hidden="true" />
@@ -27,6 +27,7 @@
  * Theme toggle component for 816tech
  * Provides a button to cycle between light, dark, and auto theme modes
  * Updated for Nuxt 3 with Heroicons and enhanced tracking
+ * FIXED: Consistent visual sizing and improved theme detection
  */
 
 // Import Heroicons
@@ -61,15 +62,27 @@ const themeLabel = computed(() => {
 </script>
 
 <style scoped>
-/* Theme toggle animation */
+/* Theme toggle animation - improved timing */
 .theme-toggle-enter-active,
 .theme-toggle-leave-active {
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
 }
 
 .theme-toggle-enter-from,
 .theme-toggle-leave-to {
   opacity: 0;
-  transform: scale(0.8) rotate(30deg);
+  transform: scale(0.8) rotate(20deg);
+}
+
+/* Ensure button has consistent hover state */
+button:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+/* Focus ring for accessibility */
+button:focus-visible {
+  ring-color: var(--color-primary);
+  ring-offset-color: var(--color-surface-primary);
 }
 </style>

@@ -1,6 +1,7 @@
 /**
  * Composable for theme management in Nuxt
  * Provides reactive state and methods for theme management with SSR support
+ * FIXED: Simplified to prevent SSR issues while still preventing FOUC
  * 
  * @returns {Object} Theme utilities and state
  */
@@ -22,6 +23,7 @@ export function useTheme() {
   
   /**
    * Initialize theme based on saved preferences and system settings
+   * FIXED: Avoid duplicate theme application that causes flash
    */
   const initTheme = () => {
     // Only run on client side
@@ -33,19 +35,22 @@ export function useTheme() {
       // Get saved theme from localStorage
       const savedTheme = localStorage.getItem('816tech-theme')
       
-      // Validate and set theme
+      // Validate and set theme (but don't apply - inline script already did)
       if (['dark', 'light', 'auto'].includes(savedTheme)) {
         currentTheme.value = savedTheme
       } else {
         currentTheme.value = 'auto'
       }
       
-      // Apply initial theme
-      applyTheme()
+      // DON'T apply theme here - inline script already applied it
+      // This prevents the flash: applyTheme()
       
       // Set up listener for system preference changes
       const updateSystemPreference = (e) => {
         systemPrefersDark.value = e.matches
+        
+        // Apply theme when system preference changes
+        applyTheme()
         
         // Dispatch event for cross-component communication
         window.dispatchEvent(new CustomEvent('system-theme-changed', {
@@ -126,16 +131,20 @@ export function useTheme() {
    */
   const applyTheme = () => {
     if (import.meta.client) {
-      document.documentElement.classList.toggle('dark', isDarkMode.value)
+      const shouldBeDark = isDarkMode.value
+      document.documentElement.classList.toggle('dark', shouldBeDark)
     }
   }
   
-  // Watch for theme changes and apply them
-  watch(isDarkMode, (newIsDark) => {
+  // Watch for theme changes and apply them (but avoid initial duplicate application)
+  watch(isDarkMode, (newIsDark, oldIsDark) => {
     if (import.meta.client) {
-      document.documentElement.classList.toggle('dark', newIsDark)
+      // Only apply if this is actually a change, not the initial load
+      if (oldIsDark !== undefined && oldIsDark !== newIsDark) {
+        document.documentElement.classList.toggle('dark', newIsDark)
+      }
     }
-  }, { immediate: true })
+  })
   
   // Initialize theme on client mount
   onMounted(() => {

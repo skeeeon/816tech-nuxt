@@ -2,11 +2,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
   
-  // SSG Configuration
+  // SSG Configuration for better performance
   nitro: {
     prerender: {
       routes: ['/']
-    }
+    },
+    // Enable compression in production
+    compressPublicAssets: true
   },
 
   // Ensure proper component auto-imports
@@ -31,7 +33,7 @@ export default defineNuxtConfig({
     ]
   },
 
-  // SEO Configuration
+  // SEO Configuration with Theme Optimization
   app: {
     head: {
       title: '816tech - Enterprise Technology Integration | Kansas City',
@@ -47,7 +49,10 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: '816tech' },
         { property: 'og:locale', content: 'en_US' },
         { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:site', content: '@816tech' }
+        { name: 'twitter:site', content: '@816tech' },
+        // Theme color meta tags for better browser integration
+        { name: 'theme-color', content: '#2563eb', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#0f172a', media: '(prefers-color-scheme: dark)' }
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -63,17 +68,19 @@ export default defineNuxtConfig({
     }
   },
 
-  // Google Fonts
+  // Google Fonts with optimized loading
   googleFonts: {
     families: {
       Inter: [300, 400, 500, 600, 700],
       'JetBrains Mono': [400, 700]
     },
     display: 'swap',
-    preload: true
+    preload: true,
+    prefetch: true,
+    preconnect: true
   },
 
-  // CSS - Simplified without PrimeVue
+  // CSS - Updated path
   css: [
     '~/assets/css/main.css'
   ],
@@ -86,19 +93,36 @@ export default defineNuxtConfig({
     }
   },
 
-  // Tailwind CSS configuration
+  // Tailwind CSS configuration with optimization
   tailwindcss: {
     exposeConfig: true,
     viewer: true,
   },
 
-  // Simplified Vite configuration
+  // Enhanced Vite configuration for performance
   vite: {
     define: {
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false
     },
-    clearScreen: false
+    clearScreen: false,
+    build: {
+      // Restore build optimizations
+      cssCodeSplit: false, // Better for theme switching
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', '@heroicons/vue'],
+          }
+        }
+      }
+    }
+  },
+
+  // Production optimizations
+  experimental: {
+    payloadExtraction: false, // Better for SSG
+    inlineSSRStyles: false // Prevent CSS duplication
   },
 
   // Disable TypeScript checking for now

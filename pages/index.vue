@@ -5,12 +5,15 @@
     <ApproachSection />
     <AboutSection />
     
-    <!-- Enhanced Contact section -->
-    <section id="contact" class="section" 
-             :style="{ backgroundColor: 'var(--color-primary)', color: 'white' }">
+    <!-- Enhanced Contact section with consistent styling -->
+    <section id="contact" class="section contact-section" 
+             style="background-color: #2563eb !important;">
       <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Ready to Transform Your Operations?</h2>
-        <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto text-white opacity-90">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: #ffffff !important;">
+          Ready to Transform Your Operations?
+        </h2>
+        <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto opacity-90" 
+           style="color: #ffffff !important;">
           Let's discuss how 816tech can solve your business challenges and drive measurable results. 
           Contact us for a free consultation and discover what's possible.
         </p>
@@ -20,10 +23,10 @@
           <div v-for="(contact, index) in contactOptions" :key="`contact-${index}`" 
                class="contact-option">
             <div class="contact-icon mb-4">
-              <component :is="contact.iconComponent" class="w-8 h-8 text-white mx-auto" />
+              <component :is="contact.iconComponent" class="w-8 h-8 mx-auto" style="color: #ffffff !important;" />
             </div>
-            <h3 class="text-xl font-semibold mb-2 text-white">{{ contact.title }}</h3>
-            <p class="text-white opacity-80 mb-4">{{ contact.description }}</p>
+            <h3 class="text-xl font-semibold mb-2" style="color: #ffffff !important;">{{ contact.title }}</h3>
+            <p class="mb-4 opacity-80" style="color: #ffffff !important;">{{ contact.description }}</p>
             <NuxtLink :to="contact.href" 
                       class="btn bg-white hover:bg-gray-100 text-blue-600 font-medium"
                       :external="contact.external"
@@ -42,7 +45,7 @@
  * Main landing page for 816tech
  * Comprehensive SEO implementation with structured data
  * Uses centralized navigation and tracking for consistent behavior
- * Updated to use Heroicons instead of PrimeIcons
+ * FIXED: Contact section with consistent background color
  */
 
 // Import Heroicons
