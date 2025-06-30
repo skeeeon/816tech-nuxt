@@ -5,37 +5,22 @@
             borderColor: 'var(--color-border-primary)'
           }">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
         <!-- Company Info -->
         <div>
           <Logo816tech class="mb-4" />
           <p :style="{ color: 'var(--color-content-secondary)' }">
-            Modern enterprise solutions expertly implemented. Serving Kansas City and the greater Midwest region.
+            Enterprise technology integration using proven open-source solutions. 
+            Serving Kansas City and the greater Midwest region with reliable, scalable systems.
           </p>
         </div>
         
         <!-- Solutions -->
         <div>
           <h4 class="text-lg font-semibold mb-4" 
-              :style="{ color: 'var(--color-content-primary)' }">Solutions</h4>
+              :style="{ color: 'var(--color-content-primary)' }">Our Services</h4>
           <ul class="space-y-3">
-            <li v-for="(link, index) in solutionLinks" :key="`solution-${index}`">
-              <NuxtLink :to="link.href" 
-                        class="transition-colors block py-1 hover:text-primary-600"
-                        :style="{ color: 'var(--color-content-secondary)' }"
-                        @click="handleFooterNavigation(link.text, link.href)">
-                {{ link.text }}
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- Industries -->
-        <div>
-          <h4 class="text-lg font-semibold mb-4"
-              :style="{ color: 'var(--color-content-primary)' }">Industries</h4>
-          <ul class="space-y-3">
-            <li v-for="(link, index) in industryLinks" :key="`industry-${index}`">
+            <li v-for="(link, index) in serviceLinks" :key="`service-${index}`">
               <NuxtLink :to="link.href" 
                         class="transition-colors block py-1 hover:text-primary-600"
                         :style="{ color: 'var(--color-content-secondary)' }"
@@ -87,7 +72,8 @@
 <script setup>
 /**
  * Footer component for 816tech
- * Contains company information, solution categories, and contact details
+ * Clean 3-column layout with only existing content
+ * Removed industries section to avoid broken links
  * Uses centralized navigation and tracking for consistent behavior
  * Updated to use Heroicons instead of PrimeIcons
  */
@@ -102,20 +88,13 @@ import Logo816tech from '~/components/common/Logo816tech.vue'
 const { scrollToSection } = useNavigation()
 const { trackNavigation, trackContact } = useTracking()
 
-// Solution links - focused on what 816tech does
-const solutionLinks = [
+// Service links - focused on actual content that exists
+const serviceLinks = [
   { text: 'System Integration', href: '/#solutions' },
   { text: 'Custom Development', href: '/#solutions' },
   { text: 'Infrastructure Design', href: '/#solutions' },
-  { text: 'Ongoing Support', href: '/#approach' }
-]
-
-// Industry links - markets 816tech serves
-const industryLinks = [
-  { text: 'Manufacturing', href: '/#industries' },
-  { text: 'Healthcare', href: '/#industries' },
-  { text: 'Education', href: '/#industries' },
-  { text: 'Commercial Real Estate', href: '/#industries' }
+  { text: 'Our Approach', href: '/#approach' },
+  { text: 'About 816tech', href: '/#about' }
 ]
 
 // Contact information with enhanced tracking data and Heroicon components
