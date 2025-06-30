@@ -1,7 +1,7 @@
 /* 
  * 816tech Main Styles
- * Custom styles optimized for PrimeVue unstyled mode + Tailwind CSS
- * PrimeIcons are automatically included by PrimeVue module
+ * Custom styles optimized for pure Tailwind CSS approach
+ * Simplified and cleaned up after removing PrimeVue
  */
 
 /* CSS Custom Properties for Theming */
@@ -84,7 +84,7 @@ body {
   transition-duration: 150ms;
 }
 
-/* Custom component styles compatible with PrimeVue unstyled mode */
+/* Enhanced button components for consistent styling */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -97,15 +97,18 @@ body {
   text-decoration: none;
   border: none;
   cursor: pointer;
+  font-size: 0.875rem;
 }
 
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
+  border: 2px solid var(--primary-color);
 }
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
@@ -119,6 +122,7 @@ body {
 .btn-secondary:hover {
   background-color: var(--primary-color);
   color: white;
+  transform: translateY(-1px);
 }
 
 .btn-outlined {
@@ -130,6 +134,7 @@ body {
 .btn-outlined:hover {
   background-color: var(--primary-color);
   color: white;
+  transform: translateY(-1px);
 }
 
 /* Focus styles for accessibility */
@@ -219,4 +224,62 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Enhanced component styles */
+.container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Improved hover and focus states */
+a {
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+/* Enhanced form elements if needed */
+input, textarea, select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+/* Icon hover effects */
+svg {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Improved component spacing */
+.space-y-3 > * + * {
+  margin-top: 0.75rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.space-y-8 > * + * {
+  margin-top: 2rem;
 }

@@ -9,8 +9,8 @@
                color: error.statusCode === 404 ? 'var(--color-warning)' : 'var(--color-error)',
                backgroundColor: (error.statusCode === 404 ? 'var(--color-warning)' : 'var(--color-error)') + '15'
              }">
-          <i :class="error.statusCode === 404 ? 'pi pi-search' : 'pi pi-exclamation-triangle'" 
-             class="text-4xl"></i>
+          <MagnifyingGlassIcon v-if="error.statusCode === 404" class="w-10 h-10" />
+          <ExclamationTriangleIcon v-else class="w-10 h-10" />
         </div>
       </div>
 
@@ -33,12 +33,12 @@
       <!-- Action buttons -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <NuxtLink to="/" class="btn btn-primary">
-          <i class="pi pi-home mr-2"></i>
+          <HomeIcon class="w-5 h-5 mr-2" />
           Return Home
         </NuxtLink>
         
         <button @click="handleError" class="btn btn-outlined">
-          <i class="pi pi-refresh mr-2"></i>
+          <ArrowPathIcon class="w-5 h-5 mr-2" />
           Try Again
         </button>
       </div>
@@ -66,7 +66,16 @@
 /**
  * Error page component for 816tech
  * Handles various error states with appropriate messaging and actions
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import {
+  MagnifyingGlassIcon,
+  ExclamationTriangleIcon,
+  HomeIcon,
+  ArrowPathIcon
+} from '@heroicons/vue/24/outline'
 
 // Get error from Nuxt
 const props = defineProps({

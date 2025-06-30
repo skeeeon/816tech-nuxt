@@ -47,8 +47,9 @@
                    class="flex items-start">
                 <div class="differentiator-icon mr-4 mt-1" 
                      :style="{ backgroundColor: differentiator.color + '20' }">
-                  <i :class="differentiator.icon" 
-                     :style="{ color: differentiator.color }"></i>
+                  <component :is="differentiator.iconComponent" 
+                             class="w-5 h-5"
+                             :style="{ color: differentiator.color }" />
                 </div>
                 <div>
                   <h4 class="font-semibold mb-2" 
@@ -100,9 +101,9 @@
                    :key="`cred-${index}`"
                    class="credential-item">
                 <div class="credential-icon-container">
-                  <i :class="credential.icon" 
-                     :style="{ color: 'var(--color-primary)' }"
-                     class="credential-icon"></i>
+                  <component :is="credential.iconComponent" 
+                             class="w-5 h-5 credential-icon"
+                             :style="{ color: 'var(--color-primary)' }" />
                 </div>
                 <div class="credential-content">
                   <h4 class="font-semibold text-sm" 
@@ -122,8 +123,8 @@
           <div class="local-presence p-6 rounded-lg" 
                :style="{ backgroundColor: 'var(--color-surface-primary)' }">
             <div class="flex items-center mb-4">
-              <i class="pi pi-map-marker mr-3" 
-                 :style="{ color: 'var(--color-primary)', fontSize: '1.5rem' }"></i>
+              <MapPinIcon class="w-6 h-6 mr-3" 
+                          :style="{ color: 'var(--color-primary)' }" />
               <h3 class="text-xl font-bold" 
                   :style="{ color: 'var(--color-content-primary)' }">
                 Kansas City Based
@@ -157,7 +158,7 @@
                  class="commitment-item">
               <div class="commitment-icon mb-4" 
                    :style="{ color: commitment.color }">
-                <i :class="commitment.icon"></i>
+                <component :is="commitment.iconComponent" class="w-8 h-8" />
               </div>
               <h4 class="font-semibold mb-2" 
                   :style="{ color: 'var(--color-content-primary)' }">
@@ -187,7 +188,7 @@
           <button 
             @click="navigateToContact('about-experience-difference')"
             class="btn btn-primary inline-flex items-center">
-            <i class="pi pi-comments mr-2"></i>
+            <ChatBubbleLeftEllipsisIcon class="w-5 h-5 mr-2" />
             Start the Conversation
           </button>
         </div>
@@ -201,7 +202,23 @@
  * About section component for 816tech
  * Highlights company background, experience, local presence, and team commitment
  * Uses centralized navigation composable for consistent behavior
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import {
+  CheckBadgeIcon,
+  UsersIcon,
+  WrenchScrewdriverIcon,
+  ShieldCheckIcon,
+  BookOpenIcon,
+  BuildingOfficeIcon,
+  MapPinIcon,
+  StarIcon,
+  EyeIcon,
+  HeartIcon,
+  ChatBubbleLeftEllipsisIcon
+} from '@heroicons/vue/24/outline'
 
 // Use centralized navigation logic
 const { navigateToContact } = useNavigation()
@@ -209,19 +226,19 @@ const { navigateToContact } = useNavigation()
 // Key differentiators for 816tech
 const differentiators = [
   {
-    icon: 'pi pi-verified',
+    iconComponent: CheckBadgeIcon,
     color: '#2563eb',
     title: 'Proven Experience',
     description: '15+ years implementing enterprise technology solutions with a track record of successful projects across multiple industries.'
   },
   {
-    icon: 'pi pi-users',
+    iconComponent: UsersIcon,
     color: '#059669',
     title: 'Business-First Approach',
     description: 'We focus on solving business problems first, then apply the right technology—not the other way around.'
   },
   {
-    icon: 'pi pi-wrench',
+    iconComponent: WrenchScrewdriverIcon,
     color: '#7c3aed',
     title: 'Full-Service Support',
     description: 'From initial consultation through ongoing maintenance—we are your long-term technology partner.'
@@ -236,20 +253,20 @@ const companyStats = [
   { number: '100%', label: 'Open Source' }
 ]
 
-// Fixed credentials and certifications with proper PrimeIcon names
+// Fixed credentials and certifications with Heroicon components
 const credentials = [
   {
-    icon: 'pi pi-shield',
+    iconComponent: ShieldCheckIcon,
     title: 'Security Certified',
     description: 'Certified in cybersecurity and data protection standards'
   },
   {
-    icon: 'pi pi-book',
+    iconComponent: BookOpenIcon,
     title: 'Industry Training',
     description: 'Ongoing education in latest technologies and practices'
   },
   {
-    icon: 'pi pi-building',
+    iconComponent: BuildingOfficeIcon,
     title: 'Vendor Partnerships',
     description: 'Authorized partner with leading technology manufacturers'
   }
@@ -258,19 +275,19 @@ const credentials = [
 // Team commitments
 const commitments = [
   {
-    icon: 'pi pi-star',
+    iconComponent: StarIcon,
     color: '#f59e0b',
     title: 'Quality First',
     description: 'Every solution meets our rigorous quality standards and exceeds client expectations.'
   },
   {
-    icon: 'pi pi-eye',
+    iconComponent: EyeIcon,
     color: '#2563eb',
     title: 'Full Transparency',
     description: 'Clear communication, honest timelines, and upfront pricing—no surprises.'
   },
   {
-    icon: 'pi pi-heart',
+    iconComponent: HeartIcon,
     color: '#dc2626',
     title: 'Long-term Success',
     description: 'We measure our success by your success and build solutions for lasting value.'
@@ -328,7 +345,6 @@ const commitments = [
 }
 
 .credential-icon {
-  @apply text-lg;
 }
 
 .credential-content {
@@ -344,7 +360,8 @@ const commitments = [
 }
 
 .commitment-icon {
-  @apply text-3xl;
+  display: flex;
+  justify-content: center;
 }
 
 /* Enhanced button styling */

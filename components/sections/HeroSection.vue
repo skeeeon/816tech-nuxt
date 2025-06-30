@@ -57,7 +57,7 @@
             @click="scrollToSection('solutions', 'hero-explore')" 
             class="btn btn-secondary-light"
             aria-label="Explore 816tech services">
-            <i class="pi pi-th-large mr-2"></i>
+            <Squares2X2Icon class="w-5 h-5 mr-2" />
             Explore Services
           </button>
         </div>
@@ -71,7 +71,11 @@
  * Hero section component for 816tech
  * Features Kansas City skyline background with open-source expertise messaging
  * Uses centralized navigation composable for consistent behavior
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import { Squares2X2Icon } from '@heroicons/vue/24/outline'
 
 // Use theme composable
 const { isDarkMode } = useTheme()

@@ -53,8 +53,9 @@
           <ul class="space-y-3">
             <li v-for="(contact, index) in contactInfo" :key="`contact-${index}`">
               <div class="flex items-center py-1">
-                <i :class="`pi ${contact.icon} mr-2`" 
-                   :style="{ color: 'var(--color-primary)' }"></i>
+                <component :is="contact.iconComponent" 
+                           class="w-4 h-4 mr-2 flex-shrink-0" 
+                           :style="{ color: 'var(--color-primary)' }" />
                 <NuxtLink v-if="contact.href" 
                           :to="contact.href" 
                           :external="contact.external"
@@ -88,7 +89,11 @@
  * Footer component for 816tech
  * Contains company information, solution categories, and contact details
  * Uses centralized navigation and tracking for consistent behavior
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import { MapPinIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
 
 // Import components using Nuxt aliases for consistency
 import Logo816tech from '~/components/common/Logo816tech.vue'
@@ -113,24 +118,24 @@ const industryLinks = [
   { text: 'Commercial Real Estate', href: '/#industries' }
 ]
 
-// Contact information with enhanced tracking data
+// Contact information with enhanced tracking data and Heroicon components
 const contactInfo = [
   { 
-    icon: 'pi-map-marker', 
+    iconComponent: MapPinIcon,
     text: 'Kansas City, MO',
     href: null,
     external: false,
     type: 'location'
   },
   { 
-    icon: 'pi-phone', 
+    iconComponent: PhoneIcon,
     text: '(816) 800-3299',
     href: 'tel:+18168003299',
     external: true,
     type: 'phone'
   },
   { 
-    icon: 'pi-envelope', 
+    iconComponent: EnvelopeIcon,
     text: 'info@816tech.com',
     href: 'mailto:info@816tech.com',
     external: true,
@@ -182,7 +187,7 @@ a:hover {
 }
 
 /* Icon hover effects */
-.pi:hover {
+svg:hover {
   transform: scale(1.1);
   transition: transform 0.2s ease;
 }

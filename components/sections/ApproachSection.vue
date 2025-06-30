@@ -45,7 +45,7 @@
             <div class="phase-content">
               <div class="phase-icon mb-6" 
                    :style="{ color: phase.color }">
-                <i :class="phase.icon"></i>
+                <component :is="phase.iconComponent" class="w-12 h-12" />
               </div>
               <h3 class="text-2xl font-bold mb-4" 
                   :style="{ color: 'var(--color-content-primary)' }">
@@ -60,7 +60,7 @@
               <div class="phase-activities mb-6">
                 <h4 class="font-semibold mb-4 text-sm uppercase tracking-wide flex items-center" 
                     :style="{ color: phase.color }">
-                  <i class="pi pi-list mr-2"></i>
+                  <ListBulletIcon class="w-4 h-4 mr-2" />
                   Key Activities
                 </h4>
                 <ul class="space-y-3">
@@ -69,8 +69,8 @@
                       class="flex items-start activity-item">
                     <div class="activity-bullet mr-3 mt-1 flex-shrink-0" 
                          :style="{ backgroundColor: phase.color + '20' }">
-                      <i class="pi pi-check text-xs" 
-                         :style="{ color: phase.color }"></i>
+                      <CheckIcon class="w-3 h-3" 
+                                 :style="{ color: phase.color }" />
                     </div>
                     <span class="text-sm leading-relaxed" 
                           :style="{ color: 'var(--color-content-secondary)' }">
@@ -88,7 +88,7 @@
                    }">
                 <h4 class="font-semibold mb-3 text-sm flex items-center" 
                     :style="{ color: 'var(--color-content-primary)' }">
-                  <i class="pi pi-box mr-2" :style="{ color: phase.color }"></i>
+                  <CubeIcon class="w-4 h-4 mr-2" :style="{ color: phase.color }" />
                   Deliverables:
                 </h4>
                 <p class="text-sm leading-relaxed" 
@@ -118,7 +118,7 @@
                        color: 'var(--color-primary)',
                        backgroundColor: 'var(--color-primary)' + '15'
                      }">
-                  <i :class="benefit.icon"></i>
+                  <component :is="benefit.iconComponent" class="w-6 h-6" />
                 </div>
               </div>
               <h4 class="font-semibold mb-3 text-lg" 
@@ -150,7 +150,7 @@
           <button 
             @click="navigateToContact('approach-discovery-call')"
             class="btn btn-primary inline-flex items-center text-lg px-8 py-4">
-            <i class="pi pi-calendar mr-3"></i>
+            <CalendarIcon class="w-5 h-5 mr-3" />
             Schedule Discovery Call
           </button>
         </div>
@@ -165,7 +165,22 @@
  * Details the three-phase implementation methodology: Discover, Design, Deploy
  * Features improved visual design with gradient connectors and modern styling
  * Uses centralized navigation composable for consistent behavior
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import {
+  MagnifyingGlassIcon,
+  PaintBrushIcon,
+  Cog6ToothIcon,
+  ListBulletIcon,
+  CheckIcon,
+  CubeIcon,
+  ClockIcon,
+  CurrencyDollarIcon,
+  StarIcon,
+  CalendarIcon
+} from '@heroicons/vue/24/outline'
 
 // Use centralized navigation logic
 const { navigateToContact } = useNavigation()
@@ -174,7 +189,7 @@ const { navigateToContact } = useNavigation()
 const phases = [
   {
     title: 'Discover',
-    icon: 'pi pi-search',
+    iconComponent: MagnifyingGlassIcon,
     color: '#2563eb', // Primary blue
     description: 'We start by deeply understanding your business challenges, current systems, and objectives to ensure our solution aligns perfectly with your needs.',
     activities: [
@@ -188,7 +203,7 @@ const phases = [
   },
   {
     title: 'Design',
-    icon: 'pi pi-palette',
+    iconComponent: PaintBrushIcon,
     color: '#059669', // Green
     description: 'Our team creates detailed system architecture, user interfaces, and integration plans tailored to your specific requirements and existing infrastructure.',
     activities: [
@@ -202,7 +217,7 @@ const phases = [
   },
   {
     title: 'Deploy',
-    icon: 'pi pi-cog',
+    iconComponent: Cog6ToothIcon,
     color: '#ea580c', // Orange
     description: 'Together we implement, test, and launch your solution with comprehensive training and ongoing support to ensure smooth adoption and prolonged success.',
     activities: [
@@ -219,17 +234,17 @@ const phases = [
 // Enhanced benefits of this structured approach
 const approachBenefits = [
   {
-    icon: 'pi pi-clock',
+    iconComponent: ClockIcon,
     title: 'Predictable Timeline',
     description: 'Structured phases with clear milestones ensure projects stay on schedule and meet deadlines, giving you confidence in delivery dates.'
   },
   {
-    icon: 'pi pi-dollar',
+    iconComponent: CurrencyDollarIcon,
     title: 'Budget Certainty',
     description: 'Thorough planning and fixed-price phases eliminate cost surprises and scope creep, protecting your investment.'
   },
   {
-    icon: 'pi pi-star',
+    iconComponent: StarIcon,
     title: 'Quality Assurance',
     description: 'Each phase includes testing and validation to ensure high-quality deliverables and exceptional user satisfaction.'
   }
@@ -301,8 +316,9 @@ const approachBenefits = [
 }
 
 .phase-icon {
-  font-size: 3rem;
   margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .activity-item {
@@ -354,7 +370,6 @@ const approachBenefits = [
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
 }
 
 /* Responsive adjustments */

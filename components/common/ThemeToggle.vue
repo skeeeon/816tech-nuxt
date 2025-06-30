@@ -9,11 +9,11 @@
       }"
       :aria-label="`Toggle theme, currently ${themeLabel} mode`"
     >
-      <!-- Icon transition -->
+      <!-- Icon transition with Heroicons -->
       <transition name="theme-toggle" mode="out-in">
-        <i v-if="isDarkMode" class="pi pi-moon text-xl" aria-hidden="true"></i>
-        <i v-else-if="currentTheme === 'light'" class="pi pi-sun text-xl" aria-hidden="true"></i>
-        <i v-else class="pi pi-desktop text-xl" aria-hidden="true"></i>
+        <MoonIcon v-if="isDarkMode" class="w-5 h-5" aria-hidden="true" />
+        <SunIcon v-else-if="currentTheme === 'light'" class="w-5 h-5" aria-hidden="true" />
+        <ComputerDesktopIcon v-else class="w-5 h-5" aria-hidden="true" />
       </transition>
     </button>
     
@@ -26,8 +26,11 @@
 /**
  * Theme toggle component for 816tech
  * Provides a button to cycle between light, dark, and auto theme modes
- * Updated for Nuxt 3 with enhanced tracking
+ * Updated for Nuxt 3 with Heroicons and enhanced tracking
  */
+
+// Import Heroicons
+import { MoonIcon, SunIcon, ComputerDesktopIcon } from '@heroicons/vue/24/outline'
 
 // Use the theme composable
 const { currentTheme, isDarkMode, toggleTheme } = useTheme()

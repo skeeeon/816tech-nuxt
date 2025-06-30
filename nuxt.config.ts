@@ -17,33 +17,12 @@ export default defineNuxtConfig({
     }
   ],
 
-  // Module order is critical - Tailwind before PrimeVue
+  // Simplified modules - PrimeVue removed
   modules: [
     '@nuxtjs/tailwindcss',
-    '@primevue/nuxt-module',
     '@vueuse/nuxt',
     '@nuxtjs/google-fonts'
   ],
-
-  // PrimeVue configuration - exclude components we don't need
-  primevue: {
-    options: {
-      unstyled: true,
-      ripple: true
-    },
-    components: {
-      exclude: [
-        'Form', 
-        'FormField',
-        'Editor',        // Depends on quill
-        'Chart',         // Depends on chart.js
-        'OrganizationChart', // Has complex dependencies
-        'Tree',          // Often has dependency issues
-        'TreeTable',     // Complex dependency
-        'Terminal'       // Not needed for marketing site
-      ]
-    }
-  },
 
   // Enhanced imports configuration
   imports: {
@@ -94,9 +73,8 @@ export default defineNuxtConfig({
     preload: true
   },
 
-  // CSS - Include PrimeIcons explicitly for proper icon display
+  // CSS - Simplified without PrimeVue
   css: [
-    'primeicons/primeicons.css',
     '~/assets/css/main.css'
   ],
 
@@ -126,11 +104,6 @@ export default defineNuxtConfig({
   // Disable TypeScript checking for now
   typescript: {
     typeCheck: false
-  },
-
-  // Build optimization
-  build: {
-    transpile: ['primevue']
   },
 
   ssr: true

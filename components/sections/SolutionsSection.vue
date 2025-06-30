@@ -12,14 +12,14 @@
         <div v-for="(solution, index) in solutions" :key="`solution-${index}`" 
              class="solution-card group">
           
-          <!-- Refined icon container -->
+          <!-- Refined icon container with Heroicons -->
           <div class="solution-icon-container mb-6">
             <div class="solution-icon" 
                  :style="{ 
                    color: solution.color,
                    backgroundColor: solution.color + '12'
                  }">
-              <i :class="solution.icon"></i>
+              <component :is="solution.iconComponent" class="w-8 h-8" />
             </div>
           </div>
 
@@ -39,8 +39,8 @@
                 class="flex items-start text-sm capability-item">
               <div class="capability-bullet mr-3 mt-1 flex-shrink-0" 
                    :style="{ backgroundColor: 'var(--color-success)' + '15' }">
-                <i class="pi pi-check text-xs" 
-                   :style="{ color: 'var(--color-success)' }"></i>
+                <CheckIcon class="w-3 h-3" 
+                           :style="{ color: 'var(--color-success)' }" />
               </div>
               <span class="leading-relaxed" 
                     :style="{ color: 'var(--color-content-secondary)' }">
@@ -66,7 +66,7 @@
           <button 
             @click="scrollToSection('approach', 'solutions-methodology')"
             class="btn btn-outlined">
-            <i class="pi pi-arrow-right mr-2"></i>
+            <ArrowRightIcon class="w-5 h-5 mr-2" />
             Learn About Our Approach
           </button>
         </div>
@@ -80,7 +80,20 @@
  * Solutions section component for 816tech
  * Highlights technology implementation capabilities with elegant, professional styling
  * Uses centralized navigation composable for consistent behavior
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import {
+  Cog6ToothIcon,
+  ChartBarIcon,
+  ShieldCheckIcon,
+  ServerIcon,
+  DevicePhoneMobileIcon,
+  WrenchScrewdriverIcon,
+  CheckIcon,
+  ArrowRightIcon
+} from '@heroicons/vue/24/outline'
 
 // Use centralized navigation logic
 const { scrollToSection } = useNavigation()
@@ -88,7 +101,7 @@ const { scrollToSection } = useNavigation()
 // Technology solution categories - positioned as implementation services
 const solutions = [
   {
-    icon: 'pi pi-cog',
+    iconComponent: Cog6ToothIcon,
     color: '#2563eb', // Primary blue
     title: 'System Integration',
     description: 'Connect disparate systems and create unified ecosystems that work together seamlessly.',
@@ -100,7 +113,7 @@ const solutions = [
     ]
   },
   {
-    icon: 'pi pi-chart-line',
+    iconComponent: ChartBarIcon,
     color: '#059669', // Green
     title: 'Data Analytics & Monitoring',
     description: 'Transform raw data into actionable insights with custom dashboards and analytics.',
@@ -112,7 +125,7 @@ const solutions = [
     ]
   },
   {
-    icon: 'pi pi-shield',
+    iconComponent: ShieldCheckIcon,
     color: '#dc2626', // Red
     title: 'Security & Compliance',
     description: 'Implement robust security measures and ensure compliance with industry standards.',
@@ -124,7 +137,7 @@ const solutions = [
     ]
   },
   {
-    icon: 'pi pi-server',
+    iconComponent: ServerIcon,
     color: '#7c3aed', // Purple
     title: 'Infrastructure Design',
     description: 'Design and deploy scalable infrastructure that grows with your business needs.',
@@ -136,7 +149,7 @@ const solutions = [
     ]
   },
   {
-    icon: 'pi pi-mobile',
+    iconComponent: DevicePhoneMobileIcon,
     color: '#ea580c', // Orange
     title: 'Custom Applications',
     description: 'Develop tailored applications and interfaces that match your specific workflows.',
@@ -148,7 +161,7 @@ const solutions = [
     ]
   },
   {
-    icon: 'pi pi-wrench',
+    iconComponent: WrenchScrewdriverIcon,
     color: '#0891b2', // Cyan
     title: 'Ongoing Support',
     description: 'Comprehensive support services to keep your systems running smoothly.',
@@ -197,7 +210,6 @@ const solutions = [
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
   transition: all 0.2s ease;
 }
 

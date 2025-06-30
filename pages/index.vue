@@ -20,7 +20,7 @@
           <div v-for="(contact, index) in contactOptions" :key="`contact-${index}`" 
                class="contact-option">
             <div class="contact-icon mb-4">
-              <i :class="contact.icon" class="text-3xl text-white"></i>
+              <component :is="contact.iconComponent" class="w-8 h-8 text-white mx-auto" />
             </div>
             <h3 class="text-xl font-semibold mb-2 text-white">{{ contact.title }}</h3>
             <p class="text-white opacity-80 mb-4">{{ contact.description }}</p>
@@ -42,7 +42,11 @@
  * Main landing page for 816tech
  * Comprehensive SEO implementation with structured data
  * Uses centralized navigation and tracking for consistent behavior
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import { PhoneIcon, EnvelopeIcon, CalendarIcon } from '@heroicons/vue/24/outline'
 
 // Import sections - using explicit imports for consistency
 import HeroSection from '~/components/sections/HeroSection.vue'
@@ -160,11 +164,11 @@ useHead({
   ]
 })
 
-// Contact options for the enhanced contact section
+// Contact options for the enhanced contact section with Heroicon components
 const contactOptions = [
   {
     type: 'phone',
-    icon: 'pi pi-phone',
+    iconComponent: PhoneIcon,
     title: 'Call Us',
     description: 'Speak directly with our team about your needs',
     action: 'Call Now',
@@ -173,7 +177,7 @@ const contactOptions = [
   },
   {
     type: 'email',
-    icon: 'pi pi-envelope',
+    iconComponent: EnvelopeIcon,
     title: 'Email Us',
     description: 'Send us details about your project for a detailed response',
     action: 'Send Email',
@@ -182,7 +186,7 @@ const contactOptions = [
   },
   {
     type: 'calendar',
-    icon: 'pi pi-calendar',
+    iconComponent: CalendarIcon,
     title: 'Schedule Meeting',
     description: 'Book a free consultation to discuss your requirements',
     action: 'Book Meeting',

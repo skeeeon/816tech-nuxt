@@ -34,7 +34,8 @@
       :aria-expanded="showMobileMenu ? 'true' : 'false'"
       @click="toggleMobileMenu"
     >
-      <i :class="showMobileMenu ? 'pi pi-times' : 'pi pi-bars'" class="text-base"></i>
+      <XMarkIcon v-if="showMobileMenu" class="w-5 h-5" />
+      <Bars3Icon v-else class="w-5 h-5" />
     </button>
     
     <!-- Mobile Menu Overlay -->
@@ -68,7 +69,7 @@
             aria-label="Close menu"
             @click="closeMobileMenu" 
           >
-            <i class="pi pi-times text-base"></i>
+            <XMarkIcon class="w-5 h-5" />
           </button>
         </div>
         
@@ -104,8 +105,11 @@
 /**
  * Navigation component for 816tech with centralized navigation logic
  * Uses the navigation composable for DRY code and consistent behavior
- * Fixed imports using Nuxt aliases for proper component resolution
+ * Updated to use Heroicons instead of PrimeIcons
  */
+
+// Import Heroicons
+import { XMarkIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 
 // Import components using Nuxt aliases
 import ThemeToggle from '~/components/common/ThemeToggle.vue'

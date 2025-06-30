@@ -1,5 +1,3 @@
-import PrimeUI from 'tailwindcss-primeui'
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -8,9 +6,7 @@ export default {
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./app.vue",
-    "./error.vue",
-    // Include PrimeVue components for proper purging in unstyled mode
-    "./node_modules/primevue/**/*.{js,ts,jsx,tsx}"
+    "./error.vue"
   ],
   darkMode: 'class',
   theme: {
@@ -62,7 +58,5 @@ export default {
       }
     },
   },
-  plugins: [
-    PrimeUI // Official PrimeVue + Tailwind integration
-  ]
+  plugins: []
 }
