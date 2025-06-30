@@ -5,7 +5,7 @@
     <!-- Background image -->
     <div class="absolute inset-0 z-0">
       <img 
-        src="/kansas-city-dusk.jpg" 
+        src="/kansas-city-dusk.webp" 
         alt="Kansas City skyline at dusk" 
         class="w-full h-full object-cover"
       />
