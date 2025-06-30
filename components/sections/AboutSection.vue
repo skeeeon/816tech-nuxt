@@ -171,6 +171,27 @@
           </div>
         </div>
       </div>
+      
+      <!-- Enhanced CTA section linking to contact -->
+      <div class="text-center mt-16 md:mt-20">
+        <div class="max-w-2xl mx-auto p-8 rounded-2xl"
+             :style="{ backgroundColor: 'var(--color-surface-primary)' }">
+          <h3 class="text-xl font-semibold mb-4" 
+              :style="{ color: 'var(--color-content-primary)' }">
+            Ready to Experience the 816tech Difference?
+          </h3>
+          <p class="text-base mb-6" 
+             :style="{ color: 'var(--color-content-secondary)' }">
+            Let's discuss how our proven approach and local expertise can transform your technology challenges into competitive advantages.
+          </p>
+          <button 
+            @click="navigateToContact('about-experience-difference')"
+            class="btn btn-primary inline-flex items-center">
+            <i class="pi pi-comments mr-2"></i>
+            Start the Conversation
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -179,8 +200,11 @@
 /**
  * About section component for 816tech
  * Highlights company background, experience, local presence, and team commitment
- * Updated for Nuxt 3 with enhanced tracking
+ * Uses centralized navigation composable for consistent behavior
  */
+
+// Use centralized navigation logic
+const { navigateToContact } = useNavigation()
 
 // Key differentiators for 816tech
 const differentiators = [
@@ -321,5 +345,15 @@ const commitments = [
 
 .commitment-icon {
   @apply text-3xl;
+}
+
+/* Enhanced button styling */
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 </style>

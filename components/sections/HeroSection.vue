@@ -48,13 +48,13 @@
         
         <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
           <button 
-            @click="scrollToSection('contact')" 
+            @click="navigateToContact('hero-consultation')" 
             class="btn btn-primary"
             aria-label="Schedule a consultation with 816tech">
             Schedule Consultation
           </button>
           <button 
-            @click="scrollToSection('solutions')" 
+            @click="scrollToSection('solutions', 'hero-explore')" 
             class="btn btn-secondary-light"
             aria-label="Explore 816tech services">
             <i class="pi pi-th-large mr-2"></i>
@@ -70,51 +70,14 @@
 /**
  * Hero section component for 816tech
  * Features Kansas City skyline background with open-source expertise messaging
- * Updated for Nuxt 3 with enhanced navigation
+ * Uses centralized navigation composable for consistent behavior
  */
 
 // Use theme composable
 const { isDarkMode } = useTheme()
 
-// Use tracking for CTA interactions
-const { trackCTA, trackNavigation } = useTracking()
-
-/**
- * Scrolls to the specified section with smooth scrolling
- * Enhanced for Nuxt with better navigation tracking
- * @param {string} sectionId - The ID of the section to scroll to
- */
-const scrollToSection = (sectionId) => {
-  // Track navigation event
-  trackNavigation(sectionId, 'hero-cta')
-  
-  // Track specific CTA clicks
-  if (sectionId === 'contact') {
-    trackCTA('hero-consultation')
-  } else if (sectionId === 'solutions') {
-    trackCTA('hero-explore-services')
-  }
-  
-  // Use Nuxt's navigation with hash
-  navigateTo(`/#${sectionId}`)
-  
-  // Also do smooth scroll for immediate UX
-  if (import.meta.client) {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      setTimeout(() => {
-        const headerOffset = 80 // Account for fixed header
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        })
-      }, 100)
-    }
-  }
-}
+// Use centralized navigation logic
+const { scrollToSection, navigateToContact } = useNavigation()
 </script>
 
 <style scoped>

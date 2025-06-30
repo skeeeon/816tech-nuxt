@@ -26,7 +26,8 @@
             <p class="text-white opacity-80 mb-4">{{ contact.description }}</p>
             <NuxtLink :to="contact.href" 
                       class="btn bg-white hover:bg-gray-100 text-blue-600 font-medium"
-                      :external="contact.external">
+                      :external="contact.external"
+                      @click="handleContactClick(contact.type)">
               {{ contact.action }}
             </NuxtLink>
           </div>
@@ -40,16 +41,17 @@
 /**
  * Main landing page for 816tech
  * Comprehensive SEO implementation with structured data
+ * Uses centralized navigation and tracking for consistent behavior
  */
 
-// Import sections
+// Import sections - using explicit imports for consistency
 import HeroSection from '~/components/sections/HeroSection.vue'
 import SolutionsSection from '~/components/sections/SolutionsSection.vue'
 import ApproachSection from '~/components/sections/ApproachSection.vue'
 import AboutSection from '~/components/sections/AboutSection.vue'
 
-// Import SEO composables
-import { useLocalBusiness } from '~/composables/useSeo'
+// Use centralized tracking for contact interactions
+const { trackContact } = useTracking()
 
 // SEO Meta Tags
 useSeoMeta({
@@ -161,6 +163,7 @@ useHead({
 // Contact options for the enhanced contact section
 const contactOptions = [
   {
+    type: 'phone',
     icon: 'pi pi-phone',
     title: 'Call Us',
     description: 'Speak directly with our team about your needs',
@@ -169,6 +172,7 @@ const contactOptions = [
     external: true
   },
   {
+    type: 'email',
     icon: 'pi pi-envelope',
     title: 'Email Us',
     description: 'Send us details about your project for a detailed response',
@@ -177,6 +181,7 @@ const contactOptions = [
     external: true
   },
   {
+    type: 'calendar',
     icon: 'pi pi-calendar',
     title: 'Schedule Meeting',
     description: 'Book a free consultation to discuss your requirements',
@@ -185,6 +190,17 @@ const contactOptions = [
     external: true
   }
 ]
+
+/**
+ * Handle contact option clicks with consistent tracking
+ * @param {string} contactType - Type of contact interaction
+ */
+const handleContactClick = (contactType) => {
+  trackContact(contactType, {
+    source: 'contact-section',
+    location: 'main-page'
+  })
+}
 </script>
 
 <style scoped>
@@ -196,10 +212,29 @@ const contactOptions = [
   @apply p-6 rounded-lg;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .contact-option:hover {
   background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.contact-icon {
+  transition: transform 0.3s ease;
+}
+
+.contact-option:hover .contact-icon {
+  transform: scale(1.1);
+}
+
+/* Enhanced button styling for contact options */
+.contact-option .btn {
+  transition: all 0.2s ease;
+}
+
+.contact-option .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 </style>

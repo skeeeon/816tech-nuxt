@@ -55,14 +55,20 @@
         </div>
       </div>
       
-      <!-- Natural transition without forced CTA -->
+      <!-- Natural transition with navigation to approach section -->
       <div class="text-center mt-16 md:mt-20">
         <div class="max-w-3xl mx-auto">
-          <p class="text-lg leading-relaxed" 
+          <p class="text-lg leading-relaxed mb-8" 
              :style="{ color: 'var(--color-content-secondary)' }">
             Every solution is delivered through our proven three-phase methodology, 
             ensuring projects are completed on time, on budget, and exceeding expectations.
           </p>
+          <button 
+            @click="scrollToSection('approach', 'solutions-methodology')"
+            class="btn btn-outlined">
+            <i class="pi pi-arrow-right mr-2"></i>
+            Learn About Our Approach
+          </button>
         </div>
       </div>
     </div>
@@ -71,13 +77,13 @@
 
 <script setup>
 /**
- * Refined Solutions section component for 816tech
+ * Solutions section component for 816tech
  * Highlights technology implementation capabilities with elegant, professional styling
- * Updated for Nuxt 3 with enhanced navigation
+ * Uses centralized navigation composable for consistent behavior
  */
 
-// Use tracking for section interactions
-const { trackCTA, trackNavigation } = useTracking()
+// Use centralized navigation logic
+const { scrollToSection } = useNavigation()
 
 // Technology solution categories - positioned as implementation services
 const solutions = [
@@ -154,33 +160,6 @@ const solutions = [
     ]
   }
 ]
-
-/**
- * Scroll to specified section with enhanced tracking
- * @param {string} sectionId - ID of the section to scroll to
- */
-const scrollToSection = (sectionId) => {
-  trackNavigation(sectionId, 'solutions-section')
-  
-  // Use Nuxt navigation
-  navigateTo(`/#${sectionId}`)
-  
-  if (import.meta.client) {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      setTimeout(() => {
-        const headerOffset = 80
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        })
-      }, 100)
-    }
-  }
-}
 </script>
 
 <style scoped>

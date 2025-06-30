@@ -148,7 +148,7 @@
             and explore how modern technology can transform your operations.
           </p>
           <button 
-            @click="scrollToSection('contact')"
+            @click="navigateToContact('approach-discovery-call')"
             class="btn btn-primary inline-flex items-center text-lg px-8 py-4">
             <i class="pi pi-calendar mr-3"></i>
             Schedule Discovery Call
@@ -164,11 +164,11 @@
  * Enhanced Our Approach section component for 816tech
  * Details the three-phase implementation methodology: Discover, Design, Deploy
  * Features improved visual design with gradient connectors and modern styling
- * Updated for Nuxt 3 with enhanced navigation and tracking
+ * Uses centralized navigation composable for consistent behavior
  */
 
-// Use tracking for interactions
-const { trackCTA, trackNavigation } = useTracking()
+// Use centralized navigation logic
+const { navigateToContact } = useNavigation()
 
 // Three-phase methodology with enhanced styling
 const phases = [
@@ -234,35 +234,6 @@ const approachBenefits = [
     description: 'Each phase includes testing and validation to ensure high-quality deliverables and exceptional user satisfaction.'
   }
 ]
-
-/**
- * Scroll to specified section with enhanced tracking
- * @param {string} sectionId - ID of the section to scroll to
- */
-const scrollToSection = (sectionId) => {
-  // Track the CTA interaction
-  trackCTA('approach-discovery-call')
-  trackNavigation(sectionId, 'approach-section')
-  
-  // Use Nuxt navigation
-  navigateTo(`/#${sectionId}`)
-  
-  if (import.meta.client) {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      setTimeout(() => {
-        const headerOffset = 80
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        })
-      }, 100)
-    }
-  }
-}
 </script>
 
 <style scoped>

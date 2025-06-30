@@ -9,6 +9,14 @@ export default defineNuxtConfig({
     }
   },
 
+  // Ensure proper component auto-imports
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false
+    }
+  ],
+
   // Module order is critical - Tailwind before PrimeVue
   modules: [
     '@nuxtjs/tailwindcss',
@@ -17,16 +25,22 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts'
   ],
 
-  // PrimeVue configuration - unstyled mode for best Tailwind integration
+  // PrimeVue configuration - exclude form components we don't need
   primevue: {
     options: {
       unstyled: true,
       ripple: true
     },
-    // Disable auto-import for components we don't need
     components: {
       exclude: ['Form', 'FormField']
     }
+  },
+
+  // Enhanced imports configuration
+  imports: {
+    dirs: [
+      'composables'
+    ]
   },
 
   // SEO Configuration
@@ -71,7 +85,7 @@ export default defineNuxtConfig({
     preload: true
   },
 
-  // CSS - Only PrimeIcons and custom styles (no theme CSS needed with unstyled mode)
+  // CSS - Include PrimeIcons explicitly for proper icon display
   css: [
     'primeicons/primeicons.css',
     '~/assets/css/main.css'
@@ -91,12 +105,23 @@ export default defineNuxtConfig({
     viewer: true,
   },
 
-  // Vite configuration
+  // Simplified Vite configuration
   vite: {
     define: {
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false
-    }
+    },
+    clearScreen: false
+  },
+
+  // Disable TypeScript checking for now
+  typescript: {
+    typeCheck: false
+  },
+
+  // Build optimization
+  build: {
+    transpile: ['primevue']
   },
 
   ssr: true

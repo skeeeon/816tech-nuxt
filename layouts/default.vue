@@ -11,10 +11,12 @@
 <script setup>
 /**
  * Default layout for 816tech Nuxt application
- * Provides the main structure for all pages
+ * Provides the main structure for all pages with explicit component imports
  */
-import { useTheme } from '~/composables/useTheme'
-import { useTracking } from '~/composables/useTracking'
+
+// Explicit component imports to resolve auto-import issues
+import TheHeader from '~/components/layout/TheHeader.vue'
+import TheFooter from '~/components/layout/TheFooter.vue'
 
 // Initialize the theme system
 const { isDarkMode } = useTheme()

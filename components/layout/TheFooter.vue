@@ -23,7 +23,7 @@
               <NuxtLink :to="link.href" 
                         class="transition-colors block py-1 hover:text-primary-600"
                         :style="{ color: 'var(--color-content-secondary)' }"
-                        @click="trackFooterLink(link.text)">
+                        @click="handleFooterNavigation(link.text, link.href)">
                 {{ link.text }}
               </NuxtLink>
             </li>
@@ -39,7 +39,7 @@
               <NuxtLink :to="link.href" 
                         class="transition-colors block py-1 hover:text-primary-600"
                         :style="{ color: 'var(--color-content-secondary)' }"
-                        @click="trackFooterLink(link.text)">
+                        @click="handleFooterNavigation(link.text, link.href)">
                 {{ link.text }}
               </NuxtLink>
             </li>
@@ -60,7 +60,7 @@
                           :external="contact.external"
                           class="transition-colors hover:text-primary-600"
                           :style="{ color: 'var(--color-content-secondary)' }"
-                          @click="trackContactLink(contact.text)">
+                          @click="handleContactInteraction(contact.type, contact.text)">
                   {{ contact.text }}
                 </NuxtLink>
                 <span v-else :style="{ color: 'var(--color-content-secondary)' }">
@@ -87,11 +87,14 @@
 /**
  * Footer component for 816tech
  * Contains company information, solution categories, and contact details
- * Updated for Nuxt 3 with enhanced tracking
+ * Uses centralized navigation and tracking for consistent behavior
  */
+
+// Import components using Nuxt aliases for consistency
 import Logo816tech from '~/components/common/Logo816tech.vue'
 
-// Use tracking for footer interactions
+// Use centralized navigation and tracking
+const { scrollToSection } = useNavigation()
 const { trackNavigation, trackContact } = useTracking()
 
 // Solution links - focused on what 816tech does
@@ -110,51 +113,77 @@ const industryLinks = [
   { text: 'Commercial Real Estate', href: '/#industries' }
 ]
 
-// Contact information
+// Contact information with enhanced tracking data
 const contactInfo = [
   { 
     icon: 'pi-map-marker', 
     text: 'Kansas City, MO',
     href: null,
-    external: false
+    external: false,
+    type: 'location'
   },
   { 
     icon: 'pi-phone', 
     text: '(816) 800-3299',
     href: 'tel:+18168003299',
-    external: true
+    external: true,
+    type: 'phone'
   },
   { 
     icon: 'pi-envelope', 
     text: 'info@816tech.com',
     href: 'mailto:info@816tech.com',
-    external: true
+    external: true,
+    type: 'email'
   }
 ]
 
 /**
- * Track footer link clicks
+ * Handle footer navigation with consistent tracking
  * @param {string} linkText - The text of the link clicked
+ * @param {string} href - The destination href
  */
-const trackFooterLink = (linkText) => {
-  trackNavigation(linkText.toLowerCase().replace(/\s+/g, '-'), 'footer')
+const handleFooterNavigation = (linkText, href) => {
+  // Extract section from href
+  const section = href.split('#')[1] || 'unknown'
+  
+  // Use centralized navigation if it's an internal section
+  if (href.startsWith('/#')) {
+    scrollToSection(section, 'footer')
+  } else {
+    // Track external navigation
+    trackNavigation(linkText.toLowerCase().replace(/\s+/g, '-'), 'footer')
+  }
 }
 
 /**
- * Track contact link clicks
- * @param {string} contactText - The contact method clicked
+ * Handle contact interactions with enhanced tracking
+ * @param {string} contactType - The type of contact (phone, email, location)
+ * @param {string} contactText - The contact text
  */
-const trackContactLink = (contactText) => {
-  let method = 'unknown'
-  if (contactText.includes('@')) method = 'email'
-  else if (contactText.includes('816')) method = 'phone'
-  
-  trackContact(method, { source: 'footer' })
+const handleContactInteraction = (contactType, contactText) => {
+  trackContact(contactType, { 
+    source: 'footer',
+    value: contactText
+  })
 }
 </script>
 
 <style scoped>
 .container {
   max-width: 1280px;
+}
+
+/* Enhanced hover effects */
+a:hover {
+  color: var(--color-primary) !important;
+  transform: translateX(2px);
+  transition: all 0.2s ease;
+}
+
+/* Icon hover effects */
+.pi:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
 }
 </style>

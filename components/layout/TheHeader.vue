@@ -20,9 +20,11 @@
 /**
  * Main header component for 816tech
  * Contains the logo and main navigation
- * Updated for Nuxt 3 with proper navigation
+ * Fixed imports using Nuxt aliases for consistent resolution
  */
-import TheNavbar from './TheNavbar.vue'
+
+// Use Nuxt aliases for all component imports
+import TheNavbar from '~/components/layout/TheNavbar.vue'
 import Logo816tech from '~/components/common/Logo816tech.vue'
 </script>
 

@@ -3,7 +3,7 @@
   <nav class="hidden md:flex items-center space-x-6">
     <NuxtLink v-for="(item, index) in navItems" :key="`nav-desktop-${index}`"
               :to="`/#${item.id}`" 
-              @click.prevent="scrollToSection(item.id)"
+              @click.prevent="scrollToSection(item.id, 'navbar')"
               class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200"
               :style="{ 
                 color: 'var(--color-content-primary)',
@@ -14,7 +14,7 @@
     </NuxtLink>
     <ThemeToggle class="mr-2" />
     <button 
-      @click="scrollToSection('contact')" 
+      @click="navigateToContact('navbar-get-started')" 
       class="btn btn-primary"
       aria-label="Contact 816tech">
       Get Started
@@ -88,7 +88,7 @@
           <div class="pt-4 mt-2 border-t" 
                :style="{ borderColor: 'var(--color-border-primary)' }">
             <button 
-              @click="scrollToSectionAndCloseMenu('contact')" 
+              @click="scrollToSectionAndCloseMenu('contact', true)" 
               class="btn btn-primary w-full justify-center"
               aria-label="Contact 816tech">
               Get Started
@@ -102,24 +102,19 @@
 
 <script setup>
 /**
- * Navigation component for 816tech with industry-focused navigation
- * Handles smooth scrolling and mobile menu toggle
- * Updated for Nuxt 3 with enhanced navigation and tracking
+ * Navigation component for 816tech with centralized navigation logic
+ * Uses the navigation composable for DRY code and consistent behavior
+ * Fixed imports using Nuxt aliases for proper component resolution
  */
+
+// Import components using Nuxt aliases
 import ThemeToggle from '~/components/common/ThemeToggle.vue'
 import Logo816tech from '~/components/common/Logo816tech.vue'
 
-// Use tracking for navigation events
-const { trackNavigation, trackCTA } = useTracking()
+// Use centralized navigation logic
+const { navItems, scrollToSection, navigateToContact } = useNavigation()
 
-// Navigation items focused on industries and solutions
-const navItems = [
-  { id: 'solutions', label: 'Solutions' },
-  { id: 'approach', label: 'Our Approach' },
-  { id: 'about', label: 'About' }
-]
-
-// Reactive state
+// Mobile menu state management
 const showMobileMenu = ref(false)
 const originalOverflow = ref(null)
 
@@ -159,45 +154,17 @@ const restoreBodyScroll = () => {
 }
 
 /**
- * Smooth scroll to section with enhanced tracking
- * @param {string} sectionId - ID of the section to scroll to
- */
-const scrollToSection = (sectionId) => {
-  // Track navigation
-  trackNavigation(sectionId, 'navbar')
-  
-  // Track CTA if contact section
-  if (sectionId === 'contact') {
-    trackCTA('navbar-get-started')
-  }
-  
-  // Use Nuxt navigation
-  navigateTo(`/#${sectionId}`)
-  
-  if (import.meta.client) {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      setTimeout(() => {
-        const headerOffset = 80 // Account for fixed header
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        })
-      }, 100)
-    }
-  }
-}
-
-/**
  * Scroll to section and close mobile menu
  * @param {string} sectionId - ID of the section to scroll to
+ * @param {boolean} isCTA - Whether this is a CTA interaction
  */
-const scrollToSectionAndCloseMenu = (sectionId) => {
+const scrollToSectionAndCloseMenu = (sectionId, isCTA = false) => {
   closeMobileMenu()
-  scrollToSection(sectionId)
+  if (isCTA) {
+    navigateToContact('mobile-menu')
+  } else {
+    scrollToSection(sectionId, 'mobile-menu')
+  }
 }
 
 // Handle escape key to close menu
