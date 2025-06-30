@@ -25,14 +25,23 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts'
   ],
 
-  // PrimeVue configuration - exclude form components we don't need
+  // PrimeVue configuration - exclude components we don't need
   primevue: {
     options: {
       unstyled: true,
       ripple: true
     },
     components: {
-      exclude: ['Form', 'FormField']
+      exclude: [
+        'Form', 
+        'FormField',
+        'Editor',        // Depends on quill
+        'Chart',         // Depends on chart.js
+        'OrganizationChart', // Has complex dependencies
+        'Tree',          // Often has dependency issues
+        'TreeTable',     // Complex dependency
+        'Terminal'       // Not needed for marketing site
+      ]
     }
   },
 
