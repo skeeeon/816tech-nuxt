@@ -83,12 +83,21 @@ const props = defineProps({
 }
 
 .logo-number {
-  @apply text-blue-600 dark:text-blue-400;
+  color: #2563eb; /* blue-600 */
 }
 
 .logo-suffix {
-  @apply text-slate-600 dark:text-slate-300;
+  color: #475569; /* slate-600 */
   font-weight: 500;
+}
+
+/* Dark mode styles */
+.dark .logo-number {
+  color: #60a5fa; /* blue-400 */
+}
+
+.dark .logo-suffix {
+  color: #cbd5e1; /* slate-300 */
 }
 
 /* Size variants */
@@ -108,18 +117,5 @@ const props = defineProps({
 
 .logo-container.lg .logo-text {
   font-size: 1.75rem;
-}
-
-/* Accessibility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
 }
 </style>

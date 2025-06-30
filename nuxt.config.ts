@@ -9,11 +9,25 @@ export default defineNuxtConfig({
     }
   },
 
+  // Module order is critical - Tailwind before PrimeVue
   modules: [
     '@nuxtjs/tailwindcss',
+    '@primevue/nuxt-module',
     '@vueuse/nuxt',
     '@nuxtjs/google-fonts'
   ],
+
+  // PrimeVue configuration - unstyled mode for best Tailwind integration
+  primevue: {
+    options: {
+      unstyled: true,
+      ripple: true
+    },
+    // Disable auto-import for components we don't need
+    components: {
+      exclude: ['Form', 'FormField']
+    }
+  },
 
   // SEO Configuration
   app: {
@@ -57,10 +71,10 @@ export default defineNuxtConfig({
     preload: true
   },
 
+  // CSS - Only PrimeIcons and custom styles (no theme CSS needed with unstyled mode)
   css: [
-    'primevue/resources/primevue.css',
     'primeicons/primeicons.css',
-    '~/assets/css/tailwind.css'
+    '~/assets/css/main.css'
   ],
 
   // Runtime config for environment variables
@@ -71,12 +85,13 @@ export default defineNuxtConfig({
     }
   },
 
-  // Build configuration
-  build: {
-    transpile: ['primevue']
+  // Tailwind CSS configuration
+  tailwindcss: {
+    exposeConfig: true,
+    viewer: true,
   },
 
-  // Transpile PrimeVue for SSR compatibility
+  // Vite configuration
   vite: {
     define: {
       __VUE_OPTIONS_API__: true,

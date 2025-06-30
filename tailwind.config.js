@@ -1,12 +1,16 @@
+import PrimeUI from 'tailwindcss-primeui'
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
     "./components/**/*.{js,vue,ts}",
-    "./layouts/**/*.vue",
+    "./layouts/**/*.vue", 
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./app.vue",
-    "./error.vue"
+    "./error.vue",
+    // Include PrimeVue components for proper purging in unstyled mode
+    "./node_modules/primevue/**/*.{js,ts,jsx,tsx}"
   ],
   darkMode: 'class',
   theme: {
@@ -28,21 +32,37 @@ module.exports = {
           800: '#1e40af',
           900: '#1e3a8a',
           950: '#172554'
+        }
+      },
+      animation: {
+        'fade-up': 'fadeUp 0.6s ease-out',
+        'pulse-ring': 'pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+      },
+      keyframes: {
+        fadeUp: {
+          'from': {
+            opacity: '0',
+            transform: 'translateY(30px)'
+          },
+          'to': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          }
         },
-        secondary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a'
+        'pulse-ring': {
+          '0%, 100%': {
+            transform: 'scale(1)',
+            opacity: '0.4'
+          },
+          '50%': {
+            transform: 'scale(1.05)',
+            opacity: '0.2'
+          }
         }
       }
     },
   },
-  plugins: [],
+  plugins: [
+    PrimeUI // Official PrimeVue + Tailwind integration
+  ]
 }
