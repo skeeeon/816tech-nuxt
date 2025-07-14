@@ -37,21 +37,27 @@
               :style="{ color: 'var(--color-content-primary)' }">Contact</h4>
           <ul class="space-y-3">
             <li v-for="(contact, index) in contactInfo" :key="`contact-${index}`">
-              <div class="flex items-center py-1">
+              <div class="flex items-start py-1">
                 <component :is="contact.iconComponent" 
-                           class="w-4 h-4 mr-2 flex-shrink-0" 
+                           class="w-4 h-4 mr-2 flex-shrink-0 mt-1" 
                            :style="{ color: 'var(--color-primary)' }" />
-                <NuxtLink v-if="contact.href" 
-                          :to="contact.href" 
-                          :external="contact.external"
-                          class="transition-colors hover:text-primary-600"
-                          :style="{ color: 'var(--color-content-secondary)' }"
-                          @click="handleContactInteraction(contact.type, contact.text)">
-                  {{ contact.text }}
-                </NuxtLink>
-                <span v-else :style="{ color: 'var(--color-content-secondary)' }">
-                  {{ contact.text }}
-                </span>
+                <div class="flex-grow">
+                  <NuxtLink v-if="contact.href" 
+                            :to="contact.href" 
+                            :external="contact.external"
+                            class="transition-colors hover:text-primary-600 block"
+                            :style="{ color: 'var(--color-content-secondary)' }"
+                            @click="handleContactInteraction(contact.type, contact.text)">
+                    <span>{{ contact.text }}</span>
+                    <span v-if="contact.subtitle" 
+                          class="block text-sm opacity-80">{{ contact.subtitle }}</span>
+                  </NuxtLink>
+                  <div v-else :style="{ color: 'var(--color-content-secondary)' }">
+                    <span>{{ contact.text }}</span>
+                    <span v-if="contact.subtitle" 
+                          class="block text-sm opacity-80">{{ contact.subtitle }}</span>
+                  </div>
+                </div>
               </div>
             </li>
           </ul>
@@ -76,6 +82,7 @@
  * Removed industries section to avoid broken links
  * Uses centralized navigation and tracking for consistent behavior
  * Updated to use Heroicons instead of PrimeIcons
+ * UPDATED: Enhanced address formatting with proper Google Maps integration
  */
 
 // Import Heroicons
@@ -98,12 +105,14 @@ const serviceLinks = [
 ]
 
 // Contact information with enhanced tracking data and Heroicon components
+// UPDATED: Full address with proper formatting and Google Maps integration
 const contactInfo = [
   { 
     iconComponent: MapPinIcon,
-    text: 'Kansas City, MO',
-    href: null,
-    external: false,
+    text: '710 Central St',
+    subtitle: 'Kansas City, MO 64105',
+    href: 'https://maps.google.com/?q=710+Central+St,+Kansas+City,+MO+64105',
+    external: true,
     type: 'location'
   },
   { 

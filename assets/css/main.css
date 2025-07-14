@@ -2,6 +2,7 @@
  * 816tech Main Styles
  * Custom styles optimized for pure Tailwind CSS approach
  * Simplified and cleaned up after removing PrimeVue
+ * UPDATED: Removed contact section overrides with !important
  */
 
 /* CSS Custom Properties for Theming */
@@ -335,29 +336,5 @@ svg {
   display: block;
 }
 
-/* Contact section - consistent blue background with white text for contrast */
-.contact-section {
-  background-color: #2563eb !important; /* Blue background in both modes */
-}
-
-.contact-section,
-.contact-section h2,
-.contact-section h3,
-.contact-section p,
-.contact-section span {
-  color: #ffffff !important; /* White text for contrast against blue background */
-}
-
-.contact-section .text-white {
-  color: #ffffff !important;
-}
-
-.contact-section .opacity-90 {
-  opacity: 0.9 !important;
-  color: #ffffff !important;
-}
-
-.contact-section .opacity-80 {
-  opacity: 0.8 !important;
-  color: #ffffff !important;
-}
+/* REMOVED: Contact section overrides with !important declarations */
+/* These have been replaced with proper Tailwind classes in the component */
