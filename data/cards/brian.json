@@ -1,0 +1,38 @@
+{
+  "slug": "brian",
+  "name": "Brian Miller",
+  "title": "Founder/CEO",
+  "company": "816tech",
+  "location": "710 Central St, Kansas City, MO 64105",
+  "image": "/images/team/brian-miller.jpg",
+  "description": "Kansas City's trusted partner for infrastructure, integration, and innovation. We architect robust solutions using proven open-source technologies that scale with your business.",
+  "contacts": {
+    "mobile": {
+      "label": "Mobile",
+      "value": "+1 8168208644",
+      "href": "tel:+18168208644"
+    },
+    "office": {
+      "label": "Office", 
+      "value": "+1 8168003299",
+      "href": "tel:+18168003299"
+    },
+    "email": {
+      "label": "Email",
+      "value": "brian@816tech.com", 
+      "href": "mailto:brian@816tech.com"
+    },
+    "website": {
+      "label": "Website",
+      "value": "816tech.com",
+      "href": "https://816tech.com"
+    },
+    "calendar": {
+      "label": "Calendar",
+      "value": "Schedule Meeting",
+      "href": "https://cal.com/816tech"
+    }
+  },
+  "vcardFilename": "brianmiller.vcf",
+  "active": true
+}

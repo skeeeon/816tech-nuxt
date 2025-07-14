@@ -32,6 +32,7 @@
 /**
  * 816tech logo component
  * Features the distinctive figure-8 diamond design with company name
+ * Updated with showText prop for minimal layouts
  */
 
 // Use the theme composable
@@ -102,12 +103,12 @@ const props = defineProps({
 
 /* Size variants */
 .logo-container.sm .logo-image {
-  height: 32px;
-  width: 26px;
+  height: 28px;
+  width: 22px;
 }
 
 .logo-container.sm .logo-text {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 .logo-container.lg .logo-image {
@@ -117,5 +118,18 @@ const props = defineProps({
 
 .logo-container.lg .logo-text {
   font-size: 1.75rem;
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 </style>

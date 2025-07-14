@@ -5,7 +5,12 @@ export default defineNuxtConfig({
   // SSG Configuration for better performance
   nitro: {
     prerender: {
-      routes: ['/']
+      routes: [
+        '/',
+        '/cards',
+        '/cards/brian'
+        // Add new card routes here as team members are added
+      ]
     },
     // Enable compression in production
     compressPublicAssets: true
@@ -63,6 +68,11 @@ export default defineNuxtConfig({
           defer: true,
           src: 'https://cloud.umami.is/script.js',
           'data-website-id': 'ab7c8a76-31ee-408d-aa07-02f3774d0f73'
+        },
+        // Add QR code library for business cards
+        {
+          src: '/qrcode.min.js',
+          defer: true
         }
       ]
     }
