@@ -5,7 +5,7 @@
             borderColor: 'var(--color-border-primary)'
           }">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
         <!-- Company Info -->
         <div>
           <Logo816tech class="mb-4" />
@@ -62,6 +62,42 @@
             </li>
           </ul>
         </div>
+
+        <!-- Client Portal & Resources -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4"
+              :style="{ color: 'var(--color-content-primary)' }">Client Resources</h4>
+          <ul class="space-y-3">
+            <li>
+              <NuxtLink to="https://816tech.invoicing.co/client"
+                        external
+                        target="_blank"
+                        class="transition-colors block py-1 hover:text-primary-600 inline-flex items-center"
+                        :style="{ color: 'var(--color-content-secondary)' }"
+                        @click="handleBillingClick">
+                <CreditCardIcon class="w-4 h-4 mr-2 flex-shrink-0" 
+                                :style="{ color: 'var(--color-primary)' }" />
+                <div>
+                  <span>Billing Portal</span>
+                  <span class="block text-sm opacity-80">Invoices & Payments</span>
+                </div>
+              </NuxtLink>
+            </li>
+            <li>
+              <div class="flex items-start py-1">
+                <ChatBubbleLeftEllipsisIcon class="w-4 h-4 mr-2 flex-shrink-0 mt-1" 
+                                            :style="{ color: 'var(--color-primary)' }" />
+                <div class="flex-grow">
+                  <span :style="{ color: 'var(--color-content-secondary)' }">Support</span>
+                  <span class="block text-sm opacity-80" 
+                        :style="{ color: 'var(--color-content-secondary)' }">
+                    Available during business hours
+                  </span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
       
       <!-- Bottom section -->
@@ -78,22 +114,27 @@
 <script setup>
 /**
  * Footer component for 816tech
- * Clean 3-column layout with only existing content
- * Removed industries section to avoid broken links
+ * Enhanced with client resources section including billing portal
  * Uses centralized navigation and tracking for consistent behavior
  * Updated to use Heroicons instead of PrimeIcons
- * UPDATED: Enhanced address formatting with proper Google Maps integration
+ * UPDATED: Added billing portal in dedicated "Client Resources" section
  */
 
 // Import Heroicons
-import { MapPinIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
+import { 
+  MapPinIcon, 
+  PhoneIcon, 
+  EnvelopeIcon, 
+  CreditCardIcon, 
+  ChatBubbleLeftEllipsisIcon 
+} from '@heroicons/vue/24/outline'
 
 // Import components using Nuxt aliases for consistency
 import Logo816tech from '~/components/common/Logo816tech.vue'
 
 // Use centralized navigation and tracking
 const { scrollToSection } = useNavigation()
-const { trackNavigation, trackContact } = useTracking()
+const { trackNavigation, trackContact, trackCustomEvent } = useTracking()
 
 // Service links - focused on actual content that exists
 const serviceLinks = [
@@ -105,7 +146,6 @@ const serviceLinks = [
 ]
 
 // Contact information with enhanced tracking data and Heroicon components
-// UPDATED: Full address with proper formatting and Google Maps integration
 const contactInfo = [
   { 
     iconComponent: MapPinIcon,
@@ -158,6 +198,16 @@ const handleContactInteraction = (contactType, contactText) => {
   trackContact(contactType, { 
     source: 'footer',
     value: contactText
+  })
+}
+
+/**
+ * Handle billing portal clicks with tracking
+ */
+const handleBillingClick = () => {
+  trackCustomEvent('billing-portal-click', {
+    source: 'footer',
+    external_url: 'https://816tech.invoicing.co/client'
   })
 }
 </script>
