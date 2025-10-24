@@ -12,7 +12,8 @@ export const useNavigation = () => {
   const navItems = [
     { id: 'solutions', label: 'Solutions' },
     { id: 'approach', label: 'Our Approach' },
-    { id: 'about', label: 'About' }
+    { id: 'about', label: 'About' },
+    { id: 'blog', label: 'Blog', path: '/blog' }
   ]
 
   /**

@@ -63,12 +63,6 @@
             Every solution is delivered through our proven three-phase methodology, 
             ensuring projects are completed on time, on budget, and exceeding expectations.
           </p>
-          <button 
-            @click="scrollToSection('approach', 'solutions-methodology')"
-            class="btn btn-outlined">
-            <ArrowRightIcon class="w-5 h-5 mr-2" />
-            Learn About Our Approach
-          </button>
         </div>
       </div>
     </div>

@@ -15,6 +15,9 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@vueuse/nuxt": "^13.4.0",
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
+    "marked": "^16.4.1",
     "nuxt": "^3.17.5",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"

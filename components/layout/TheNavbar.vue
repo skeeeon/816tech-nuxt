@@ -1,32 +1,46 @@
 <template>
   <!-- Desktop Navigation -->
   <nav class="hidden md:flex items-center space-x-6">
-    <NuxtLink v-for="(item, index) in navItems" :key="`nav-desktop-${index}`"
-              :to="`/#${item.id}`" 
-              @click.prevent="scrollToSection(item.id, 'navbar')"
-              class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200"
-              :style="{ 
-                color: 'var(--color-content-primary)',
-                ':hover': { color: 'var(--color-primary)' }
-              }"
-              :aria-label="`Go to ${item.label} section`">
-      {{ item.label }}
-    </NuxtLink>
+    <template v-for="(item, index) in navItems" :key="`nav-desktop-${index}`">
+      <!-- If the item has a 'path', it's a direct link -->
+      <NuxtLink v-if="item.path"
+                :to="item.path"
+                class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200"
+                :style="{
+                  color: 'var(--color-content-primary)',
+                  ':hover': { color: 'var(--color-primary)' }
+                }"
+                :aria-label="`Go to ${item.label} page`">
+        {{ item.label }}
+      </NuxtLink>
+      <!-- Otherwise, it's a scroll-to link for the homepage -->
+      <NuxtLink v-else
+                :to="`/#${item.id}`"
+                @click.prevent="scrollToSection(item.id, 'navbar')"
+                class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200"
+                :style="{
+                  color: 'var(--color-content-primary)',
+                  ':hover': { color: 'var(--color-primary)' }
+                }"
+                :aria-label="`Go to ${item.label} section`">
+        {{ item.label }}
+      </NuxtLink>
+    </template>
     <ThemeToggle class="mr-2" />
-    <button 
-      @click="navigateToContact('navbar-get-started')" 
+    <button
+      @click="navigateToContact('navbar-get-started')"
       class="btn btn-primary"
       aria-label="Contact 816tech">
       Get Started
     </button>
   </nav>
-  
+
   <!-- Mobile Navigation -->
   <div class="flex items-center space-x-3 md:hidden">
     <ThemeToggle />
-    <button 
+    <button
       class="p-2 rounded-full h-10 w-10 flex items-center justify-center transition-colors"
-      :style="{ 
+      :style="{
         backgroundColor: showMobileMenu ? 'var(--color-surface-secondary)' : 'transparent',
         color: 'var(--color-content-primary)'
       }"
@@ -37,59 +51,74 @@
       <XMarkIcon v-if="showMobileMenu" class="w-5 h-5" />
       <Bars3Icon v-else class="w-5 h-5" />
     </button>
-    
+
     <!-- Mobile Menu Overlay -->
-    <div 
-      v-if="showMobileMenu" 
+    <div
+      v-if="showMobileMenu"
       class="fixed inset-0 bg-black bg-opacity-50 z-40"
       aria-hidden="true"
       @click="closeMobileMenu"
     ></div>
-    
+
     <!-- Mobile Menu Panel -->
     <transition name="mobile-menu">
-      <div v-if="showMobileMenu" 
+      <div v-if="showMobileMenu"
            class="fixed top-0 right-0 h-full w-64 sm:w-80 shadow-xl z-50 p-4 overflow-y-auto border-l"
-           :style="{ 
+           :style="{
              backgroundColor: 'var(--color-surface-primary)',
              borderColor: 'var(--color-border-primary)'
            }"
            role="dialog"
            aria-modal="true"
            aria-label="Mobile navigation menu">
-        <div class="flex justify-between items-center mb-8 pb-4 border-b" 
+        <div class="flex justify-between items-center mb-8 pb-4 border-b"
              :style="{ borderBottomColor: 'var(--color-border-primary)' }">
           <Logo816tech size="sm" />
-          <button 
+          <button
             class="p-2 rounded-full h-10 w-10 flex items-center justify-center transition-colors"
-            :style="{ 
+            :style="{
               backgroundColor: 'var(--color-surface-secondary)',
               color: 'var(--color-content-primary)'
             }"
             aria-label="Close menu"
-            @click="closeMobileMenu" 
+            @click="closeMobileMenu"
           >
             <XMarkIcon class="w-5 h-5" />
           </button>
         </div>
-        
+
         <div class="flex flex-col space-y-2">
-          <NuxtLink v-for="(item, index) in navItems" :key="`nav-mobile-${index}`"
-                    :to="`/#${item.id}`" 
-                    @click.prevent="scrollToSectionAndCloseMenu(item.id)" 
-                    class="mobile-nav-item rounded-lg transition-colors"
-                    :style="{ 
-                      color: 'var(--color-content-primary)',
-                      ':hover': { backgroundColor: 'var(--color-surface-hover)' }
-                    }"
-                    :aria-label="`Go to ${item.label} section`">
-            {{ item.label }}
-          </NuxtLink>
-          
-          <div class="pt-4 mt-2 border-t" 
+          <template v-for="(item, index) in navItems" :key="`nav-mobile-${index}`">
+            <!-- Handle direct path links for mobile -->
+            <NuxtLink v-if="item.path"
+                      :to="item.path"
+                      @click="closeMobileMenu"
+                      class="mobile-nav-item rounded-lg transition-colors"
+                      :style="{
+                        color: 'var(--color-content-primary)',
+                        ':hover': { backgroundColor: 'var(--color-surface-hover)' }
+                      }"
+                      :aria-label="`Go to ${item.label} page`">
+              {{ item.label }}
+            </NuxtLink>
+            <!-- Handle scroll-to links for mobile -->
+            <NuxtLink v-else
+                      :to="`/#${item.id}`"
+                      @click.prevent="scrollToSectionAndCloseMenu(item.id)"
+                      class="mobile-nav-item rounded-lg transition-colors"
+                      :style="{
+                        color: 'var(--color-content-primary)',
+                        ':hover': { backgroundColor: 'var(--color-surface-hover)' }
+                      }"
+                      :aria-label="`Go to ${item.label} section`">
+              {{ item.label }}
+            </NuxtLink>
+          </template>
+
+          <div class="pt-4 mt-2 border-t"
                :style="{ borderColor: 'var(--color-border-primary)' }">
-            <button 
-              @click="scrollToSectionAndCloseMenu('contact', true)" 
+            <button
+              @click="scrollToSectionAndCloseMenu('contact', true)"
               class="btn btn-primary w-full justify-center"
               aria-label="Contact 816tech">
               Get Started
@@ -106,6 +135,7 @@
  * Navigation component for 816tech with centralized navigation logic
  * Uses the navigation composable for DRY code and consistent behavior
  * Updated to use Heroicons instead of PrimeIcons
+ * FIXED: Handles both direct page links (e.g., /blog) and homepage anchor links.
  */
 
 // Import Heroicons
@@ -127,7 +157,7 @@ const originalOverflow = ref(null)
  */
 const toggleMobileMenu = () => {
   showMobileMenu.value = !showMobileMenu.value
-  
+
   if (import.meta.client) {
     // Store original overflow setting before changing it
     if (showMobileMenu.value) {
@@ -164,11 +194,14 @@ const restoreBodyScroll = () => {
  */
 const scrollToSectionAndCloseMenu = (sectionId, isCTA = false) => {
   closeMobileMenu()
-  if (isCTA) {
-    navigateToContact('mobile-menu')
-  } else {
-    scrollToSection(sectionId, 'mobile-menu')
-  }
+  // Use a nextTick to ensure menu is closed before trying to scroll
+  nextTick(() => {
+    if (isCTA) {
+      navigateToContact('mobile-menu')
+    } else {
+      scrollToSection(sectionId, 'mobile-menu')
+    }
+  })
 }
 
 // Handle escape key to close menu
@@ -205,7 +238,7 @@ onUnmounted(() => {
 .mobile-menu-leave-active {
   transition: opacity 0.3s, transform 0.3s;
 }
-  
+
 .mobile-menu-enter-from,
 .mobile-menu-leave-to {
   opacity: 0;

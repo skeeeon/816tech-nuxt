@@ -1,19 +1,55 @@
+import { readdirSync, readFileSync } from 'node:fs'
+import path from 'node:path'
+import matter from 'gray-matter'
+import { defineNuxtConfig } from 'nuxt/config'
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
   
-  // SSG Configuration for better performance
+  // SSG Configuration with dynamic route generation via hooks
   nitro: {
     prerender: {
+      // We only need to define the static routes here.
+      // The dynamic blog routes will be added by the hook below.
       routes: [
         '/',
         '/cards',
-        '/cards/brian'
-        // Add new card routes here as team members are added
+        '/cards/brian',
+        '/blog'
+        // Note: No need to manually add blog posts here anymore!
       ]
     },
     // Enable compression in production
     compressPublicAssets: true
+  },
+
+  hooks: {
+    'nitro:config'(nitroConfig) {
+      if (nitroConfig.prender && nitroConfig.prender.routes) {
+        const postsDir = './content/blog'
+        const files = readdirSync(postsDir)
+        
+        const seenSlugs = new Set()
+        const blogRoutes = files.map(file => {
+          const content = readFileSync(path.join(postsDir, file), 'utf-8')
+          const { data } = matter(content)
+          const slug = data.slug
+
+          // --- SAFETY CHECK ---
+          // If we've already seen this slug, throw an error to stop the build.
+          if (seenSlugs.has(slug)) {
+            throw new Error(`Duplicate slug found: "${slug}" in file "${file}". Please ensure all post slugs are unique.`)
+          }
+          seenSlugs.add(slug)
+          // --- END SAFETY CHECK ---
+
+          return `/blog/${slug}`
+        })
+        
+        nitroConfig.prender.routes.push(...blogRoutes)
+      }
+    }
   },
 
   // Ensure proper component auto-imports
