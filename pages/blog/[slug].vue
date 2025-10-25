@@ -151,7 +151,7 @@
 <script setup>
 /**
  * Blog post page - displays a single blog post
- * FIXED: Use $fetch to avoid importing server utilities in client bundle
+ * Enhanced with social media image support for rich link previews
  */
 
 const route = useRoute()
@@ -159,7 +159,6 @@ const slug = route.params.slug
 const config = useRuntimeConfig()
 
 // Fetch post using API route instead of direct import
-// This prevents Vite from trying to bundle server/utils/blog.js
 const { data: post, pending, error: fetchError } = await useAsyncData(
   `blog-post-${slug}`,
   () => $fetch(`/api/blog/posts/${slug}`)
@@ -178,7 +177,6 @@ watch(post, (newPost) => {
 
 // Format date helper - consistent UTC to avoid hydration mismatches
 const formatDate = (dateString) => {
-  // Parse the date as UTC to avoid timezone issues between server and client
   const date = new Date(dateString + 'T00:00:00Z')
   return date.toLocaleDateString('en-US', { 
     year: 'numeric', 
@@ -194,19 +192,50 @@ const getPostUrl = () => {
   return `${baseUrl}/blog/${slug}`
 }
 
-// Dynamic SEO based on post data
+// Enhanced SEO with social media image support
 watchEffect(() => {
   if (post.value) {
+    const baseUrl = config.public.siteUrl || 'https://816tech.com'
+    
+    // Determine the social media image
+    // Priority: post.image -> default blog card
+    const socialImage = post.value.image 
+      ? `${baseUrl}${post.value.image}`
+      : `${baseUrl}/images/blog/default-og-image.jpg`
+    
+    // Image alt text for accessibility
+    const imageAlt = post.value.imageAlt || post.value.title
+    
     useSeoMeta({
+      // Basic meta
       title: `${post.value.title} - 816tech Blog`,
       description: post.value.excerpt,
+      
+      // Open Graph (Facebook, LinkedIn)
       ogTitle: post.value.title,
       ogDescription: post.value.excerpt,
       ogType: 'article',
       ogUrl: getPostUrl(),
+      ogImage: socialImage,
+      ogImageAlt: imageAlt,
+      ogImageWidth: '1200',
+      ogImageHeight: '630',
+      ogSiteName: '816tech Blog',
+      
+      // Twitter Card
+      twitterCard: 'summary_large_image',
+      twitterTitle: post.value.title,
+      twitterDescription: post.value.excerpt,
+      twitterImage: socialImage,
+      twitterImageAlt: imageAlt,
+      twitterSite: '@816tech',
+      twitterCreator: '@816tech',
+      
+      // Article specific meta
       'article:published_time': new Date(post.value.date).toISOString(),
       'article:author': post.value.author,
-      'article:tag': post.value.tags
+      'article:tag': post.value.tags,
+      'article:section': 'Technology'
     })
   }
 })

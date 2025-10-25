@@ -1,7 +1,31 @@
 <template>
   <div class="blog-index-page">
+    <!-- Clean RSS button - top right -->
+    <div class="pt-4 pb-2">
+      <div class="container mx-auto px-4">
+        <div class="max-w-7xl mx-auto flex justify-end">
+          <!-- RSS Feed Link -->
+          <a href="/api/feed.xml"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition-all hover:-translate-y-0.5"
+             :style="{ 
+               borderColor: 'var(--color-border-primary)',
+               backgroundColor: 'var(--color-surface-secondary)',
+               color: 'var(--color-content-primary)'
+             }"
+             aria-label="Subscribe to RSS feed">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248-1.796 0-3.252-1.454-3.252-3.248 0-1.794 1.456-3.248 3.252-3.248 1.795.001 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"/>
+            </svg>
+            RSS Feed
+          </a>
+        </div>
+      </div>
+    </div>
+
     <!-- Main content -->
-    <div class="py-16">
+    <div class="py-8">
       <div class="container mx-auto px-4">
         <!-- Loading state -->
         <div v-if="pending" class="text-center">
@@ -78,7 +102,7 @@
                   <div v-if="post.tags && post.tags.length > 0" class="flex gap-2">
                     <span v-for="tag in post.tags.slice(0, 3)" 
                           :key="tag"
-                          class="text-xs px-1 py-1 rounded"
+                          class="text-xs px-2 py-1 rounded"
                           :style="{ 
                             backgroundColor: 'var(--color-surface-tertiary)',
                             color: 'var(--color-content-secondary)'
@@ -124,11 +148,10 @@
 <script setup>
 /**
  * Blog index page - displays all blog posts
- * FIXED: Use $fetch to avoid importing server utilities in client bundle
+ * Enhanced with RSS feed link for subscriptions
  */
 
 // Fetch posts using Nuxt's built-in server routes capability
-// This prevents Vite from trying to bundle server/utils/blog.js
 const { data: posts, pending, error, refresh } = await useAsyncData(
   'blog-posts',
   () => $fetch('/api/blog/posts')
@@ -136,7 +159,6 @@ const { data: posts, pending, error, refresh } = await useAsyncData(
 
 // Format date helper - consistent UTC to avoid hydration mismatches
 const formatDate = (dateString) => {
-  // Parse the date as UTC to avoid timezone issues between server and client
   const date = new Date(dateString + 'T00:00:00Z')
   return date.toLocaleDateString('en-US', { 
     year: 'numeric', 
@@ -177,6 +199,16 @@ useSeoMeta({
 }
 
 .empty-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.error-icon {
   width: 100px;
   height: 100px;
   border-radius: 50%;

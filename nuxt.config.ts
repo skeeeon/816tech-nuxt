@@ -16,7 +16,8 @@ export default defineNuxtConfig({
         '/',
         '/cards',
         '/cards/brian',
-        '/blog'
+        '/blog',
+	'/api/feed.xml'
       ],
       // Crawl all links to discover routes automatically
       crawlLinks: true

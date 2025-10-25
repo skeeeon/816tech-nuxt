@@ -2,7 +2,7 @@
  * Server-only blog utilities for 816tech
  * These functions run ONLY on the server/build side, never in browser
  * Safe to use Node.js APIs like fs here
- * FIXED: Use absolute import path for markdown utilities
+ * UPDATED: Added image and imageAlt support for social media sharing
  */
 
 import { promises as fs } from 'fs'
@@ -14,7 +14,6 @@ import hljs from 'highlight.js'
 /**
  * Configure marked with custom renderer and options
  * Supports syntax highlighting, GFM, and smart typography
- * MOVED: From utils/markdown.js to avoid import resolution issues
  */
 function configureMarked() {
   const renderer = new marked.Renderer()
@@ -128,6 +127,8 @@ async function readPostFile(filename) {
       slug: data.slug || 'untitled',
       excerpt: data.excerpt || '',
       tags: Array.isArray(data.tags) ? data.tags : [],
+      image: data.image || null,  // Social media image path
+      imageAlt: data.imageAlt || data.title,  // Image alt text for accessibility
       content: htmlContent,
       readingTime
     }
@@ -160,6 +161,8 @@ export async function getAllPosts() {
           slug: post.slug,
           excerpt: post.excerpt,
           tags: post.tags,
+          image: post.image,  // Include for social sharing previews
+          imageAlt: post.imageAlt,
           readingTime: post.readingTime
         }
       })
