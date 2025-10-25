@@ -1,18 +1,5 @@
 <template>
   <div class="blog-index-page">
-    <!-- Page header 
-    <div class="page-header py-12" :style="{ backgroundColor: 'var(--color-surface-secondary)' }">
-      <div class="container mx-auto px-4 text-center">
-        <h1 class="text-3xl md:text-4xl font-bold mb-3" 
-            :style="{ color: 'var(--color-content-primary)' }">
-          816tech Blog
-        </h1>
-        <p class="text-lg" :style="{ color: 'var(--color-content-secondary)' }">
-          Insights on enterprise technology, system integration, and open source.
-        </p>
-      </div>
-    </div> --->
-
     <!-- Main content -->
     <div class="py-16">
       <div class="container mx-auto px-4">
@@ -137,35 +124,14 @@
 <script setup>
 /**
  * Blog index page - displays all blog posts
- * Uses Nuxt's asyncData for proper SSR/SSG data fetching
- * FIXED: Prevent client-side refetch, use only pre-rendered data
+ * FIXED: Use $fetch to avoid importing server utilities in client bundle
  */
 
-// Use useAsyncData with strict server-only execution
-const { data: posts, pending, error } = await useAsyncData(
-  'blog-posts', 
-  async () => {
-    // This function runs ONLY on server during SSR/SSG
-    if (import.meta.client) {
-      // On client, return null - data should already be in payload
-      return null
-    }
-    
-    const { getAllPosts } = await import('~/server/utils/blog')
-    return await getAllPosts()
-  },
-  {
-    // Critical: Only fetch on server, never on client
-    lazy: false,
-    server: true,
-    // Always use cached data on client
-    getCachedData: (key) => {
-      const nuxtApp = useNuxtApp()
-      // Check both payload locations
-      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-      return data
-    }
-  }
+// Fetch posts using Nuxt's built-in server routes capability
+// This prevents Vite from trying to bundle server/utils/blog.js
+const { data: posts, pending, error, refresh } = await useAsyncData(
+  'blog-posts',
+  () => $fetch('/api/blog/posts')
 )
 
 // Format date helper - consistent UTC to avoid hydration mismatches

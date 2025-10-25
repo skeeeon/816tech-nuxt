@@ -1,4 +1,6 @@
 import { defineNuxtConfig } from 'nuxt/config'
+// Import build-time utility (static import - safe for Nuxt config)
+import { getAllBlogSlugs } from './server/utils/buildtime-blog'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -31,18 +33,25 @@ export default defineNuxtConfig({
     '/blog/**': { prerender: true }
   },
 
-  // CRITICAL: Hook to generate blog post routes
+  // FIXED: Hook to generate blog post routes using build-time utility
   hooks: {
     async 'nitro:config'(nitroConfig) {
       // Only run during build/generate
       if (!nitroConfig.prerender) return
       
       try {
-        // Dynamically import the server util to get post slugs
-        const { getAllPostSlugs } = await import('./server/utils/blog.js')
-        const slugs = await getAllPostSlugs()
+        console.log('[nuxt:config] Generating blog post routes...')
         
-        // Add each blog post route to prerender list
+        // Use the build-time utility to get slugs
+        // This is a static import that Vite won't try to bundle for the client
+        const slugs = await getAllBlogSlugs()
+        
+        if (slugs.length === 0) {
+          console.warn('[nuxt:config] No blog posts found to prerender')
+          return
+        }
+        
+        // Generate blog post routes
         const blogRoutes = slugs.map(slug => `/blog/${slug}`)
         
         // Ensure routes array exists
@@ -50,12 +59,14 @@ export default defineNuxtConfig({
           nitroConfig.prerender.routes = []
         }
         
-        // Add blog routes
+        // Add blog routes to prerender list
         nitroConfig.prerender.routes.push(...blogRoutes)
         
         console.log(`✅ Pre-rendering ${blogRoutes.length} blog posts:`, blogRoutes)
       } catch (error) {
         console.error('❌ Error generating blog routes:', error)
+        // Don't fail the build if blog route generation fails
+        // The blog will still work with client-side navigation
       }
     }
   },
@@ -106,7 +117,18 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'canonical', href: 'https://816tech.com' }
+        { rel: 'canonical', href: 'https://816tech.com' },
+        // ADDED: Highlight.js CSS for syntax highlighting
+        { 
+          rel: 'stylesheet', 
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css',
+          media: '(prefers-color-scheme: light)'
+        },
+        { 
+          rel: 'stylesheet', 
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css',
+          media: '(prefers-color-scheme: dark)'
+        }
       ],
       script: [
         {

@@ -2,13 +2,99 @@
  * Server-only blog utilities for 816tech
  * These functions run ONLY on the server/build side, never in browser
  * Safe to use Node.js APIs like fs here
+ * FIXED: Use absolute import path for markdown utilities
  */
 
 import { promises as fs } from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-// FIXED: Use relative import instead of ~ alias for build hook compatibility
-import { parseMarkdown, getReadingTime } from '../../utils/markdown.js'
+import { marked } from 'marked'
+import hljs from 'highlight.js'
+
+/**
+ * Configure marked with custom renderer and options
+ * Supports syntax highlighting, GFM, and smart typography
+ * MOVED: From utils/markdown.js to avoid import resolution issues
+ */
+function configureMarked() {
+  const renderer = new marked.Renderer()
+  
+  // Customize heading rendering to add IDs for anchor links
+  renderer.heading = function({ text, depth }) {
+    const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
+    return `<h${depth} id="${escapedText}">${text}</h${depth}>`
+  }
+  
+  // Customize code block rendering with syntax highlighting
+  renderer.code = function({ text, lang }) {
+    const code = text
+    const language = lang
+    
+    // If language is specified and supported, highlight it
+    if (language && hljs.getLanguage(language)) {
+      try {
+        const highlighted = hljs.highlight(code, { 
+          language: language,
+          ignoreIllegals: true 
+        }).value
+        return `<pre><code class="hljs language-${language}">${highlighted}</code></pre>`
+      } catch (err) {
+        console.error('Syntax highlighting error:', err)
+      }
+    }
+    
+    // Auto-detect language if not specified
+    try {
+      const result = hljs.highlightAuto(code)
+      return `<pre><code class="hljs language-${result.language}">${result.value}</code></pre>`
+    } catch (err) {
+      // Fallback to plain code block
+      return `<pre><code class="hljs">${escapeHtml(code)}</code></pre>`
+    }
+  }
+  
+  // Configure marked options
+  marked.setOptions({
+    renderer: renderer,
+    gfm: true,
+    breaks: true,
+    pedantic: false,
+    smartLists: true,
+    smartypants: true,
+    xhtml: false
+  })
+}
+
+/**
+ * Escape HTML special characters
+ */
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  }
+  return text.replace(/[&<>"']/g, m => map[m])
+}
+
+/**
+ * Parse markdown string to HTML
+ */
+function parseMarkdown(markdown) {
+  configureMarked()
+  return marked.parse(markdown)
+}
+
+/**
+ * Extract reading time from markdown content
+ */
+function getReadingTime(content) {
+  const wordsPerMinute = 200
+  const words = content.trim().split(/\s+/).length
+  return Math.ceil(words / wordsPerMinute)
+}
 
 /**
  * Get the posts directory path
@@ -30,7 +116,7 @@ async function readPostFile(filename) {
     const { data, content } = matter(fileContents)
     
     // Parse markdown to HTML
-    const htmlContent = await parseMarkdown(content)
+    const htmlContent = parseMarkdown(content)
     
     // Calculate reading time
     const readingTime = getReadingTime(content)

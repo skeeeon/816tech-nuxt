@@ -151,46 +151,18 @@
 <script setup>
 /**
  * Blog post page - displays a single blog post
- * Uses Nuxt's asyncData for proper SSR/SSG data fetching
- * FIXED: Prevent client-side refetch, use only pre-rendered data
+ * FIXED: Use $fetch to avoid importing server utilities in client bundle
  */
 
 const route = useRoute()
 const slug = route.params.slug
 const config = useRuntimeConfig()
 
-// Use useAsyncData with strict server-only execution
+// Fetch post using API route instead of direct import
+// This prevents Vite from trying to bundle server/utils/blog.js
 const { data: post, pending, error: fetchError } = await useAsyncData(
   `blog-post-${slug}`,
-  async () => {
-    // This function runs ONLY on server during SSR/SSG
-    if (import.meta.client) {
-      // On client, return null - data should already be in payload
-      return null
-    }
-    
-    const { getPostBySlug } = await import('~/server/utils/blog')
-    const result = await getPostBySlug(slug)
-    
-    // If no post found, return null (we'll handle 404 below)
-    if (!result) {
-      return null
-    }
-    
-    return result
-  },
-  {
-    // Critical: Only fetch on server, never on client
-    lazy: false,
-    server: true,
-    // Always use cached data on client
-    getCachedData: (key) => {
-      const nuxtApp = useNuxtApp()
-      // Check both payload locations
-      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-      return data
-    }
-  }
+  () => $fetch(`/api/blog/posts/${slug}`)
 )
 
 // If post not found after loading, throw 404
@@ -242,39 +214,10 @@ watchEffect(() => {
 
 <style>
 /*
- * Dual-theme syntax highlighting for light and dark modes
- * Using GitHub-style themes for better readability
+ * Enhanced Prose Styles for Blog Content
+ * Includes syntax highlighting support via highlight.js
  */
 
-/* Light mode: GitHub Light theme colors */
-:root {
-  --hljs-bg: #f6f8fa;
-  --hljs-color: #24292e;
-  --hljs-comment: #6a737d;
-  --hljs-keyword: #d73a49;
-  --hljs-string: #032f62;
-  --hljs-number: #005cc5;
-  --hljs-function: #6f42c1;
-  --hljs-class: #6f42c1;
-  --hljs-variable: #e36209;
-  --hljs-operator: #d73a49;
-}
-
-/* Dark mode: GitHub Dark theme colors */
-.dark {
-  --hljs-bg: #0d1117;
-  --hljs-color: #c9d1d9;
-  --hljs-comment: #8b949e;
-  --hljs-keyword: #ff7b72;
-  --hljs-string: #a5d6ff;
-  --hljs-number: #79c0ff;
-  --hljs-function: #d2a8ff;
-  --hljs-class: #d2a8ff;
-  --hljs-variable: #ffa657;
-  --hljs-operator: #ff7b72;
-}
-
-/* Enhanced Prose Styles for Blog Content */
 .prose {
   color: var(--color-content-secondary);
   line-height: 1.8;
@@ -352,7 +295,7 @@ watchEffect(() => {
   font-weight: 600;
 }
 
-/* Code - inline and blocks */
+/* Code - inline */
 .prose code {
   background-color: var(--color-surface-secondary);
   color: var(--color-content-primary);
@@ -367,7 +310,7 @@ watchEffect(() => {
 
 /* Code blocks container */
 .prose pre {
-  background-color: var(--hljs-bg);
+  background-color: var(--color-surface-secondary);
   border-radius: 8px;
   padding: 1.5em;
   overflow-x: auto;
@@ -384,65 +327,13 @@ watchEffect(() => {
 /* Reset styles for code inside pre blocks */
 .prose pre code {
   background-color: transparent;
-  color: var(--hljs-color);
+  color: inherit;
   border: none;
   padding: 0;
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.6;
   border-radius: 0;
-}
-
-/* Syntax highlighting classes */
-.hljs {
-  background: var(--hljs-bg) !important;
-  color: var(--hljs-color);
-}
-
-.hljs-comment,
-.hljs-quote {
-  color: var(--hljs-comment);
-  font-style: italic;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-type,
-.hljs-built_in,
-.hljs-literal {
-  color: var(--hljs-keyword);
-  font-weight: 600;
-}
-
-.hljs-string,
-.hljs-doctag,
-.hljs-title,
-.hljs-section,
-.hljs-selector-id {
-  color: var(--hljs-string);
-}
-
-.hljs-number {
-  color: var(--hljs-number);
-}
-
-.hljs-function,
-.hljs-class .hljs-title {
-  color: var(--hljs-function);
-  font-weight: 600;
-}
-
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag .hljs-attr,
-.hljs-attr {
-  color: var(--hljs-variable);
-}
-
-.hljs-operator,
-.hljs-selector-attr,
-.hljs-selector-pseudo {
-  color: var(--hljs-operator);
 }
 
 /* Blockquotes */
