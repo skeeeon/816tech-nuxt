@@ -12,7 +12,7 @@
 /**
  * Default layout for 816tech Nuxt application
  * Provides the main structure for all pages with explicit component imports
- * FIXED: Enhanced theme support and proper initialization
+ * ENHANCED: Dynamic highlight.js theme loading based on current theme
  */
 
 // Explicit component imports to resolve auto-import issues
@@ -25,8 +25,42 @@ const { isDarkMode } = useTheme()
 // Initialize analytics tracking
 useTracking()
 
-// Note: We don't watch isDarkMode here to avoid duplicate theme application
-// The inline script in app.vue and useTheme composable handle theme application
+/**
+ * Dynamically load the appropriate highlight.js theme
+ * This ensures code blocks have proper contrast in both light and dark modes
+ */
+const loadHighlightTheme = (dark) => {
+  if (!import.meta.client) return
+  
+  // Remove existing highlight.js stylesheets
+  const existingLinks = document.querySelectorAll('link[data-highlight-theme]')
+  existingLinks.forEach(link => link.remove())
+  
+  // Add the appropriate theme
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.setAttribute('data-highlight-theme', 'true')
+  
+  if (dark) {
+    // Dark theme - high contrast
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
+  } else {
+    // Light theme - high contrast
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css'
+  }
+  
+  document.head.appendChild(link)
+}
+
+// Load initial theme on mount
+onMounted(() => {
+  loadHighlightTheme(isDarkMode.value)
+})
+
+// Watch for theme changes and reload highlight.js theme
+watch(isDarkMode, (newIsDark) => {
+  loadHighlightTheme(newIsDark)
+})
 </script>
 
 <style>

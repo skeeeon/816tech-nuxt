@@ -309,9 +309,32 @@ watchEffect(() => {
   margin-bottom: 1.5em;
 }
 
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose ul ul {
+  list-style-type: circle;
+  margin-top: 0.5em;
+}
+
+.prose ul ul ul {
+  list-style-type: square;
+}
+
+.prose ol ol {
+  list-style-type: lower-alpha;
+  margin-top: 0.5em;
+}
+
 .prose li {
   margin-bottom: 0.75em;
   line-height: 1.7;
+  display: list-item;
 }
 
 .prose li > p {
@@ -419,6 +442,59 @@ watchEffect(() => {
   border: none;
   border-top: 2px solid var(--color-border-primary);
   margin: 3em 0;
+}
+
+/* Strikethrough */
+.prose del,
+.prose s {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* Task lists (GitHub Flavored Markdown) */
+.prose input[type="checkbox"] {
+  margin-right: 0.5em;
+  cursor: pointer;
+}
+
+.prose li.task-list-item {
+  list-style-type: none;
+  margin-left: -1.75em;
+  padding-left: 1.75em;
+}
+
+/* Abbreviations */
+.prose abbr {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* Keyboard input */
+.prose kbd {
+  background-color: var(--color-surface-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+  font-size: 0.875em;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 2px 0 var(--color-border-primary);
+}
+
+/* Subscript and superscript */
+.prose sub,
+.prose sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.prose sup {
+  top: -0.5em;
+}
+
+.prose sub {
+  bottom: -0.25em;
 }
 
 /* Share buttons */

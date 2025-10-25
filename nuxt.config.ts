@@ -119,17 +119,6 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'canonical', href: 'https://816tech.com' },
-        // ADDED: Highlight.js CSS for syntax highlighting
-        { 
-          rel: 'stylesheet', 
-          href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css',
-          media: '(prefers-color-scheme: light)'
-        },
-        { 
-          rel: 'stylesheet', 
-          href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css',
-          media: '(prefers-color-scheme: dark)'
-        }
       ],
       script: [
         {
