@@ -172,27 +172,7 @@
           </div>
         </div>
       </div>
-      
-      <!-- Enhanced CTA section linking to contact -->
-      <div class="text-center mt-16 md:mt-20">
-        <div class="max-w-2xl mx-auto p-8 rounded-2xl"
-             :style="{ backgroundColor: 'var(--color-surface-primary)' }">
-          <h3 class="text-xl font-semibold mb-4" 
-              :style="{ color: 'var(--color-content-primary)' }">
-            Ready to Experience the 816tech Difference?
-          </h3>
-          <p class="text-base mb-6" 
-             :style="{ color: 'var(--color-content-secondary)' }">
-            Let's discuss how our proven approach and local expertise can transform your technology challenges into competitive advantages.
-          </p>
-          <button 
-            @click="navigateToContact('about-experience-difference')"
-            class="btn btn-primary inline-flex items-center">
-            <ChatBubbleLeftEllipsisIcon class="w-5 h-5 mr-2" />
-            Start the Conversation
-          </button>
-        </div>
-      </div>
+    
     </div>
   </section>
 </template>

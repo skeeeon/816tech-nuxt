@@ -55,16 +55,6 @@
         </div>
       </div>
       
-      <!-- Natural transition with navigation to approach section -->
-      <div class="text-center mt-16 md:mt-20">
-        <div class="max-w-3xl mx-auto">
-          <p class="text-lg leading-relaxed mb-8" 
-             :style="{ color: 'var(--color-content-secondary)' }">
-            Every solution is delivered through our proven three-phase methodology, 
-            ensuring projects are completed on time, on budget, and exceeding expectations.
-          </p>
-        </div>
-      </div>
     </div>
   </section>
 </template>
