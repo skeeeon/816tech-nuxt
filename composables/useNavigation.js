@@ -2,6 +2,7 @@
  * Navigation composable for 816tech
  * Centralizes navigation logic to follow DRY principles
  * Provides consistent navigation behavior across all components
+ * FIXED: Blog navigation now works correctly with proper routing
  */
 
 export const useNavigation = () => {
@@ -9,11 +10,13 @@ export const useNavigation = () => {
   const { trackNavigation, trackCTA } = useTracking()
 
   // Navigation items - centralized configuration
+  // Items with 'id' are hash-based sections on homepage
+  // Items with 'path' are separate pages
   const navItems = [
     { id: 'solutions', label: 'Solutions' },
     { id: 'approach', label: 'Our Approach' },
     { id: 'about', label: 'About' },
-    { id: 'blog', label: 'Blog', path: '/blog' }
+    { path: '/blog', label: 'Blog' } // This is a real route, not a hash section
   ]
 
   /**

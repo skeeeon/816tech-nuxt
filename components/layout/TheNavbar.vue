@@ -2,29 +2,44 @@
   <!-- Desktop Navigation -->
   <nav class="hidden md:flex items-center space-x-6">
     <template v-for="(item, index) in navItems" :key="`nav-desktop-${index}`">
-      <!-- If the item has a 'path', it's a direct link -->
-      <NuxtLink v-if="item.path"
+      <!-- Blog link: use regular anchor for full page load -->
+      <a v-if="item.path === '/blog'"
+         :href="item.path"
+         class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200"
+         :style="{
+           color: 'var(--color-content-primary)',
+           ':hover': { color: 'var(--color-primary)' }
+         }"
+         @click="trackNavigation(item.label.toLowerCase().replace(/\s+/g, '-'), 'navbar')"
+         :aria-label="`Go to ${item.label} page`">
+        {{ item.label }}
+      </a>
+      
+      <!-- Other direct page links (if any) -->
+      <NuxtLink v-else-if="item.path"
                 :to="item.path"
                 class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200"
                 :style="{
                   color: 'var(--color-content-primary)',
                   ':hover': { color: 'var(--color-primary)' }
                 }"
+                @click="trackNavigation(item.label.toLowerCase().replace(/\s+/g, '-'), 'navbar')"
                 :aria-label="`Go to ${item.label} page`">
         {{ item.label }}
       </NuxtLink>
-      <!-- Otherwise, it's a scroll-to link for the homepage -->
-      <NuxtLink v-else
-                :to="`/#${item.id}`"
-                @click.prevent="scrollToSection(item.id, 'navbar')"
-                class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200"
-                :style="{
-                  color: 'var(--color-content-primary)',
-                  ':hover': { color: 'var(--color-primary)' }
-                }"
-                :aria-label="`Go to ${item.label} section`">
+      
+      <!-- Hash section links (for homepage sections) -->
+      <a v-else
+         :href="`/#${item.id}`"
+         @click.prevent="handleSectionClick(item.id)"
+         class="text-base font-medium py-2 px-3 rounded-md transition-colors duration-200 cursor-pointer"
+         :style="{
+           color: 'var(--color-content-primary)',
+           ':hover': { color: 'var(--color-primary)' }
+         }"
+         :aria-label="`Go to ${item.label} section`">
         {{ item.label }}
-      </NuxtLink>
+      </a>
     </template>
     <ThemeToggle class="mr-2" />
     <button
@@ -89,10 +104,23 @@
 
         <div class="flex flex-col space-y-2">
           <template v-for="(item, index) in navItems" :key="`nav-mobile-${index}`">
-            <!-- Handle direct path links for mobile -->
-            <NuxtLink v-if="item.path"
+            <!-- Blog link: use regular anchor for full page load -->
+            <a v-if="item.path === '/blog'"
+               :href="item.path"
+               @click="handleMobilePageClick(item.label)"
+               class="mobile-nav-item rounded-lg transition-colors"
+               :style="{
+                 color: 'var(--color-content-primary)',
+                 ':hover': { backgroundColor: 'var(--color-surface-hover)' }
+               }"
+               :aria-label="`Go to ${item.label} page`">
+              {{ item.label }}
+            </a>
+            
+            <!-- Other direct page links (if any) -->
+            <NuxtLink v-else-if="item.path"
                       :to="item.path"
-                      @click="closeMobileMenu"
+                      @click="handleMobilePageClick(item.label)"
                       class="mobile-nav-item rounded-lg transition-colors"
                       :style="{
                         color: 'var(--color-content-primary)',
@@ -101,24 +129,25 @@
                       :aria-label="`Go to ${item.label} page`">
               {{ item.label }}
             </NuxtLink>
-            <!-- Handle scroll-to links for mobile -->
-            <NuxtLink v-else
-                      :to="`/#${item.id}`"
-                      @click.prevent="scrollToSectionAndCloseMenu(item.id)"
-                      class="mobile-nav-item rounded-lg transition-colors"
-                      :style="{
-                        color: 'var(--color-content-primary)',
-                        ':hover': { backgroundColor: 'var(--color-surface-hover)' }
-                      }"
-                      :aria-label="`Go to ${item.label} section`">
+            
+            <!-- Hash section links for mobile -->
+            <a v-else
+               :href="`/#${item.id}`"
+               @click.prevent="handleMobileSectionClick(item.id)"
+               class="mobile-nav-item rounded-lg transition-colors cursor-pointer"
+               :style="{
+                 color: 'var(--color-content-primary)',
+                 ':hover': { backgroundColor: 'var(--color-surface-hover)' }
+               }"
+               :aria-label="`Go to ${item.label} section`">
               {{ item.label }}
-            </NuxtLink>
+            </a>
           </template>
 
           <div class="pt-4 mt-2 border-t"
                :style="{ borderColor: 'var(--color-border-primary)' }">
             <button
-              @click="scrollToSectionAndCloseMenu('contact', true)"
+              @click="handleMobileContactClick"
               class="btn btn-primary w-full justify-center"
               aria-label="Contact 816tech">
               Get Started
@@ -133,9 +162,9 @@
 <script setup>
 /**
  * Navigation component for 816tech with centralized navigation logic
- * Uses the navigation composable for DRY code and consistent behavior
- * Updated to use Heroicons instead of PrimeIcons
- * FIXED: Handles both direct page links (e.g., /blog) and homepage anchor links.
+ * FIXED: Proper handling of page links vs section links
+ * - Page links (like /blog) use NuxtLink without preventDefault
+ * - Section links (like #solutions) use anchor with preventDefault + scrollToSection
  */
 
 // Import Heroicons
@@ -147,6 +176,7 @@ import Logo816tech from '~/components/common/Logo816tech.vue'
 
 // Use centralized navigation logic
 const { navItems, scrollToSection, navigateToContact } = useNavigation()
+const { trackNavigation } = useTracking()
 
 // Mobile menu state management
 const showMobileMenu = ref(false)
@@ -159,7 +189,6 @@ const toggleMobileMenu = () => {
   showMobileMenu.value = !showMobileMenu.value
 
   if (import.meta.client) {
-    // Store original overflow setting before changing it
     if (showMobileMenu.value) {
       originalOverflow.value = document.body.style.overflow
       document.body.style.overflow = 'hidden'
@@ -182,25 +211,45 @@ const closeMobileMenu = () => {
  */
 const restoreBodyScroll = () => {
   if (import.meta.client) {
-    // Reset to original overflow or empty string if originalOverflow was null
     document.body.style.overflow = originalOverflow.value || ''
   }
 }
 
 /**
- * Scroll to section and close mobile menu
+ * Handle section link clicks (for homepage sections)
  * @param {string} sectionId - ID of the section to scroll to
- * @param {boolean} isCTA - Whether this is a CTA interaction
  */
-const scrollToSectionAndCloseMenu = (sectionId, isCTA = false) => {
+const handleSectionClick = (sectionId) => {
+  scrollToSection(sectionId, 'navbar')
+}
+
+/**
+ * Handle mobile section link clicks
+ * @param {string} sectionId - ID of the section to scroll to
+ */
+const handleMobileSectionClick = (sectionId) => {
   closeMobileMenu()
-  // Use a nextTick to ensure menu is closed before trying to scroll
   nextTick(() => {
-    if (isCTA) {
-      navigateToContact('mobile-menu')
-    } else {
-      scrollToSection(sectionId, 'mobile-menu')
-    }
+    scrollToSection(sectionId, 'mobile-menu')
+  })
+}
+
+/**
+ * Handle mobile page link clicks (like /blog)
+ * @param {string} label - Label of the page
+ */
+const handleMobilePageClick = (label) => {
+  closeMobileMenu()
+  trackNavigation(label.toLowerCase().replace(/\s+/g, '-'), 'mobile-menu')
+}
+
+/**
+ * Handle mobile contact button click
+ */
+const handleMobileContactClick = () => {
+  closeMobileMenu()
+  nextTick(() => {
+    navigateToContact('mobile-menu')
   })
 }
 

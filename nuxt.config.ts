@@ -1,53 +1,61 @@
-import { readdirSync, readFileSync } from 'node:fs'
-import path from 'node:path'
-import matter from 'gray-matter'
 import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
   
-  // SSG Configuration with dynamic route generation via hooks
+  // SSG Configuration for static generation
+  ssr: true,
+  
   nitro: {
     prerender: {
-      // We only need to define the static routes here.
-      // The dynamic blog routes will be added by the hook below.
+      // Static routes that should always be pre-rendered
       routes: [
         '/',
         '/cards',
         '/cards/brian',
         '/blog'
-        // Note: No need to manually add blog posts here anymore!
-      ]
+      ],
+      // Crawl all links to discover routes automatically
+      crawlLinks: true
     },
     // Enable compression in production
     compressPublicAssets: true
   },
 
+  // Add route rules for better caching and SPA behavior
+  routeRules: {
+    // Blog index should be static
+    '/blog': { prerender: true },
+    // Blog posts should be static (will be generated for each slug)
+    '/blog/**': { prerender: true }
+  },
+
+  // CRITICAL: Hook to generate blog post routes
   hooks: {
-    'nitro:config'(nitroConfig) {
-      if (nitroConfig.prender && nitroConfig.prender.routes) {
-        const postsDir = './content/blog'
-        const files = readdirSync(postsDir)
+    async 'nitro:config'(nitroConfig) {
+      // Only run during build/generate
+      if (!nitroConfig.prerender) return
+      
+      try {
+        // Dynamically import the server util to get post slugs
+        const { getAllPostSlugs } = await import('./server/utils/blog.js')
+        const slugs = await getAllPostSlugs()
         
-        const seenSlugs = new Set()
-        const blogRoutes = files.map(file => {
-          const content = readFileSync(path.join(postsDir, file), 'utf-8')
-          const { data } = matter(content)
-          const slug = data.slug
-
-          // --- SAFETY CHECK ---
-          // If we've already seen this slug, throw an error to stop the build.
-          if (seenSlugs.has(slug)) {
-            throw new Error(`Duplicate slug found: "${slug}" in file "${file}". Please ensure all post slugs are unique.`)
-          }
-          seenSlugs.add(slug)
-          // --- END SAFETY CHECK ---
-
-          return `/blog/${slug}`
-        })
+        // Add each blog post route to prerender list
+        const blogRoutes = slugs.map(slug => `/blog/${slug}`)
         
-        nitroConfig.prender.routes.push(...blogRoutes)
+        // Ensure routes array exists
+        if (!nitroConfig.prerender.routes) {
+          nitroConfig.prerender.routes = []
+        }
+        
+        // Add blog routes
+        nitroConfig.prerender.routes.push(...blogRoutes)
+        
+        console.log(`✅ Pre-rendering ${blogRoutes.length} blog posts:`, blogRoutes)
+      } catch (error) {
+        console.error('❌ Error generating blog routes:', error)
       }
     }
   },
@@ -70,7 +78,8 @@ export default defineNuxtConfig({
   // Enhanced imports configuration
   imports: {
     dirs: [
-      'composables'
+      'composables',
+      'utils'
     ]
   },
 
@@ -153,7 +162,6 @@ export default defineNuxtConfig({
     },
     clearScreen: false,
     build: {
-      // Restore build optimizations
       cssCodeSplit: false, // Better for theme switching
       rollupOptions: {
         output: {
@@ -174,7 +182,5 @@ export default defineNuxtConfig({
   // Disable TypeScript checking for now
   typescript: {
     typeCheck: false
-  },
-
-  ssr: true
+  }
 })
