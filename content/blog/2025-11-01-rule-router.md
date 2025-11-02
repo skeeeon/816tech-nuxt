@@ -9,6 +9,7 @@ image: "/images/blog/grug.jpg"
 imageAlt: "Grug-brained developer trapping complexity"
 ---
 ![Alt text](/images/blog/grug.jpg "Optional title")
+
 We've all been there. An access control platform from one vendor, a video platform from another, and a dozen third-party services that don't talk to each other.
 
 This space between distributed services is where complexity thrives. It's where we write endless boilerplate for message validation, spin up microservices just for a simple webhook, and watch technical debt pile up. It's the essential but unglamorous work.
@@ -27,6 +28,8 @@ The core tenets are powerful:
 4.  **Maintain a Clear, Focused Scope:** The best way to prevent a system from becoming a complex monolith is to be disciplined about what it *doesn't* do.
 
 This philosophy isn't about being unsophisticated, it's about building systems that are simple, maintainable, and easy to reason about.
+
+---
 
 ### Introducing the Rule Router & HTTP Gateway
 
@@ -73,6 +76,8 @@ Here's a practical example:
 
 This single block of YAML defines a complete, self-contained piece of business logic. It perfectly embodies the **Locality of Behavior** principle. To understand this workflow, you only need to read this one rule.
 
+---
+
 ### Architectural Principles in Action
 
 Our philosophy directly shaped key architectural decisions.
@@ -90,6 +95,8 @@ The `http-gateway` is a great example of maintaining a focused scope. You might 
 *   **Does it have a fancy UI?** No, it has declarative YAML files that live in git.
 
 By focusing solely on its core competency (bridging HTTP and NATS) the application remains small, fast, and easy to manage. It uses the same rule syntax, evaluation logic, and actions as the `rule-router` so you have a consistent experience. 
+
+---
 
 ### Powerful Features for Real-World Problems
 
@@ -148,6 +155,8 @@ Events often need to be enriched with data from another source. Our engine can l
         }
 ```
 To make this incredibly fast, the applications has an opt-in feature that maintains a local, in-memory mirror of the KV buckets, updated in real-time via Jetstream watch subscriptions. This gives us a significant performance boost over direct NATS lookups for every message, but it's optional to keep the default footprint minimal.
+
+---
 
 ### Why We Built This (And How to Get Started)
 
