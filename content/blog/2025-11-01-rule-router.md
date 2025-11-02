@@ -5,8 +5,10 @@ author: "Brian Miller"
 slug: "grug-brain-nats-rule-engine"
 excerpt: "Complexity is bad"
 tags: ["nats", "golang", "event-driven"]
+image: "/images/blog/grug.jpg"
+imageAlt: "Grug-brained developer trapping complexity"
 ---
-
+![Alt text](/images/blog/grug.jpg "Optional title")
 We've all been there. An access control platform from one vendor, a video platform from another, and a dozen third-party services that don't talk to each other.
 
 This space between distributed services is where complexity thrives. It's where we write endless boilerplate for message validation, spin up microservices just for a simple webhook, and watch technical debt pile up. It's the essential but unglamorous work.
