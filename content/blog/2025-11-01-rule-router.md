@@ -90,9 +90,9 @@ A reliable system requires good tooling. The `rule-cli` is a standalone utility 
 
 **3. A Focused Scope: Saying 'No' to Feature Creep**
 The `http-gateway` is a great example of maintaining a focused scope. You might ask:
-*   **Does it handle TLS or rate-limiting?** No, a reverse proxy does that better in both scenarios. 
-*	**Does it handle auth?** You can use simple header checks, but you're better off using an API gateway if you need something more powerful.
-*   **Does it have a fancy UI?** No, it has declarative YAML files that live in git.
+*   **Does it handle TLS or rate-limiting?** No. A reverse proxy does that better in both scenarios. 
+*	**Does it handle auth?** No. You can use simple header checks, but you're better off using an API gateway if you need something more powerful.
+*   **Does it have a fancy UI?** No. It has declarative YAML files that live in git.
 
 By focusing solely on its core competency (bridging HTTP and NATS) the application remains small, fast, and easy to manage. It uses the same rule syntax, evaluation logic, and actions as the `rule-router` so you have a consistent experience. 
 
@@ -154,7 +154,7 @@ Events often need to be enriched with data from another source. Our engine can l
           "data": {data}
         }
 ```
-To make this incredibly fast, the applications has an opt-in feature that maintains a local, in-memory mirror of the KV buckets, updated in real-time via Jetstream watch subscriptions. This gives us a significant performance boost over direct NATS lookups for every message, but it's optional to keep the default footprint minimal.
+To make this incredibly fast, the applications have an opt-in feature that maintains a local, in-memory mirror of the KV buckets, updated in real-time via Jetstream watch subscriptions. This gives us a significant performance boost over direct NATS lookups for every message, but it's optional to keep the default footprint minimal.
 
 ---
 
