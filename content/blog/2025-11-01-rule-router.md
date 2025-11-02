@@ -3,7 +3,7 @@ title: "Building a Grug-Brained NATS Rule Engine in Go"
 date: "2025-11-01"
 author: "Brian Miller"
 slug: "grug-brain-nats-rule-engine"
-excerpt: "Complexity is bad"
+excerpt: "Replacing boilerplate microservices with simple, declarative YAML"
 tags: ["nats", "golang", "event-driven"]
 image: "/images/blog/grug.jpg"
 imageAlt: "Grug-brained developer trapping complexity"
