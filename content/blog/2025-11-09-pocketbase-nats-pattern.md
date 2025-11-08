@@ -22,7 +22,7 @@ On the other end of the spectrum are "big brain" solutions. You could build a fl
 
 We believe there's a simpler, more pragmatic way. In this post, we'll introduce the architectural pattern that powers our open-source IoT platform: a Grug-brained control plane built with **PocketBase**, bridged seamlessly to the NATS data plane.
 
-### The Pattern: Decoupling the Control and Data Planes
+### Decoupling the Control and Data Planes
 
 The core of our architecture is a classic, robust design: a clean separation between the system's brain (the control plane) and its nervous system (the data plane).
 
@@ -42,7 +42,7 @@ For our control plane, we chose PocketBase, and it's one of the most Grug-braine
 3.  **Good Enough for Most:** While it's not a globally distributed, multi-region database, it is more than capable of managing the configuration for thousands of tenants and millions of devices. It's the 80/20 solution that works for the vast majority of use cases without the complexity of a traditional database cluster.
 4.  **Extensible with Go:** You can use PocketBase as a framework and extend it with your own Go code, which is exactly what we did to build our custom libraries.
 
-### The Bridge: `pb-nats` - Dynamic NATS Authentication
+### Manage NATS Authentication - pb-nats
 
 This is the magic that ties the two planes together. While NATS has an excellent, native CLI tool `nsc` that can manage the operator/account/user hierarchy, this doesn't always work for a dynamic, multi-tenant SaaS where users are signing up and changing permissions regularly.
 
@@ -57,7 +57,7 @@ Our `pb-nats` library solves this problem. It's a Go library that hooks directly
 
 The result is a fully dynamic authentication system where the NATS server itself requires only a minimal, static configuration to point to its operator JWT and system account. All subsequent account and user management happens in real-time, driven by your application's database. PocketBase becomes the central control for the entire NATS security topology. This is the "narrow interface" Grug talks about, hiding the immense complexity of JWT management behind simple database records.
 
-### The Foundation: `pb-tenancy` and `pb-audit`
+### Enhancing PocketBase - pb-tenancy and pb-audit 
 
 To build a real product, you need more than just auth. We've also open-sourced the foundational libraries we built on PocketBase:
 
@@ -66,7 +66,7 @@ To build a real product, you need more than just auth. We've also open-sourced t
 
 These libraries provide the essential, non-negotiable features for a SaaS product, allowing developers to focus on their core business logic.
 
-### The Tool: Managing the Control Plane with `pb-cli`
+### Managing the Control Plane with pb-cli
 
 A powerful platform is only as good as the tools you have to manage it. Grug loves good tools because they do the thinking for him. In that spirit, we built `pb-cli`, a command-line interface designed for the day-to-day operations of a PocketBase-driven control plane.
 
@@ -87,7 +87,7 @@ By providing a powerful, scriptable CLI, we embrace the "infrastructure as code"
 
 Our platform offers a compelling alternative for those who value simplicity. By leveraging PocketBase, our control plane is arguably simpler to manage and extend for application-specific logic than a generic, all-purpose control plane.
 
-### Conclusion: A Pragmatic Pattern for the Modern Web
+### Pragmatic Pattern for the Modern Web
 
 The "PocketBase + NATS" pattern, bridged by `pb-nats`, is a powerful, pragmatic, and Grug-brained approach to building modern, real-time applications. It provides the best of both worlds: a simple, fast, and easy-to-manage control plane, and a high-performance, resilient data plane.
 
