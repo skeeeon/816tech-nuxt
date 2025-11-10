@@ -57,7 +57,7 @@ Here's a practical example:
     # The "When": This logic must pass for the action to run
     operator: and
     items:
-      - field: "temperature"
+      - field: "{temperature}"
         operator: "gt"
         value: 30
   
@@ -113,11 +113,11 @@ Third-party systems love sending events in batches. Instead of writing custom fa
       subject: "security.events.batch"
   action:
     nats:
-      forEach: "events"  # Iterate over the "events" array in the message
+      forEach: "{events}"  # Iterate over the "events" array in the message
       filter:            # Only process elements that match this condition
         operator: and
         items:
-          - field: "status"
+          - field: "{status}"
             operator: "eq"
             value: "critical"
       subject: "alerts.critical.{event_id}"
@@ -142,7 +142,7 @@ Events often need to be enriched with data from another source. Our engine can l
     operator: and
     items:
       # Look up the device's status from the 'device_status' KV bucket
-      - field: "@kv.device_status.{device_id}:active"
+      - field: "{@kv.device_status.{device_id}:active}"
         operator: "eq"
         value: true
   action:
