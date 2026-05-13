@@ -5,24 +5,24 @@ author: "Brian Miller"
 slug: "rule-router-six-months-later"
 excerpt: "What we changed, what we learned, and why the rule engine kept earning new responsibilities"
 tags: ["nats", "golang", "event-driven", "gitops"]
-image: "/images/blog/grug.jpg"
+image: "/images/blog/grug-six-months.jpg"
 imageAlt: "Grug-brained developer trapping complexity"
 ---
 ![Alt text](/images/blog/grug-six-months.jpg "Grug through time")
 
-When we wrote about rule-router last November, the project was two binaries and a CLI: a NATS-to-NATS router and an HTTP gateway that shared a rule engine. The pitch was that most of the glue code between services can be replaced with YAML if the rule engine is good enough.
+When we [wrote about rule-router last November](https://www.816tech.com/blog/grug-brain-nats-rule-engine), the project was two binaries and a CLI: a NATS-to-NATS router and an HTTP gateway that shared a rule engine. For anyone landing here cold: rule-router is a small Go service that watches NATS subjects and HTTP endpoints, evaluates incoming events against YAML rules, and routes, enriches, or transforms them into new NATS messages or HTTP calls. The pitch was that most of the glue code between services can be replaced with YAML if the rule engine is good enough.
 
-Six months of running it in real systems later, the pitch still holds. But the shape of the project has changed, and a few things we expected to be separate problems turned out to be the same problem.
+Six months of running it in real systems later, the pitch still holds, and the shape of the project has changed quite a bit.
 
-This post is a tour of what's new, in roughly the order it started to matter.
+This post is a tour of what's new, organized by what hurt the most before each change went in.
 
 ### Credit where it's due
 
-Some of the bigger changes were directly inspired by [`shunt`](https://github.com/danielmichaels/shunt), a fork of rule-router. They took the project in a direction we hadn't planned and made decisions on two problems we'd been circling: collapsing the binaries, and adding a KV-backed rule store (an added bonus was also debounce which never even crossed our minds!) We read their code, learned from it, and ported the ideas back upstream with our own implementations. It was easily the most useful piece of feedback the project has gotten. The "best feature request is a fork" cliché turned out to be exactly right.
+Some of the bigger changes were directly inspired by [`shunt`](https://github.com/danielmichaels/shunt), a personal fork of rule-router by [one of its users](https://github.com/danielmichaels). The fork took the project in a direction we hadn't planned and solved three problems we'd been circling: collapsing the binaries, adding a KV-backed rule store, and adding debounce. We read the code, learned from it, and ported the ideas back upstream with our own implementations. It was one of the most useful pieces of feedback the project has gotten.
 
 ### One binary instead of three
 
-The first thing that changed was the executable boundary.
+The most visible structural change is that the executable boundary moved.
 
 We started with three binaries: `rule-router`, `http-gateway`, and (a bit later) `rule-scheduler` for cron-based publishing. Each had its own config, its own metrics port, its own NATS connection pool. The split made sense on paper, since the workloads are different. In practice almost every deployment ended up running at least two of them, often all three, against the same NATS cluster, against the same KV buckets, evaluating rules with the same engine.
 
@@ -165,8 +165,7 @@ This is what made scheduler fan-out feel natural. A cron job has no incoming pay
 
 A short list of things we considered and decided not to add, in case it's useful to anyone else weighing this kind of thing:
 
-- A scripting language for actions. CEL and Go templates both came up. We kept saying no. The rule format is verbose by design; if you need real logic, write a NATS service in any language and call it.
-- A built-in UI for editing rules directly in production. The web UI pushes to KV, but it doesn't pretend to be a deployment system. Source of truth is still git.
+- A scripting language for actions. CEL and Go templates both came up. We kept saying no. The rule format is verbose by design; if you need real logic, use a full-fledged stream processor like eKuiper, or Wombat. Or go crazy and write a NATS service in any language and call it.
 - Rule versioning inside KV. KV history works fine; we didn't need to invent more.
 - HTTP gateway auth beyond header checks. A real API gateway does this better. We never want to be a reverse proxy.
 
