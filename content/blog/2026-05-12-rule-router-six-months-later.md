@@ -18,7 +18,7 @@ This post is a tour of what's new, organized by what hurt the most before each c
 
 ### Credit where it's due
 
-Some of the bigger changes were directly inspired by [`shunt`](https://github.com/danielmichaels/shunt), a personal fork of rule-router by [one of its users](https://github.com/danielmichaels). The fork took the project in a direction we hadn't planned and solved three problems we'd been circling: collapsing the binaries, adding a KV-backed rule store, and adding debounce. We read the code, learned from it, and ported the ideas back upstream with our own implementations. It was one of the most useful pieces of feedback the project has gotten.
+Some of the bigger changes were directly inspired by [`shunt`](https://github.com/danielmichaels/shunt), a personal fork of rule-router. The fork took the project in a direction we hadn't planned and solved three problems we'd been circling: collapsing the binaries, adding a KV-backed rule store, and adding debounce. We read the code, learned from it, and ported the ideas back upstream with our own implementations. It was one of the most useful pieces of feedback the project has gotten.
 
 ### One binary instead of three
 
