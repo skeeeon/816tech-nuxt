@@ -2,10 +2,10 @@
   <section id="approach" class="section"
            :style="{ backgroundColor: 'var(--color-surface-primary)' }">
     <div class="container mx-auto px-4">
-      <h2 class="section-title text-center">Our Proven Approach</h2>
+      <h2 class="section-title text-center">How a Job Goes</h2>
       <p class="section-subtitle text-center">
-        Every successful implementation follows our structured three-phase methodology,
-        ensuring projects are delivered on time, on budget, and exceeding expectations.
+        Three steps, with something concrete delivered at the end of each one. The process is
+        the same for eight doors, a camera retrofit, or a software integration.
       </p>
       
       <!-- Enhanced three phase methodology -->
@@ -106,7 +106,7 @@
         <div class="max-w-5xl mx-auto text-center">
           <h3 class="text-2xl md:text-3xl font-bold mb-8" 
               :style="{ color: 'var(--color-content-primary)' }">
-            Why Our Approach Works
+            What You Get Working With Us
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div v-for="(benefit, index) in approachBenefits" :key="`benefit-${index}`" 
@@ -140,18 +140,18 @@
              :style="{ backgroundColor: 'var(--color-surface-secondary)' }">
           <h3 class="text-2xl font-semibold mb-4" 
               :style="{ color: 'var(--color-content-primary)' }">
-            Ready to Start Your Technology Journey?
+            Want a number for your building?
           </h3>
-          <p class="text-base mb-8 leading-relaxed" 
+          <p class="text-base mb-8 leading-relaxed"
              :style="{ color: 'var(--color-content-secondary)' }">
-            Let's begin with a discovery conversation to understand your challenges 
-            and explore how modern technology can transform your operations.
+            Tell us what you're trying to fix and we'll come look at it. The walkthrough and
+            the fixed-price quote don't cost anything.
           </p>
-          <button 
+          <button
             @click="navigateToContact('approach-discovery-call')"
             class="btn btn-primary inline-flex items-center text-lg px-8 py-4">
             <CalendarIcon class="w-5 h-5 mr-3" />
-            Schedule Discovery Call
+            Schedule a walkthrough
           </button>
         </div>
       </div>
@@ -186,67 +186,70 @@ import {
 const { navigateToContact } = useNavigation()
 
 // Three-phase methodology with enhanced styling
+// Kept the three-phase structure; replaced the abstractions. Every "deliverable"
+// below is a document or working system the customer physically receives -- no ROI
+// projections (we have no basis for that number) and no "exceeding expectations".
 const phases = [
   {
-    title: 'Discover',
+    title: 'Walk it',
     iconComponent: MagnifyingGlassIcon,
     color: '#2563eb', // Primary blue
-    description: 'We start by deeply understanding your business challenges, current systems, and objectives to ensure our solution aligns perfectly with your needs.',
+    description: 'We come out and look at the actual building and the actual systems. Most sites have more usable cable in the walls and more life left in their equipment than the owner expects.',
     activities: [
-      'Stakeholder interviews and requirements gathering',
-      'Current system assessment and gap analysis',
-      'Site surveys and technical feasibility studies',
-      'ROI analysis and business case development',
-      'Risk assessment and mitigation planning'
+      'Look at each door, camera position, and cable path',
+      'Trace what the last installer left and what still works',
+      'Check network drops, switch capacity, and power',
+      'Sort out which doors are code-required egress',
+      'Agree on what is in scope and what can wait'
     ],
-    deliverables: 'Comprehensive project plan, technical specifications, timeline, and budget proposal with clear ROI projections.'
+    deliverables: 'A point-by-point list of what each door, camera, run, or integration needs. The walkthrough costs nothing.'
   },
   {
-    title: 'Design',
+    title: 'Quote it',
     iconComponent: PaintBrushIcon,
     color: '#059669', // Green
-    description: 'Our team creates detailed system architecture, user interfaces, and integration plans tailored to your specific requirements and existing infrastructure.',
+    description: 'One number, itemized, with the hardware named. You will know the make and model of every reader, camera, lock, and switch before anyone drills a hole.',
     activities: [
-      'System architecture and network design',
-      'User interface and experience design',
-      'Integration planning with existing systems',
-      'Security framework and compliance review',
-      'Testing strategy and acceptance criteria'
+      'Itemized hardware list at the part-number level',
+      'Labor quoted per door or per drop, with a firm total',
+      'Any monthly fee stated plainly with what it covers',
+      'A wiring and termination plan the crew can execute',
+      'Half down at signing, balance when it works'
     ],
-    deliverables: 'Detailed technical designs, architectural diagrams, user mockups, and implementation roadmap with milestones.'
+    deliverables: 'A fixed-price quote you can compare line by line against anyone else\'s.'
   },
   {
-    title: 'Deploy',
+    title: 'Build it',
     iconComponent: Cog6ToothIcon,
     color: '#ea580c', // Orange
-    description: 'Together we implement, test, and launch your solution with comprehensive training and ongoing support to ensure smooth adoption and prolonged success.',
+    description: 'Licensed low-voltage crews pull the wire. We design it, commission it, and stay until your people can run it without calling us.',
     activities: [
-      'System installation and configuration',
-      'Integration testing and quality assurance',
-      'User training and documentation',
-      'Go-live support and monitoring',
-      'Performance optimization and fine-tuning'
+      'Licensed subcontractors handle wire and conduit',
+      'We commission and test every device ourselves',
+      'Credentials loaded, schedules set, staff trained',
+      'You get the administrator logins, and they stay yours',
+      'On access jobs we pull the network cable and prove doors still open'
     ],
-    deliverables: 'Fully operational system, comprehensive documentation, trained users, and ongoing support plan.'
+    deliverables: 'A working system, your own administrator access, as-built documentation, and a spare parts plan.'
   }
 ]
 
 // Enhanced benefits of this structured approach
 const approachBenefits = [
   {
-    iconComponent: ClockIcon,
-    title: 'Predictable Timeline',
-    description: 'Structured phases with clear milestones ensure projects stay on schedule and meet deadlines, giving you confidence in delivery dates.'
+    iconComponent: CurrencyDollarIcon,
+    title: 'You own the hardware',
+    description: 'The panels, readers, cameras, and switches are yours, bought outright. Nothing is leased, and nothing stops working because a subscription lapsed.'
   },
   {
-    iconComponent: CurrencyDollarIcon,
-    title: 'Budget Certainty',
-    description: 'Thorough planning and fixed-price phases eliminate cost surprises and scope creep, protecting your investment.'
+    iconComponent: ClockIcon,
+    title: 'No per-door billing',
+    description: 'One flat monthly fee for the account, however many doors, cameras, or credentials you add. Add a door next year and the monthly fee stays where it is.'
   },
   {
     iconComponent: StarIcon,
-    title: 'Quality Assurance',
-    description: 'Each phase includes testing and validation to ensure high-quality deliverables and exceptional user satisfaction.'
+    title: 'Nobody gets locked in',
+    description: 'The software is open source. Take it in house or hand it to another integrator and it keeps working, with your data intact.'
   }
 ]
 </script>

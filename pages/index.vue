@@ -9,11 +9,11 @@
     <section id="contact" class="section bg-blue-600 text-white">
       <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">
-          Ready to Transform Your Operations?
+          What are you trying to fix?
         </h2>
         <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto text-blue-100">
-          Let's discuss how 816tech can solve your business challenges and drive measurable results. 
-          Contact us for a free consultation and discover what's possible.
+          Doors, cameras, a wiring closet, or two systems that refuse to talk to each other.
+          Tell us and we'll come look. The walkthrough and the fixed-price quote are free.
         </p>
         
         <!-- Contact options -->
@@ -61,12 +61,12 @@ const { trackContact } = useTracking()
 
 // SEO Meta Tags
 useSeoMeta({
-  title: '816tech - Enterprise Technology Integration | Kansas City',
-  description: 'Kansas City\'s trusted technology integration partner specializing in enterprise solutions using proven open-source technologies. System integration, custom development, and infrastructure design.',
-  keywords: 'enterprise technology, system integration, Kansas City, Missouri, open source solutions, custom software development, technology consulting',
+  title: '816tech - Technology Integration & Access Control | Kansas City',
+  description: 'Kansas City technology integrator: access control, cameras, networks and cabling, and custom software integrations. Doors decide on site so they keep working through an outage, you own the hardware, and we service what other installers left behind.',
+  keywords: 'technology integrator Kansas City, access control Kansas City, security integrator Kansas City, commercial access control, security camera installation, structured cabling, low voltage contractor, custom software integration, system integration Kansas City',
   author: '816tech',
-  ogTitle: '816tech - Enterprise Technology Solutions in Kansas City',
-  ogDescription: 'Transform your business operations with proven technology integration and custom solutions built on open-source platforms.',
+  ogTitle: '816tech - Technology Integration Built on Systems You Own',
+  ogDescription: 'A Kansas City integrator for physical security, networks, and the software that connects them. We write the code, so systems that "don\'t integrate" usually turn out to.',
   ogImage: '/images/816tech-og-image.jpg',
   ogImageWidth: '1200',
   ogImageHeight: '630',
@@ -77,8 +77,8 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterSite: '@816tech',
   twitterCreator: '@816tech',
-  twitterTitle: '816tech - Enterprise Technology Integration | Kansas City',
-  twitterDescription: 'Kansas City\'s trusted technology integration partner using open-source solutions.',
+  twitterTitle: '816tech - Technology Integration & Access Control | Kansas City',
+  twitterDescription: 'Kansas City integrator for physical security, networks, and the software that connects them. Systems you own, no per-door fees.',
   twitterImage: '/images/816tech-og-image.jpg',
   // Local business specific meta tags
   'business:contact_data:locality': 'Kansas City',
@@ -287,7 +287,7 @@ const contactOptions = [
     type: 'phone',
     iconComponent: PhoneIcon,
     title: 'Call Us',
-    description: 'Speak directly with our team about your needs',
+    description: 'Tell us how many doors, or what stopped working',
     action: 'Call Now',
     href: 'tel:+18168003299',
     external: true
@@ -296,7 +296,7 @@ const contactOptions = [
     type: 'email',
     iconComponent: EnvelopeIcon,
     title: 'Email Us',
-    description: 'Send us details about your project for a detailed response',
+    description: 'Send the details and we will come back with questions',
     action: 'Send Email',
     href: 'mailto:info@816tech.com',
     external: true
@@ -304,9 +304,9 @@ const contactOptions = [
   {
     type: 'calendar',
     iconComponent: CalendarIcon,
-    title: 'Schedule Meeting',
-    description: 'Book a free consultation to discuss your requirements',
-    action: 'Book Meeting',
+    title: 'Book a Walkthrough',
+    description: 'Pick a time and we will come look at the building',
+    action: 'Book a Time',
     href: 'https://cal.com/816tech',
     external: true
   }

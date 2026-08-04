@@ -38,12 +38,13 @@
     <div class="container mx-auto px-4 relative z-20">
       <div class="max-w-4xl">
         <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight text-white">
-          Enterprise Technology<br>
-          <span class="text-blue-400">Built on Open Standards</span>
+          Technology Integration<br>
+          <span class="text-blue-400">Built on Systems You Own</span>
         </h1>
         <p class="text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl text-gray-200">
-          Kansas City's trusted partner for infrastructure, integration, and innovation. 
-          We architect robust solutions using proven open-source technologies that scale with your business.
+          A Kansas City integrator for physical security, networks, and the software that connects
+          them. Access control and video are where we go deepest, and because we write the code
+          ourselves, we can usually connect systems another installer would call incompatible.
         </p>
         
         <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">

@@ -4,8 +4,8 @@
     <div class="container mx-auto px-4">
       <h2 class="section-title text-center">About 816tech</h2>
       <p class="section-subtitle text-center">
-        A Kansas City-based technology integrator with deep expertise in enterprise implementation
-        and a commitment to delivering exceptional results.
+        A Kansas City technology integrator with sixteen years of experience designing and
+        installing the systems we sell.
       </p>
       
       <!-- Company overview -->
@@ -20,17 +20,24 @@
             <div class="space-y-4 text-base" 
                  :style="{ color: 'var(--color-content-secondary)' }">
               <p>
-                Founded in Kansas City with over 15 years of combined experience in enterprise technology, 
-                816tech was born from a simple observation: too many projects fail not because of 
-                technology limitations, but due to poor implementation and lack of business focus.
+                We have sixteen years in this trade, most of it on the integration side: specifying
+                access control and video systems, installing them, and commissioning them. That work
+                ran from a single laundromat to multi-building campuses to enterprises with sites in
+                several states, so we know what holds up at one door and what holds up at a thousand.
               </p>
               <p>
-                We bridge the gap between cutting-edge technology and real-world business needs, 
-                ensuring every project delivers measurable value and sustainable results.
+                A few of those years were spent on the distribution side, selling to other
+                installers, which is where you find out what generates service calls two years after
+                handover. The same complaints kept coming back. Cloud systems stopped working when
+                the internet did. Per-door software fees grew every time somebody added a reader.
+                Customers could not touch their own equipment, because the software belonged to
+                whoever sold it to them.
               </p>
               <p>
-                Our local presence in the heart of America allows us to serve clients across the Midwest 
-                with personalized attention while maintaining the expertise and resources of a national firm.
+                So we build what we would want in our own building: decisions made on site, hardware
+                you own outright, and open-source software, so no vendor can hold your building
+                hostage, including us. When two systems refuse to talk to each other, we write the
+                code that makes them, which most integrators cannot do.
               </p>
             </div>
           </div>
@@ -132,9 +139,8 @@
             </div>
             <p class="text-sm mb-4" 
                :style="{ color: 'var(--color-content-secondary)' }">
-              Proudly serving the greater Kansas City metropolitan area and the Midwest region. 
-              Our local presence means faster response times, on-site support, and a deep 
-              understanding of regional business needs.
+              Serving the Kansas City metro and the surrounding area. Close enough to walk your
+              building this week, and to be on site the same week when something needs a hand on it.
             </p>
           </div>
         </div>
@@ -145,12 +151,11 @@
         <div class="max-w-3xl mx-auto">
           <h3 class="text-2xl font-bold mb-6" 
               :style="{ color: 'var(--color-content-primary)' }">
-            Our Commitment to You
+            What You Can Hold Us To
           </h3>
-          <p class="text-lg mb-8" 
+          <p class="text-lg mb-8"
              :style="{ color: 'var(--color-content-secondary)' }">
-            We don't just implement technology—we partner with you for long-term success. 
-            Every project is backed by our commitment to quality, transparency, and measurable results.
+            Three things, in writing, on every job.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div v-for="(commitment, index) in commitments" 
@@ -203,74 +208,89 @@ import {
 // Use centralized navigation logic
 const { navigateToContact } = useNavigation()
 
-// Key differentiators for 816tech
+// NOTE ON CLAIMS: everything in this file must be verifiable if a customer asks.
+// Three earlier entries were deleted rather than reworded, because they could not be
+// backed by a company with no completed jobs yet:
+//   - "6-12 Months to ROI"                  -> a fabricated metric
+//   - "Security Certified"                  -> no specific certification to name
+//   - "Authorized partner with leading ..."  -> not true of 816tech as a new entity
+// If any becomes true, name the certificate or the manufacturer explicitly. Do not
+// restore a vague version. Same rule for the stats: no number we can't source.
+//
+// VOICE: first person plural ("we"), never "I". Prior copy mixed the two, which read
+// as a one-person shop. The prior experience is real and transferable, so it belongs
+// to the company.
+//
+// PRIOR-WORK REFERENCES: describe SIZE, not sector. The range runs from a single
+// small business through enterprises operating in several states, and the rungs are
+// named by building count ("multi-building campuses"), not by industry. Never name a
+// former customer and never imply one: no stadiums or arenas, and no sector labels
+// either -- "school districts" was cut for the same reason, since a named sector plus
+// a metro plus a size is close to an identification even when no customer is meant.
 const differentiators = [
   {
     iconComponent: CheckBadgeIcon,
     color: '#2563eb',
-    title: 'Proven Experience',
-    description: '15+ years implementing enterprise technology solutions with a track record of successful projects across multiple industries.'
+    title: 'Sixteen years installing these systems',
+    description: 'Mostly integration work, on sites ranging from single small businesses to enterprises operating in several states. We have specified this equipment, installed it, and been called back when it failed.'
   },
   {
     iconComponent: UsersIcon,
     color: '#059669',
-    title: 'Business-First Approach',
-    description: 'We focus on solving business problems first, then apply the right technology—not the other way around.'
+    title: 'The designer commissions the job',
+    description: 'No account manager handing you off, and no tier-one queue. Whoever walks your building is who sets the system up and who picks up the phone afterward.'
   },
   {
     iconComponent: WrenchScrewdriverIcon,
     color: '#7c3aed',
-    title: 'Full-Service Support',
-    description: 'From initial consultation through ongoing maintenance—we are your long-term technology partner.'
+    title: 'We write the software',
+    description: 'Unusual for an integrator, and it means the integrations other shops decline are ordinary work here, including equipment that shipped with no way to talk to anything else.'
   }
 ]
 
-// Company statistics
 const companyStats = [
-  { number: '15+', label: 'Years of Experience' },
-  { number: '6-12', label: 'Months to ROI' },
-  { number: '0', label: 'Vendor Lock-in Risk' },
-  { number: '100%', label: 'Open Source' }
+  { number: '16', label: 'Years installing these systems' },
+  { number: 'KC', label: 'Based in Kansas City' },
+  { number: '0', label: 'Per-device software fees' },
+  { number: '100%', label: 'Open source software' }
 ]
 
-// Fixed credentials and certifications with Heroicon components
 const credentials = [
   {
     iconComponent: ShieldCheckIcon,
-    title: 'Security Certified',
-    description: 'Certified in cybersecurity and data protection standards'
+    title: 'Insured',
+    description: 'General liability and errors & omissions coverage; certificate available on request'
   },
   {
     iconComponent: BookOpenIcon,
-    title: 'Industry Training',
-    description: 'Ongoing education in latest technologies and practices'
+    title: 'Code-aware',
+    description: 'Egress stays mechanical and fire release runs through listed power supplies'
   },
   {
     iconComponent: BuildingOfficeIcon,
-    title: 'Vendor Partnerships',
-    description: 'Authorized partner with leading technology manufacturers'
+    title: 'Licensed crews on the wire',
+    description: 'Conduit and cable pulled by licensed low-voltage contractors carrying their own insurance'
   }
 ]
 
-// Team commitments
 const commitments = [
   {
     iconComponent: StarIcon,
     color: '#f59e0b',
-    title: 'Quality First',
-    description: 'Every solution meets our rigorous quality standards and exceeds client expectations.'
+    title: 'Your equipment is yours',
+    description: 'You buy the hardware outright. Nothing is leased, and nothing stops working if you stop paying us.'
   },
   {
     iconComponent: EyeIcon,
     color: '#2563eb',
-    title: 'Full Transparency',
-    description: 'Clear communication, honest timelines, and upfront pricing—no surprises.'
+    title: 'Fixed prices, named parts',
+    description: 'You see the make and model of every component before work starts, with labor quoted per door or per drop instead of open-ended.'
   },
   {
     iconComponent: HeartIcon,
     color: '#dc2626',
-    title: 'Long-term Success',
-    description: 'We measure our success by your success and build solutions for lasting value.'
+    title: 'No lock-in, ever',
+    description: 'The software is open source. Take it in house or hand it to another integrator and it keeps working, with your data intact.'
   }
 ]
 </script>

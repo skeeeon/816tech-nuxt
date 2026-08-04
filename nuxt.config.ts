@@ -98,13 +98,13 @@ export default defineNuxtConfig({
   // SEO Configuration with Theme Optimization
   app: {
     head: {
-      title: '816tech - Enterprise Technology Integration | Kansas City',
+      title: '816tech - Technology Integration & Access Control | Kansas City',
       htmlAttrs: { lang: 'en' },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Kansas City\'s trusted technology integration partner. Enterprise solutions using proven open-source technologies.' },
-        { name: 'keywords', content: 'enterprise technology, system integration, Kansas City, Missouri, open source solutions, custom software development' },
+        { name: 'description', content: 'Kansas City technology integrator: access control, cameras, networks and cabling, and custom software integrations. Systems you own, no per-door fees.' },
+        { name: 'keywords', content: 'technology integrator Kansas City, access control Kansas City, security integrator Kansas City, security camera installation, structured cabling, custom software integration' },
         { name: 'author', content: '816tech' },
         { name: 'robots', content: 'index, follow' },
         { property: 'og:type', content: 'website' },

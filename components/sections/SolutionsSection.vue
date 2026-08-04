@@ -2,10 +2,10 @@
   <section id="solutions" class="section" 
            :style="{ backgroundColor: 'var(--color-surface-primary)' }">
     <div class="container mx-auto px-4">
-      <h2 class="section-title text-center">Solutions That Work</h2>
+      <h2 class="section-title text-center">What We Do</h2>
       <p class="section-subtitle text-center">
-        We specialize in implementing solutions that solve real business challenges,
-        from initial concept to ongoing support.
+        Physical security is the core of what we do, and the cabling, networking, and software
+        behind it are part of the same job. We also service equipment another company installed.
       </p>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 md:mt-16">
@@ -69,11 +69,11 @@
 
 // Import Heroicons
 import {
-  Cog6ToothIcon,
-  ChartBarIcon,
   ShieldCheckIcon,
+  VideoCameraIcon,
   ServerIcon,
-  DevicePhoneMobileIcon,
+  CodeBracketIcon,
+  ArrowsRightLeftIcon,
   WrenchScrewdriverIcon,
   CheckIcon,
   ArrowRightIcon
@@ -83,77 +83,92 @@ import {
 const { scrollToSection } = useNavigation()
 
 // Technology solution categories - positioned as implementation services
+// Six cards to fill the lg:grid-cols-3 grid cleanly (2 rows of 3).
+//
+// Two rules for anything added or reworded here:
+//   1. It must be a THING, not an abstraction. "API development and integration"
+//      and "predictive analytics implementation" are what made the earlier version
+//      of this section say nothing -- a reader could not tell what they'd receive.
+//   2. It must be deliverable by one operator plus a licensed sub crew.
+//      Notably removed: "24/7 monitoring and support". The SLA is remote response
+//      next business day with on-site billed T&M, and "monitoring" is a licensed
+//      activity in several states -- we say notifications.
+//
+// Physical security leads because it's the deepest specialty, but the range is
+// deliberate: adjacent network and software work is what fills the months while
+// access-control sales cycles run, and a one-trick shop contradicts our own
+// no-lock-in argument.
 const solutions = [
   {
-    iconComponent: Cog6ToothIcon,
-    color: '#2563eb', // Primary blue
-    title: 'System Integration',
-    description: 'Connect disparate systems and create unified ecosystems that work together seamlessly.',
-    capabilities: [
-      'Legacy system modernization',
-      'API development and integration',
-      'Real-time data synchronization',
-      'Cross-platform compatibility'
-    ]
-  },
-  {
-    iconComponent: ChartBarIcon,
-    color: '#059669', // Green
-    title: 'Data Analytics & Monitoring',
-    description: 'Transform raw data into actionable insights with custom dashboards and analytics.',
-    capabilities: [
-      'Real-time monitoring dashboards',
-      'Predictive analytics implementation',
-      'Custom reporting solutions',
-      'Alert and notification systems'
-    ]
-  },
-  {
     iconComponent: ShieldCheckIcon,
-    color: '#dc2626', // Red
-    title: 'Security & Compliance',
-    description: 'Implement robust security measures and ensure compliance with industry standards.',
+    color: '#2563eb', // Primary blue
+    title: 'Access Control & Physical Security',
+    description: 'Card and fob entry that keeps working when the internet goes down, because the doors decide locally.',
     capabilities: [
-      'End-to-end encryption',
-      'Access control and authentication',
-      'Compliance documentation',
-      'Security audit and testing'
+      'Doors unlock on site, not in a data center',
+      'Add or revoke a credential in seconds',
+      'Schedules, holidays, and after-hours rules',
+      'Every entry logged, searchable, and yours to keep'
+    ]
+  },
+  {
+    iconComponent: VideoCameraIcon,
+    color: '#059669', // Green
+    title: 'Cameras & Video',
+    description: 'New camera systems or additions to what you have, recording on site rather than in somebody\'s cloud.',
+    capabilities: [
+      'ONVIF cameras, no proprietary lock-in',
+      'On-site recording, nothing streamed out by default',
+      'Badge events linked to the footage',
+      'Motion and object detection on the local box'
     ]
   },
   {
     iconComponent: ServerIcon,
     color: '#7c3aed', // Purple
-    title: 'Infrastructure Design',
-    description: 'Design and deploy scalable infrastructure that grows with your business needs.',
+    title: 'Networks, Cabling & Wireless',
+    description: 'The low-voltage infrastructure underneath all of it, done to the same standard as the visible parts.',
     capabilities: [
-      'Network architecture planning',
-      'Edge computing implementation',
-      'Cloud integration strategies',
-      'Scalability and redundancy'
+      'Structured cabling, clean terminations, tidy racks',
+      'Switching, PoE, and VLANs sized for the building',
+      'Wireless coverage surveys and access points',
+      'Camera and door networks kept off your office LAN'
     ]
   },
   {
-    iconComponent: DevicePhoneMobileIcon,
+    iconComponent: CodeBracketIcon,
     color: '#ea580c', // Orange
-    title: 'Custom Applications',
-    description: 'Develop tailored applications and interfaces that match your specific workflows.',
+    title: 'Custom Software & Integrations',
+    description: 'We write the software, so systems that "don\'t integrate" usually turn out to.',
     capabilities: [
-      'Mobile app development',
-      'Web-based control panels',
-      'Custom user interfaces',
-      'Workflow automation tools'
+      'Connect equipment and software that shipped without APIs for each other',
+      'Dashboards and reports built around how you actually work',
+      'Automation for the steps somebody is doing by hand',
+      'Data pushed into the reporting tools you already run'
+    ]
+  },
+  {
+    iconComponent: ArrowsRightLeftIcon,
+    color: '#0284c7', // Sky
+    title: 'Working With What You Own',
+    description: 'We would rather keep your equipment in service than sell you replacements for it.',
+    capabilities: [
+      'Keep working cameras, panels, and readers running',
+      'Tie existing systems together instead of ripping them out',
+      'Service and repair hardware another installer put in',
+      'A straight answer when something really is past saving'
     ]
   },
   {
     iconComponent: WrenchScrewdriverIcon,
     color: '#0891b2', // Cyan
-    title: 'Ongoing Support',
-    description: 'Comprehensive support services to keep your systems running smoothly.',
+    title: 'Service & Support',
+    description: 'One flat monthly fee covers the software, hosting, and remote help.',
     capabilities: [
-      '24/7 monitoring and support',
-      'Preventive maintenance',
-      'Performance optimization',
-      'Training and documentation'
+      'Request service in one tap from your phone',
+      'Remote response next business day, included',
+      'We see equipment faults before you call',
+      'On-site work quoted and billed by the hour'
     ]
   }
 ]
