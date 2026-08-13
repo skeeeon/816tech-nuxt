@@ -11,8 +11,7 @@
       <!-- Enhanced three phase methodology -->
       <div class="relative mt-12 md:mt-16">
         <!-- Progress line background (desktop only) -->
-        <div class="hidden lg:block absolute top-[30px] left-0 right-0 h-1 mx-auto"
-             style="width: calc(100% - 240px); left: 120px;">
+        <div class="progress-track hidden lg:block absolute top-[30px] h-1">
           <!-- Background line -->
           <div class="w-full h-full rounded-full"
                :style="{ backgroundColor: 'var(--color-border-primary)' }"></div>
@@ -20,7 +19,7 @@
           <div class="absolute top-0 left-0 w-full h-full rounded-full bg-gradient-to-r from-blue-500 via-green-500 to-orange-500"></div>
         </div>
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
+        <div class="approach-grid grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
           <div v-for="(phase, index) in phases" :key="`phase-${index}`" 
                class="approach-phase relative">
             
@@ -227,8 +226,8 @@ const phases = [
       'Licensed subcontractors handle wire and conduit',
       'We commission and test every device ourselves',
       'Credentials loaded, schedules set, staff trained',
-      'You get the administrator logins, and they stay yours',
-      'On access jobs we pull the network cable and prove doors still open'
+      'Administrator logins are yours and stay yours',
+      'We pull the network cable and prove doors open'
     ],
     deliverables: 'A working system, your own administrator access, as-built documentation, and a spare parts plan.'
   }
@@ -261,6 +260,16 @@ const approachBenefits = [
 
 .approach-phase {
   position: relative;
+}
+
+/* Connector between the first and last phase circles. Each circle is centered in
+   its column, so its center sits half a column in from the track's edge:
+   (track width - 2 gaps) / 3 / 2. Derived rather than hardcoded so it stays on
+   the circles at every desktop width. */
+.progress-track {
+  --track-inset: calc((100% - 2 * 3rem) / 6);
+  left: var(--track-inset);
+  right: var(--track-inset);
 }
 
 .phase-header {
@@ -318,18 +327,17 @@ const approachBenefits = [
   text-align: center;
 }
 
+/* The activity list is bullet + text, so it stays left-aligned at every width.
+   Inheriting the centering above only shows up once an item wraps, which reads
+   as the text drifting away from its checkmark. */
+.phase-activities {
+  text-align: left;
+}
+
 .phase-icon {
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
-}
-
-.activity-item {
-  transition: all 0.2s ease;
-}
-
-.activity-item:hover {
-  transform: translateX(4px);
 }
 
 .activity-bullet {
@@ -375,6 +383,54 @@ const approachBenefits = [
   justify-content: center;
 }
 
+/* Desktop: keep the three phase columns aligned to each other instead of letting
+   each one size to its own copy. Fallback is a flex column that pins the
+   deliverables card to the bottom; subgrid additionally lines up every row
+   (icon, title, description, activities, deliverables) across all three. */
+@media (min-width: 1024px) {
+  .approach-phase {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .phase-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+
+  .phase-activities {
+    flex: 1 1 auto;
+  }
+}
+
+@supports (grid-template-rows: subgrid) {
+  @media (min-width: 1024px) {
+    .approach-grid {
+      /* header, icon, title, description, activities, deliverables */
+      grid-template-rows: repeat(6, auto);
+      row-gap: 0;
+    }
+
+    .approach-phase {
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-row: span 6;
+    }
+
+    .phase-content {
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-row: span 5;
+    }
+
+    .phase-activities {
+      flex: none;
+    }
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 1023px) {
   .phase-header {
@@ -391,7 +447,6 @@ const approachBenefits = [
     margin: 0 auto 1.5rem auto;
   }
   
-  .phase-activities,
   .phase-deliverables {
     text-align: left;
   }
