@@ -4,8 +4,9 @@
     <div class="container mx-auto px-4">
       <h2 class="section-title text-center">What We Do</h2>
       <p class="section-subtitle text-center">
-        Physical security is the core of what we do, and the cabling, networking, and software
-        behind it are part of the same job. We also service equipment another company installed.
+        We start with the software and the integration, then handle the physical systems that
+        depend on it. Access control and cameras are the specialty, and we service equipment
+        another company installed.
       </p>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 md:mt-16">

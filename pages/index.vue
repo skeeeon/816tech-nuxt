@@ -9,11 +9,12 @@
     <section id="contact" class="section bg-blue-600 text-white">
       <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">
-          What are you trying to fix?
+          Tell us what you're working on
         </h2>
         <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto text-blue-100">
-          Doors, cameras, a wiring closet, or two systems that refuse to talk to each other.
-          Tell us and we'll come look. The walkthrough and the fixed-price quote are free.
+          A new building, two systems that refuse to talk to each other, or something that
+          stopped working. Tell us what you have and we'll tell you what it takes. Scoping
+          the job and quoting it are free.
         </p>
         
         <!-- Contact options -->
@@ -304,9 +305,9 @@ const contactOptions = [
   {
     type: 'calendar',
     iconComponent: CalendarIcon,
-    title: 'Book a Walkthrough',
-    description: 'Pick a time and we will come look at the building',
-    action: 'Book a Time',
+    title: 'Schedule a Meeting',
+    description: 'Pick a time to talk through what you need',
+    action: 'Pick a Time',
     href: 'https://cal.com/816tech',
     external: true
   }

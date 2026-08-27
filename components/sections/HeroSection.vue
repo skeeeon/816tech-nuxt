@@ -48,18 +48,18 @@
         </p>
         
         <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
-          <button 
-            @click="navigateToContact('hero-consultation')" 
+          <button
+            @click="navigateToContact('hero-contact')"
             class="btn btn-primary"
-            aria-label="Schedule a consultation with 816tech">
-            Schedule Consultation
+            aria-label="Contact 816tech">
+            Contact Us
           </button>
-          <button 
-            @click="scrollToSection('solutions', 'hero-explore')" 
+          <button
+            @click="scrollToSection('approach', 'hero-how-we-work')"
             class="btn btn-secondary-light"
-            aria-label="Explore 816tech services">
-            <Squares2X2Icon class="w-5 h-5 mr-2" />
-            Explore Services
+            aria-label="See how a job goes with 816tech">
+            <ClipboardDocumentListIcon class="w-5 h-5 mr-2" />
+            How a Job Goes
           </button>
         </div>
       </div>
@@ -76,7 +76,7 @@
  */
 
 // Import Heroicons
-import { Squares2X2Icon } from '@heroicons/vue/24/outline'
+import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
 
 // Use theme composable
 const { isDarkMode } = useTheme()

@@ -139,18 +139,18 @@
              :style="{ backgroundColor: 'var(--color-surface-secondary)' }">
           <h3 class="text-2xl font-semibold mb-4" 
               :style="{ color: 'var(--color-content-primary)' }">
-            Want a number for your building?
+            Want a number for your job?
           </h3>
           <p class="text-base mb-8 leading-relaxed"
              :style="{ color: 'var(--color-content-secondary)' }">
-            Tell us what you're trying to fix and we'll come look at it. The walkthrough and
-            the fixed-price quote don't cost anything.
+            Tell us what you need and we'll come look at it. Scoping the job and quoting it
+            don't cost anything.
           </p>
           <button
             @click="navigateToContact('approach-discovery-call')"
             class="btn btn-primary inline-flex items-center text-lg px-8 py-4">
             <CalendarIcon class="w-5 h-5 mr-3" />
-            Schedule a walkthrough
+            Request a meeting
           </button>
         </div>
       </div>
@@ -190,18 +190,18 @@ const { navigateToContact } = useNavigation()
 // projections (we have no basis for that number) and no "exceeding expectations".
 const phases = [
   {
-    title: 'Walk it',
+    title: 'Scope it',
     iconComponent: MagnifyingGlassIcon,
     color: '#2563eb', // Primary blue
-    description: 'We come out and look at the actual building and the actual systems. Most sites have more usable cable in the walls and more life left in their equipment than the owner expects.',
+    description: 'We find out what you actually have. Usually that means walking the building; sometimes it means reading an existing system\'s configuration and what its API will let us do. Most sites have more usable cable in the walls and more life left in their equipment than the owner expects.',
     activities: [
       'Look at each door, camera position, and cable path',
       'Trace what the last installer left and what still works',
-      'Check network drops, switch capacity, and power',
-      'Sort out which doors are code-required egress',
+      'Read the existing software: configs, exports, and API limits',
+      'Check network drops, switch capacity, power, and egress rules',
       'Agree on what is in scope and what can wait'
     ],
-    deliverables: 'A point-by-point list of what each door, camera, run, or integration needs. The walkthrough costs nothing.'
+    deliverables: 'A point-by-point list of what each door, camera, run, or integration needs. This part costs nothing.'
   },
   {
     title: 'Quote it',
