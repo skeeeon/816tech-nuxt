@@ -8,6 +8,7 @@ tags: ["nats", "access-control", "golang", "event-driven"]
 image: "/images/blog/walks-into-bar.jpg"
 imageAlt: "Cartoon illustration of a face reader, a key-value bucket, and two YAML scrolls walking into a bar called The Code & Cocktail"
 ---
+![A face reader, a key-value bucket, and two YAML scrolls walk into a bar called The Code & Cocktail](/images/blog/walks-into-bar.webp)
 
 The [iDFace Max](https://www.controlid.com.br/en/access-control/idface-max/) is Control iD's current face reader: two 1080p cameras, a 7" touchscreen, and room for 100,000 faces with liveness detection. Control iD is an ASSA ABLOY company, and the matching runs on [Paravision](https://www.paravision.ai/news/control-id-partners-with-paravision-to-launch-new-idface-max-access-control-system/) rather than an in-house algorithm, which is most of why we looked at it. Paravision places top five worldwide on NIST's 1:N visa-border benchmark. The part of this problem we have no business writing ourselves is handled by a company that does only that.
 

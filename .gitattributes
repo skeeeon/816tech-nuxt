@@ -1,0 +1,27 @@
+# Normalise all text to LF in the repository and check it out as LF everywhere.
+# The index is already LF throughout, but this machine has core.autocrlf=true, so
+# checkouts produced CRLF working files and git warned on every commit that
+# touched one. eol=lf overrides autocrlf per-file and keeps the two in agreement.
+* text=auto eol=lf
+
+# Windows shells need CRLF in these to run at all.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary assets: never normalise line endings, never diff as text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.svg text
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.mp4 binary
+*.webm binary
