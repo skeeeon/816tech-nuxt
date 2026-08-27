@@ -1,15 +1,17 @@
 ---
-title: "A Face Reader, a KV Bucket, and Three YAML Files"
+title: "A Face Reader, a KV Bucket, and Some YAML Rules"
 date: "2026-08-26"
 author: "Brian Miller"
 slug: "face-reader-access-control-rules"
-excerpt: "Building an attribute-based authorization layer for facial recognition readers without writing a middleware service"
+excerpt: "An attribute-based authorization layer for facial recognition readers, declared in YAML instead of written in Go"
 tags: ["nats", "access-control", "golang", "event-driven"]
-image: "/images/blog/default-og-image.jpg"
-imageAlt: "Facial recognition reader at a door"
+image: "/images/blog/walks-into-bar.jpg"
+imageAlt: "Cartoon illustration of a face reader, a key-value bucket, and two YAML scrolls walking into a bar called The Code & Cocktail"
 ---
 
-The Control iD idFace Max has an [online identification mode](https://www.controlid.com.br/docs/access-api-en/operating-modes/online-identification-events/). Someone stands in front of the camera, the device matches the face against its local template store, and then instead of deciding on its own it asks a server what to do. It POSTs the identification to an endpoint you control and blocks, holding the door, until it gets back a JSON verdict.
+The [iDFace Max](https://www.controlid.com.br/en/access-control/idface-max/) is Control iD's current face reader: two 1080p cameras, a 7" touchscreen, and room for 100,000 faces with liveness detection. Control iD is an ASSA ABLOY company, and the matching runs on [Paravision](https://www.paravision.ai/news/control-id-partners-with-paravision-to-launch-new-idface-max-access-control-system/) rather than an in-house algorithm, which is most of why we looked at it. Paravision places top five worldwide on NIST's 1:N visa-border benchmark. The part of this problem we have no business writing ourselves is handled by a company that does only that.
+
+What made us buy one is how much of the device is reachable from outside it: a documented HTTP API, a notification stream you can point anywhere, and an [online identification mode](https://www.controlid.com.br/docs/access-api-en/operating-modes/online-identification-events/) that tells the reader to stop deciding things for itself. Someone stands in front of the camera, the device matches the face against its local template store, and then instead of deciding on its own it asks a server what to do. It POSTs the identification to an endpoint you control and blocks, holding the door, until it gets back a JSON verdict.
 
 Whoever answers that call is the actual access control system. The reader is a camera with an opinion about who you are; the authorization logic lives on your side.
 
@@ -38,7 +40,7 @@ And the device sits there, holding the door closed, until it gets back something
 
 Event 7 is access granted, event 6 is access denied, and `actions` is the list of relays to fire. The [return message format](https://www.controlid.com.br/docs/access-api-en/operating-modes/online-identification-events/#return-message) is fixed, and the whole exchange has to complete inside the device's timeout, which is short.
 
-Two things here were outside what rule-router could do: the body is form-encoded rather than JSON, and some deployments want to distinguish doors by a query parameter on the callback URL. Both went in for 0.19.0. The form decoder was the one we argued about, because a rule engine that accepts every content type anyone asks for stops being a rule engine. So we wrote down a bar it has to clear: no configuration, and the same flat map of fields JSON produces. Form encoding clears it. XML, multipart, and Protobuf don't.
+Two things here were outside what rule-router could do: the body is form-encoded rather than JSON, and some deployments want to distinguish doors by a query parameter on the callback URL. Both went in for 0.19.0. The form decoder was the one we argued about, because a rule engine that accepts every content type anyone asks for stops being a rule engine. The test we settled on: no configuration, and the same flat map of fields JSON produces. Form encoding passes. XML, multipart, and Protobuf don't.
 
 A form field lands in a rule exactly like a JSON field. `{device_id}`, `{user_id}`, `{confidence}`. Values stay strings, always, because inferring types would turn a PIN of `007` into `7`. Comparisons coerce, so `gte: 85` still works against `"93"`.
 
@@ -126,9 +128,9 @@ Three rules on the same path, evaluated top to bottom.
 
 A few things here are load-bearing.
 
-Rules 1 and 2 are separate because a rule has exactly one action. You can't publish to NATS and respond to the caller from the same rule, so the audit trail and the door decision are two rules with identical conditions. That felt redundant the first time we wrote it and stopped feeling that way once the conditions started diverging.
+Rules 1 and 2 are separate because a rule has exactly one action. You can't publish to NATS and respond to the caller from the same rule, so the audit trail and the door decision are two rules with identical conditions. It looked redundant the first time we wrote it, and stopped looking that way once the two sets of conditions began to diverge.
 
-Every matching rule on the path is evaluated, but only the first `respond` is written back. On a granted identification all three rules match and produce three actions; the caller gets event 7 because rule 2 got there first. Put the deny rule above the grant rule and every door in the building stops working, which is a satisfying thing to be able to reason about from the file order alone.
+Every matching rule on the path is evaluated, but only the first `respond` is written back. On a granted identification all three rules match and produce three actions; the caller gets event 7 because rule 2 got there first. Put the deny rule above the grant rule and every door in the building stops working, which the file order alone is enough to tell you.
 
 The deny rule has no conditions on purpose. If the KV lookup misses, or the bucket is unreachable, or the face belongs to nobody in the system, the grant conditions evaluate false and the request falls through to event 6. Failure closes the door.
 
@@ -148,7 +150,7 @@ There's no reload, no deploy, no cache to wait out. The next identification at a
 
 ### From a list of people to a set of conditions
 
-Once the decision is a set of conditions instead of a lookup, you can keep adding conditions, and that's where the arrangement starts earning its keep. The same grant rule with real policy on it:
+Once the decision is a set of conditions rather than a single lookup, nothing stops you from adding more of them. The same grant rule with real policy on it:
 
 ```yaml
 - trigger:
@@ -197,11 +199,11 @@ Once the decision is a set of conditions instead of a lookup, you can keep addin
 
 Seven attributes. Three looked up live from KV, one from the device's own claim about match quality, three from the clock. No code.
 
-The area check is the one people tend to like. `{@kv.devices.{device_id}:area}` maps the reader that made the call to the space it guards, and `contains` tests that against the user's list of cleared areas. One rule file covers every door in the building, and adding a door means adding a KV key rather than a rule.
+The area check does the most work per line. `{@kv.devices.{device_id}:area}` maps the reader that made the call to the space it guards, and `contains` tests that against the user's list of cleared areas. One rule file covers every door in the building, and adding a door means adding a KV key rather than a rule.
 
-The timeclock condition is the interlock we originally built this for. A contractor who hasn't clocked in doesn't get into the lab, even with a perfectly good face and an active badge record. The timeclock system writes `{"status": "clocked_in"}` to a bucket on punch, which most of them can do over a webhook, and the door layer reads it a hundred times a day without either system knowing the other exists.
+The timeclock condition is the interlock we originally built this for. A contractor who hasn't clocked in doesn't get into the lab, even with a perfectly good face and an active badge record. The timeclock system writes `{"status": "clocked_in"}` to a bucket on punch, something most of them can do over a webhook, and the door layer reads it a hundred times a day without either system knowing the other exists.
 
-Other interlocks have the same shape. An occupancy counter in KV, incremented by a NATS rule on grant, caps how many people are in a room. A muster flag flipped during a fire alarm puts every door into one mode. A certification expiry on the user record gates a machine authorization reader on the shop floor, since the engine answering a door can answer a "should this person start this press" endpoint with a different bucket and a different `portal_id`. None of those need new features, just another key in a bucket and another condition in a list.
+Other interlocks have the same shape. An occupancy counter in KV, incremented by a NATS rule on grant, caps how many people are in a room. A muster flag flipped during a fire alarm puts every door into one mode. A certification expiry on the user record can gate a machine authorization reader on the shop floor: the same engine that answers a door will answer a "should this person start this press" endpoint, with a different bucket and a different `portal_id`. None of those need new features, just another key in a bucket and another condition in a list.
 
 ### The two boring endpoints
 
@@ -231,7 +233,7 @@ The `>` wildcard catches every notification subpath the device uses, and `passth
 
 ### What we got wrong
 
-The grant path worked almost immediately. The deny path took an embarrassing amount of time, and the bug is instructive.
+The grant path worked almost immediately. The deny path took an embarrassing amount of time.
 
 Our first deny response was minimal, on the theory that a denial doesn't need much:
 
@@ -241,9 +243,9 @@ Our first deny response was minimal, on the theory that a denial doesn't need mu
 
 The reader rejected it and reported a generic server error, which looks exactly like a connectivity problem. We chased a connectivity problem for a while.
 
-The response has to carry the full field set. `user_id`, `user_name`, `user_image`, `portal_id`, and `actions` are all required, even when `actions` is empty and the answer is no. The documentation has complete examples for granted responses and none for denied ones, and we filled that gap by inventing something reasonable instead of copying the documented shape and changing the event number.
+The response has to carry the full field set. `user_id`, `user_name`, `user_image`, `portal_id`, and `actions` are all required, even when `actions` is empty and the answer is no. The documentation has complete examples for granted responses and none for denied ones. We filled that gap by inventing something reasonable, rather than copying the documented shape and changing the event number.
 
-Every test we wrote passed, because every test verified that the correct bytes left the gateway. None could verify the device would accept those bytes. What actually found it was changing event 7 to event 6 in the working grant rule and watching a denial come through fine, which isolated the variable in one shot.
+Every test we wrote passed, because every test verified that the correct bytes left the gateway. None could verify the device would accept those bytes. What found it was changing event 7 to event 6 in the working grant rule and watching the denial go through fine. That isolated the variable in one shot.
 
 If you're integrating with hardware that blocks on your response, assume its parser is stricter than its documentation, and mirror whatever example the vendor did publish.
 
