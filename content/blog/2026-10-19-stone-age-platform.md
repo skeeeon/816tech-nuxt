@@ -10,19 +10,19 @@ imageAlt: "Stone-Age.io platform"
 ---
 ![Stone-Age.io](/images/blog/stone-age-platform.jpg)
 
-NATS is so hot right now. We keep finding it in places it wasn't a year ago, and more of the people showing up are putting real workloads on it rather than kicking the tires. Maybe that's just the algorithm reinforcing the echo chamber we're in, but we love to see it.
+NATS is so hot right now. We keep finding it in places it wasn't a year ago, and more of the people showing up are putting real workloads on it rather than kicking the tires. Maybe that's just the algorithm feeding us back our own echo chamber. Either way, we love to see it.
 
 Last November we [wrote up the pattern underneath this](https://www.816tech.com/blog/pocketbase-nats-pattern): PocketBase minting NATS account and user credentials straight from database records. That post ended by saying the libraries were the foundation of a platform we were building. This is that platform.
 
-[Stone-Age.io](https://stone-age.io) is an MIT-licensed multi-tenant control plane for fleets of equipment and the software that runs alongside it. The equipment we had in mind is the kind that fills a building: video servers, access control panels, cameras, door readers, power meters, and the small Linux boxes at each site doing the actual talking. Integrators and managed service providers run one Stone-Age.io deployment with a tenant per customer. If the fleet is your own, it's the same deployment with one tenant in it.
+[Stone-Age.io](https://stone-age.io) is an MIT-licensed multi-tenant control plane for fleets of equipment and the software that runs alongside it. The equipment we had in mind fills a building: video servers, access control panels, cameras, door readers, power meters, and the small Linux boxes at each site doing the actual talking. Integrators and managed service providers run one Stone-Age.io deployment with a tenant per customer. If the fleet is your own, it's the same deployment with one tenant in it.
 
 One row in its inventory is the thing's record, its login, its messaging identity and its certificate on a private network, all at once. If you keep an asset inventory in one system, a device registry in another, certificates in a third, and a job somewhere holding the three together, you already know the problem this is built to remove.
 
 ### A second job to learn
 
-Every time we've looked hard at a hyperscaler's IoT offering, it has read like a second job: a device registry, shadows or twins, a rules engine, policies, an edge runtime, a credential provider, and the cloud's own IAM model holding it all together. They're well built, and plenty of people run on them happily. The cost is knowledge and vocabulary that apply nowhere else, as well as a dependency and a roadmap you don't really get a vote in. One of the big three retired its IoT service outright and gave customers about a year to move; another has carried two or three overlapping products long enough that picking between them is its own project.
+Every time we've looked hard at a hyperscaler's IoT offering, it has read like a second job: a device registry, shadows or twins, a rules engine, policies, an edge runtime, a credential provider, and the cloud's own IAM model holding it all together. They're well built, and plenty of people run on them happily. The cost is knowledge and vocabulary that apply nowhere else, as well as a dependency and a roadmap you don't really get a vote in. Google retired IoT Core outright and gave customers about a year to move; another of the big three has carried two or three overlapping products long enough that picking between them is its own project.
 
-The bet we're making is that if you already understand NATS subjects, JSON payloads and JWT identity, you know most of what this platform asks of you. That's an if, not a promise. But what you learn here transfers to anything else you build on NATS, which is more than we can say for the alternatives.
+The bet we're making is that if you already understand NATS subjects, JSON payloads and JWT identity, you know most of what this platform asks of you. That's a big if for some readers. But what you learn here transfers to anything else you build on NATS, which is more than we can say for the alternatives.
 
 ### Accounts carry more than permissions
 
@@ -55,14 +55,14 @@ The agent on a box like that one never gets a credential file copied to it. It s
 
 ### Adopt one depth at a time
 
-The platform is built in layers, and each layer is a complete working system by itself. There are four, and you can run at any of them:
+The platform is built in layers, and each layer is a complete working system by itself. You can stop at any of them:
 
 1. A multi-tenant inventory. Things, Locations, types, a REST API, a console, floor plans and maps. No messaging, no mesh.
 2. Identities. Organizations get NATS accounts and Nebula CAs, Things get users and host certs, and you write your own consumers.
 3. A contract layer. Thing Types declare a subject prefix, and their operations declare a capability and a suffix, so another team can work out a device's subjects from the records themselves.
 4. Everything that consumes the bus: rule-router, the agent, a stream processor, Telegraf into whatever TSDB you like.
 
-Each depth keeps the records from the one before, so adding the next one rewrites nothing. The inventory row you create on day one is the same row that gains identities, contracts and consumers. Most deployments settle at 2 or 3, and the ones that go further get there a layer at a time.
+Each depth keeps the records from the one before, so adding the next one rewrites nothing. The inventory row you create on day one is the same row that later gains identities, contracts and consumers. Most deployments settle at 2 or 3, and the ones that go further get there a layer at a time.
 
 This is for you if you run equipment across more than one site or more than one customer, you want the inventory and the credentials to be the same thing, and you'd rather own the box that holds them. If you have a handful of devices in one building, it's more machinery than your problem needs. And if what you want on day one is a device shadow, OTA campaign management and a certified module ecosystem, a hyperscaler has those and we don't.
 
@@ -72,31 +72,29 @@ Nothing here is forked and nothing is a protocol we invented.
 
 PocketBase is what the control plane is built on: identity, inventory, SQLite, REST, admin UI, one binary. Nebula is the connectivity layer, peer to peer with NAT traversal and outbound-only connections, so no port opens on a customer network.
 
-NATS is the bus, and it carries more than that word suggests. Pub/sub and request/reply, native MQTT for devices that speak nothing else, JetStream for anything that has to survive a restart, KV and object buckets, a micro service framework in the clients with discovery and stats in it, and leaf nodes so a site keeps running when the WAN drops. A broker, a cache, a job queue and a service registry collapse into one binary you can run on a Raspberry Pi. That's why we build on NATS rather than on a broker and three other things we'd also have to run.
+NATS is the bus, and it carries more than that word suggests. Pub/sub and request/reply, native MQTT for devices that speak nothing else, JetStream for anything that has to survive a restart, KV and object buckets, a microservice framework in the clients with discovery and stats built in, and leaf nodes so a site keeps running when the WAN drops. A broker, a cache, a job queue and a service registry collapse into one binary you can run on a Raspberry Pi. That's why we build on NATS rather than on a broker and three other things we'd also have to run.
 
-What we've built on top is the glue holding everything together: the console, [rule-router](https://www.816tech.com/blog/rule-router-six-months-later) for the YAML automation across NATS, HTTP and cron, the `stone` CLI for pulling a tenant's records into YAML you can diff and apply from CI, and the agent, which is how any of this reaches edge hardware: a service on Linux, Windows or FreeBSD that can run the device's Nebula host in process and, on a site gateway, host the leaf node too.
+What we've built on top is the glue holding everything together: the console; [rule-router](https://www.816tech.com/blog/rule-router-six-months-later) for the YAML automation across NATS, HTTP and cron; the `stone` CLI for pulling a tenant's records into YAML you can diff and apply from CI; and the agent, which is how any of this reaches edge hardware. It's a service on Linux, Windows or FreeBSD that can run the device's Nebula host in process and, on a site gateway, host the leaf node too.
 
-Everything else plugs into the same subjects: Telegraf for long-term storage, eKuiper, Benthos or Wombat for windowed aggregation, or you can plug in an AI model, since inference is just another client with a credential. We'd rather point at those than write worse versions of them.
+Everything else plugs into the same subjects: Telegraf for long-term storage, eKuiper, Benthos or Wombat for windowed aggregation, or a model of your choosing, since inference is just another client with a credential. We'd rather point at those than write worse versions of them.
 
 ### Credit where it's due
 
 NATS is [Synadia's](https://synadia.com) work, and the reason any of this was possible is that they made something this complete and gave it away. They also sell the managed answer: Synadia Cloud runs the bus for you, and Synadia Platform's Control Plane manages accounts and clusters at a scale we aren't pretending to serve. If your problem is operating NATS well, start there.
 
-The same goes for the other half. Nebula came out of Slack and is now developed by [Defined Networking](https://defined.net), founded by the people who wrote it. They sell Managed Nebula, which runs the control plane and the enrollment for you, and the lighthouses as well if you want them managed. If you want someone else operating your overlay, ask them. We generate Nebula config because the same record that mints a NATS user should mint the host certificate, not because the world needed another CA.
+The same goes for the other half. Nebula came out of Slack and is now developed by [Defined Networking](https://defined.net), founded by the people who wrote it. They sell Managed Nebula, which runs the control plane and the enrollment for you, lighthouses included if you want them managed. If you want someone else operating your overlay, ask them. We generate Nebula config because the same record that mints a NATS user should mint the host certificate, not because the world needed another CA.
 
-Both of those products answer the question of running these things well. Ours is the provisioning question, and the inventory the credentials belong to.
+Both of those products answer the question of running these things well. Ours is the provisioning question: where credentials come from, and which inventory they belong to.
 
 ### The trade-offs we're making
 
-Two things we'd rather you heard from us than found out later.
+This isn't fewer moving parts. At full depth you're running a control plane, a broker, an overlay network, an agent per site, a rule engine, a stream processor and a TSDB. Most deployments run a fraction of that, and the first three get you through depth 2. The honest claim is narrower: where the tenant boundary lives, and how easily you can walk away. Your data is in SQLite, your messages are on NATS, your history is in a time series database you picked. To leave, keep what you want and stop running the control plane.
 
-This isn't fewer moving parts. At full depth you're running a control plane, a broker, an overlay network, an agent per site, a rule engine, a stream processor and a TSDB. Most deployments run a fraction of that, and the first three get you through depth 2, but the full list is the full list. The honest claim is narrower: where the tenant boundary lives, and how easily you can walk away. Your data is in SQLite, your messages are on NATS, your history is in a time series database you picked. To leave, keep what you want and stop running the control plane.
-
-Another kicker we're sure will get a lot of grief: the control plane holds keys. It has the NATS operator key and every organization's Nebula CA private key, because the thing that mints identities has to hold the key that signs them. Those minting keys can be encrypted at rest with `nats.encryption_key` and `nebula.encryption_key`, both of which default to empty for simplicity's sake, so set them before you create real data. What they cover is the material that mints identities, not the credentials already issued: a `.creds` file holds the user seed, and a Nebula host config holds its key inline, because that's where Nebula needs it. Either way, a control plane backup is as sensitive as the live database. Moving the signing operations behind a KMS is a longer-term idea and not something we've done yet. If you want the keys on a machine you own in the meantime, that's the self-hosted install, and it's the free one.
+The control plane also holds keys, and we expect grief for it. It has the NATS operator key and every organization's Nebula CA private key, because the thing that mints identities has to hold the key that signs them. Those minting keys can be encrypted at rest with `nats.encryption_key` and `nebula.encryption_key`, both of which default to empty for simplicity's sake, so set them before you create real data. What they cover is the material that mints identities, not the credentials already issued: a `.creds` file holds the user seed, and a Nebula host config holds its key inline, because that's where Nebula needs it. Either way, a control plane backup is as sensitive as the live database. Moving the signing operations behind a KMS is a longer-term idea and not something we've done yet. If you want the keys on a machine you own in the meantime, that's the self-hosted install, and it's the free one.
 
 ### Running it
 
-Download `stone-age` for your architecture from the [releases page](https://github.com/stone-age-io/platform/releases), then run five commands in order:
+Download `stone-age` for your architecture from the [releases page](https://github.com/stone-age-io/platform/releases), then run these in order:
 
 ```bash
 ./stone-age superuser upsert admin@example.com 'change-me-8-chars-min'
