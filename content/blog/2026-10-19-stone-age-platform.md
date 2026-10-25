@@ -1,9 +1,9 @@
 ---
-title: "Stone-Age.io: One Record Is the Host, Its Login, and Its Keys"
+title: "One Row Is the Device, Its Login, and Its Keys"
 date: "2026-10-19"
 author: "Brian Miller"
 slug: "stone-age-platform"
-excerpt: "The multi-tenant IoT platform we built on the PocketBase + NATS pattern, and the parts of it we don't claim"
+excerpt: "An MIT-licensed multi-tenant IoT platform where a device's inventory row, its NATS user, and its Nebula certificate are the same record"
 tags: ["nats", "pocketbase", "nebula", "golang", "iot"]
 image: "/images/blog/stone-age-platform.jpg"
 imageAlt: "Stone-Age.io platform"
@@ -12,7 +12,7 @@ imageAlt: "Stone-Age.io platform"
 
 Last November we [wrote up the PocketBase + NATS pattern](https://www.816tech.com/blog/pocketbase-nats-pattern): use PocketBase as a control plane, use `pb-nats` to mint NATS account and user JWTs from database records, and push the account claims over `$SYS.REQ.CLAIMS.UPDATE` so nothing restarts. User JWTs are signed by the account and presented by the client, so they never need pushing at all. That post ended by saying the libraries were the foundation of a platform we were building.
 
-That platform is [Stone-Age.io](https://stone-age.io), it's at v0.13.0, and it's MIT licensed. This post is what it turned into and where we think it fits.
+That platform is [Stone-Age.io](https://stone-age.io), and it's MIT licensed. This post is what it turned into and where we think it fits.
 
 ### A second job to learn
 
@@ -103,7 +103,7 @@ docker run -d --name stone-age \
 
 Then, against a throwaway database, `./stone-age demo-seed --confirm` builds three tenants with locations on a real map, a fleet of things and gateways, NATS roles, signed identities and a Nebula network with a lighthouse. It runs through the same provisioning hooks the console uses, so what you get is what you'd have built by hand.
 
-It's early, and we'd rather hear where it breaks than have it starred. If you run NATS in anger and the account provisioning model looks wrong to you, that's the feedback we want most.
+It's early, and we'd rather hear where it breaks than have it starred. If you run NATS in production and think we've got the account provisioning wrong, that's the feedback we want most.
 
 * Platform: [github.com/stone-age-io/platform](https://github.com/stone-age-io/platform)
 * Agent: [github.com/stone-age-io/agent](https://github.com/stone-age-io/agent)
