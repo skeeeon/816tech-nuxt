@@ -80,7 +80,7 @@ Everything else plugs into the same subjects: Telegraf for long-term storage, eK
 
 ### Credit where it's due
 
-NATS is [Synadia's](https://synadia.com) work, and the reason any of this was possible is that they made something this complete and gave it away. They also sell the managed answer: Synadia Cloud runs the bus for you, and Synadia Platform's Control Plane manages accounts and clusters at a scale we aren't pretending to serve. If your problem is operating NATS well, start there.
+NATS is [Synadia's](https://synadia.com) work, and the reason any of this was possible is that they made something this complete and made it open source. They also sell the managed answer: Synadia Cloud runs the bus for you, and Synadia Platform's Control Plane manages accounts and clusters at a scale we aren't pretending to serve. If your problem is operating NATS well, start there.
 
 The same goes for the other half. Nebula came out of Slack and is now developed by [Defined Networking](https://defined.net), founded by the people who wrote it. They sell Managed Nebula, which runs the control plane and the enrollment for you, lighthouses included if you want them managed. If you want someone else operating your overlay, ask them. We generate Nebula config because the same record that mints a NATS user should mint the host certificate, not because the world needed another CA.
 
