@@ -14,7 +14,7 @@ NATS is so hot right now. We keep finding it in places it wasn't a year ago, and
 
 Last November we [wrote up the pattern underneath this](https://www.816tech.com/blog/pocketbase-nats-pattern): PocketBase minting NATS account and user credentials straight from database records. That post ended by saying the libraries were the foundation of a platform we were building. This is that platform.
 
-[Stone-Age.io](https://stone-age.io) is an MIT-licensed multi-tenant control plane for fleets of equipment and the software that runs alongside it. The equipment we had in mind fills a building: video servers, access control panels, cameras, door readers, power meters, and the small Linux boxes at each site doing the actual talking. Integrators and managed service providers run one Stone-Age.io deployment with a tenant per customer. If the fleet is your own, it's the same deployment with one tenant in it.
+[Stone-Age.io](https://stone-age.io) is an MIT-licensed multi-tenant control plane for fleets of equipment and the software that runs alongside it. The equipment we had in mind fills a building or a warehouse: video servers, access control panels, cameras, door readers, freezer probes, power meters, and the small Linux boxes at each site doing the actual talking. Integrators and managed service providers run one Stone-Age.io deployment with a tenant per customer. If the fleet is your own, it's the same deployment with one tenant in it.
 
 One row in its inventory is the thing's record, its login, its messaging identity and its certificate on a private network, all at once. If you keep an asset inventory in one system, a device registry in another, certificates in a third, and a job somewhere holding the three together, you already know the problem this is built to remove.
 
@@ -47,7 +47,13 @@ curl -X POST http://localhost:8090/api/org/things \
 
 One request, one transaction, and that box exists as an inventory entry, a login, a messaging identity and a mesh node at once. There is no second registry to reconcile against.
 
+![A door's thing page in the demo console: the subjects it publishes and subscribes to, and its live state read from KV](/images/blog/stone-age-thing-page.png)
+
+*A door in the demo, one record: the subjects its type declares, and its live state straight from KV.*
+
 Most equipment can't hold an identity of its own and shouldn't have to. A camera, a door on a vendor's panel, a power meter: those are rows with `"mode":"none"` on both halves, inventory records whose data reaches the bus through whatever runs code nearby, usually the VMS, a site gateway, or a rule polling the vendor's API. The row is the same shape either way, so the day something can speak for itself you attach identities to the record you already have.
+
+The same goes for equipment that already reports to a vendor's cloud. Rule-router takes that cloud's webhooks and polls its API on a schedule, so its events land on the tenant's bus next to everything else, and one rule can act on both. You keep the vendor's cloud; you lose the silo.
 
 The same idea one level up: creating an Organization provisions its NATS account and its own private Nebula CA, and one organization's CA can't sign a certificate another organization trusts. Suspending the organization withdraws the account and drops every device and browser in that tenant off the hub. The tenant boundary is a signature rather than a filter somebody has to remember to apply.
 
@@ -75,6 +81,10 @@ PocketBase is what the control plane is built on: identity, inventory, SQLite, R
 NATS is the bus, and it carries more than that word suggests. Pub/sub and request/reply, native MQTT for devices that speak nothing else, JetStream for anything that has to survive a restart, KV and object buckets, a microservice framework in the clients with discovery and stats built in, and leaf nodes so a site keeps running when the WAN drops. A broker, a cache, a job queue and a service registry collapse into one binary you can run on a Raspberry Pi. That's why we build on NATS rather than on a broker and three other things we'd also have to run.
 
 What we've built on top is the glue holding everything together: the console; [rule-router](https://www.816tech.com/blog/rule-router-six-months-later) for the YAML automation across NATS, HTTP and cron; the `stone` CLI for pulling a tenant's records into YAML you can diff and apply from CI; and the agent, which is how any of this reaches edge hardware. It's a service on Linux, Windows or FreeBSD that can run the device's Nebula host in process and, on a site gateway, host the leaf node too.
+
+![Terminal recording of the stone CLI: switching to a tenant, listing things, a live NATS subscription, a KV read, and pulling the tenant to YAML](/images/blog/stone-cli.gif)
+
+*The `stone` CLI against the demo: switch tenant, list things, watch live telemetry, read a twin value from KV, pull the tenant to YAML. The telemetry is sped up.*
 
 Everything else plugs into the same subjects: Telegraf for long-term storage, eKuiper, Benthos or Wombat for windowed aggregation, or a model of your choosing, since inference is just another client with a credential. We'd rather point at those than write worse versions of them.
 
@@ -114,9 +124,17 @@ Then, against a throwaway database:
 
 That builds three tenants, a type taxonomy, locations on a real map, a fleet of things and gateways, NATS roles, signed identities and a Nebula network with a lighthouse. It runs in-process through the same provisioning hooks the console and the API use, so what you get is what you'd have built by hand. Run it again and it tops up rather than duplicating, because it finds every record by its per-organization `code`.
 
+The seed writes records, not traffic, so dashboards stay empty until something publishes. The rule-router files in [`demo/rules/`](https://github.com/stone-age-io/platform/tree/main/demo/rules) put live telemetry on the seeded subjects. Run one rule-router per organization, pointed at that organization's folder: each tenant is its own NATS account, so one process can't publish for all three.
+
+![A cold-chain dashboard in the demo console with live freezer temperatures, reefer gauges, a site map and shipment events](/images/blog/stone-age-cold-chain-dashboard.png)
+
+*One of the seeded tenants, a cold-chain distributor, with the demo rules running. The dashboard is ours, built in the console on top of the seed; the readings are live.*
+
 There's a single container that does all of this on first boot if you'd rather not run the steps yourself. The [docs](https://docs.stone-age.io/doc/platform/getting-started) have it.
 
 It's early, and we'd rather hear where it breaks than have it starred. If you run NATS in production and think we've got the account provisioning wrong, that's the feedback we want most.
+
+If you'd rather see it running before you install anything, [ask us for a read-only login](mailto:info@stone-age.io?subject=Demo%20access) to the demo. And if you'd rather not run it at all, [we host it too](https://stone-age.io/#pricing).
 
 * Platform: [github.com/stone-age-io/platform](https://github.com/stone-age-io/platform)
 * Agent: [github.com/stone-age-io/agent](https://github.com/stone-age-io/agent)
