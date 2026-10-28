@@ -11,7 +11,7 @@
     >
       <!-- Icon transition with Heroicons - Fixed sizing to match original -->
       <transition name="theme-toggle" mode="out-in">
-        <MoonIcon v-if="isDarkMode" class="w-5 h-5" aria-hidden="true" />
+        <MoonIcon v-if="currentTheme === 'dark'" class="w-5 h-5" aria-hidden="true" />
         <SunIcon v-else-if="currentTheme === 'light'" class="w-5 h-5" aria-hidden="true" />
         <ComputerDesktopIcon v-else class="w-5 h-5" aria-hidden="true" />
       </transition>
