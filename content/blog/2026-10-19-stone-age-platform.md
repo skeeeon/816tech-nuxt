@@ -47,9 +47,9 @@ curl -X POST http://localhost:8090/api/org/things \
 
 One request, one transaction, and that box exists as an inventory entry, a login, a messaging identity and a mesh node at once. There is no second registry to reconcile against.
 
-![A door's thing page in the demo console: the subjects it publishes and subscribes to, and its live state read from KV](/images/blog/stone-age-thing-page.png)
+![An access controller's thing page in the demo console: its inventory details, its NATS user and role, its Nebula host and overlay IP, and the subjects it publishes](/images/blog/stone-age-thing-page.png)
 
-*A door in the demo, one record: the subjects its type declares, and its live state straight from KV.*
+*One record in the demo: an access controller's inventory entry, its NATS user, its Nebula host on the overlay, and the subjects its type declares.*
 
 Most equipment can't hold an identity of its own and shouldn't have to. A camera, a door on a vendor's panel, a power meter: those are rows with `"mode":"none"` on both halves, inventory records whose data reaches the bus through whatever runs code nearby, usually the VMS, a site gateway, or a rule polling the vendor's API. The row is the same shape either way, so the day something can speak for itself you attach identities to the record you already have.
 
