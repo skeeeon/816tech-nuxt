@@ -104,17 +104,14 @@ The control plane also holds keys, and we expect grief for it. It has the NATS o
 
 ### Running it
 
-Download `stone-age` for your architecture from the [releases page](https://github.com/stone-age-io/platform/releases), then run these in order:
+Download `stone-age` for your architecture from the [releases page](https://github.com/stone-age-io/platform/releases), then:
 
 ```bash
-./stone-age superuser upsert admin@example.com 'change-me-8-chars-min'
-./stone-age migrate up
-./stone-age bootstrap --email admin@example.com --org "System" --operator-org "Acme MSP"
-./stone-age nats export --output ./nats-config/
+./stone-age init --email admin@example.com --operator-org "Acme MSP"
 ./stone-age serve --nats
 ```
 
-That's the control plane and the bus in one process, with the console at `http://localhost:8090`. The order matters: `bootstrap` writes fields that `migrate up` creates, and `nats export` needs the data `bootstrap` seeds.
+That's the control plane and the bus in one process, with the console at `http://localhost:8090`. `init` asks for a password, creates the database, seeds the NATS operator and your first administrator, and writes the NATS server config, in the one order that works. Once that config exists it does nothing, so running it twice is harmless.
 
 Then, against a throwaway database:
 
@@ -124,13 +121,17 @@ Then, against a throwaway database:
 
 That builds three tenants, a type taxonomy, locations on a real map, a fleet of things and gateways, NATS roles, signed identities and a Nebula network with a lighthouse. It runs in-process through the same provisioning hooks the console and the API use, so what you get is what you'd have built by hand. Run it again and it tops up rather than duplicating, because it finds every record by its per-organization `code`.
 
+![Terminal recording: stone-age init, demo-seed and serve --nats, then the stone CLI creating a context, logging in, switching to the Northwind tenant, listing its things and showing one thing's NATS user and Nebula host](/images/blog/stone-zero-to-demo.gif)
+
+*From an empty directory to a seeded, running platform, then the `stone` CLI against it. Sped up: on a laptop `init` takes about 8 seconds and `demo-seed` about 19. Long output is trimmed where marked.*
+
 The seed writes records, not traffic, so dashboards stay empty until something publishes. The rule-router files in [`demo/rules/`](https://github.com/stone-age-io/platform/tree/main/demo/rules) put live telemetry on the seeded subjects. Run one rule-router per organization, pointed at that organization's folder: each tenant is its own NATS account, so one process can't publish for all three.
 
 ![A cold-chain dashboard in the demo console with live freezer temperatures, reefer gauges, a site map and shipment events](/images/blog/stone-age-cold-chain-dashboard.png)
 
 *One of the seeded tenants, a cold-chain distributor, with the demo rules running. The dashboard is ours, built in the console on top of the seed; the readings are live.*
 
-There's a single container that does all of this on first boot if you'd rather not run the steps yourself. The [docs](https://docs.stone-age.io/doc/platform/getting-started) have it.
+If you'd rather not download anything, there's a single container that runs `init` and `serve --nats` on first boot. The [docs](https://docs.stone-age.io/doc/platform/getting-started) have the one-line `docker run`.
 
 It's early, and we'd rather hear where it breaks than have it starred. If you run NATS in production and think we've got the account provisioning wrong, that's the feedback we want most.
 
