@@ -16,6 +16,10 @@ Last November we [wrote up the pattern underneath this](https://www.816tech.com/
 
 [Stone-Age.io](https://stone-age.io) is an MIT-licensed multi-tenant control plane for fleets of equipment and the software that runs alongside it. The equipment we had in mind fills a building or a warehouse: video servers, access control panels, cameras, door readers, freezer probes, power meters, and the small Linux boxes at each site doing the actual talking. Integrators and managed service providers run one Stone-Age.io deployment with a tenant per customer. If the fleet is your own, it's the same deployment with one tenant in it.
 
+![A cold-chain dashboard in the demo console with live freezer temperatures, reefer gauges, a site map and shipment events](/images/blog/stone-age-cold-chain-dashboard.png)
+
+*A tenant in the demo: a cold-chain distributor's freezers, reefers, sites and shipment events, live on its own NATS account. The dashboard is ours, built in the console on top of the seeded records; running the same demo is covered at the end.*
+
 One row in its inventory is the thing's record, its login, its messaging identity and its certificate on a private network, all at once. If you keep an asset inventory in one system, a device registry in another, certificates in a third, and a job somewhere holding the three together, you already know the problem this is built to remove.
 
 ### A second job to learn
@@ -125,11 +129,7 @@ That builds three tenants, a type taxonomy, locations on a real map, a fleet of 
 
 *From an empty directory to a seeded, running platform, then the `stone` CLI against it. Sped up: on a laptop `init` takes about 8 seconds and `demo-seed` about 19. Long output is trimmed where marked.*
 
-The seed writes records, not traffic, so dashboards stay empty until something publishes. The rule-router files in [`demo/rules/`](https://github.com/stone-age-io/platform/tree/main/demo/rules) put live telemetry on the seeded subjects. Run one rule-router per organization, pointed at that organization's folder: each tenant is its own NATS account, so one process can't publish for all three.
-
-![A cold-chain dashboard in the demo console with live freezer temperatures, reefer gauges, a site map and shipment events](/images/blog/stone-age-cold-chain-dashboard.png)
-
-*One of the seeded tenants, a cold-chain distributor, with the demo rules running. The dashboard is ours, built in the console on top of the seed; the readings are live.*
+The seed writes records, not traffic, so dashboards stay empty until something publishes. The rule-router files in [`demo/rules/`](https://github.com/stone-age-io/platform/tree/main/demo/rules) put live telemetry on the seeded subjects. Run one rule-router per organization, pointed at that organization's folder: each tenant is its own NATS account, so one process can't publish for all three. That's what drives the cold-chain dashboard at the top.
 
 If you'd rather not download anything, there's a single container that runs `init` and `serve --nats` on first boot. The [docs](https://docs.stone-age.io/doc/platform/getting-started) have the one-line `docker run`.
 
