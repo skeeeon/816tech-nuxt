@@ -104,7 +104,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Kansas City technology integrator: access control, cameras, networks and cabling, and custom software integrations. Systems you own, no per-door fees.' },
+        { name: 'description', content: 'Kansas City technology integrator: access control, cameras, networks and cabling, and custom software integrations. We also service what another company installed.' },
         { name: 'keywords', content: 'technology integrator Kansas City, access control Kansas City, security integrator Kansas City, security camera installation, structured cabling, custom software integration' },
         { name: 'author', content: '816tech' },
         { name: 'robots', content: 'index, follow' },

@@ -63,10 +63,10 @@ const { trackContact } = useTracking()
 // SEO Meta Tags
 useSeoMeta({
   title: '816tech - Technology Integration & Access Control | Kansas City',
-  description: 'Kansas City technology integrator: access control, cameras, networks and cabling, and custom software integrations. Doors decide on site so they keep working through an outage, you own the hardware, and we service what other installers left behind.',
+  description: 'Kansas City technology integrator: access control, cameras, networks and cabling, custom software. New systems, expansions, and service on what another installer left behind.',
   keywords: 'technology integrator Kansas City, access control Kansas City, security integrator Kansas City, commercial access control, security camera installation, structured cabling, low voltage contractor, custom software integration, system integration Kansas City',
   author: '816tech',
-  ogTitle: '816tech - Technology Integration Built on Systems You Own',
+  ogTitle: '816tech - Access Control, Cameras, Networks, and Custom Software',
   ogDescription: 'A Kansas City integrator for physical security, networks, and the software that connects them. We write the code, so systems that "don\'t integrate" usually turn out to.',
   ogImage: '/images/816tech-og-image.jpg',
   ogImageWidth: '1200',
@@ -79,7 +79,7 @@ useSeoMeta({
   twitterSite: '@816tech',
   twitterCreator: '@816tech',
   twitterTitle: '816tech - Technology Integration & Access Control | Kansas City',
-  twitterDescription: 'Kansas City integrator for physical security, networks, and the software that connects them. Systems you own, no per-door fees.',
+  twitterDescription: 'Kansas City integrator for physical security, networks, and the software that connects them. We also service what another company installed.',
   twitterImage: '/images/816tech-og-image.jpg',
   // Local business specific meta tags
   'business:contact_data:locality': 'Kansas City',

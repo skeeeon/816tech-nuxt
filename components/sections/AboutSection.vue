@@ -34,7 +34,7 @@
               We build what we would want to run, and we sell nothing we would not put in our
               own building. Doors that keep deciding when the internet is down. Hardware you
               own outright. Open-source software, so nobody can hold your building hostage, us
-              included. One flat fee that does not climb every time you add a reader. When two
+              included. Costs you see before the work starts, not after. When two
               systems refuse to talk to each other, we write the code that makes them, because
               we would rather solve that than tell you it cannot be done.
             </p>

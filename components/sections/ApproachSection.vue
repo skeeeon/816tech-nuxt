@@ -175,9 +175,8 @@ import {
   ListBulletIcon,
   CheckIcon,
   CubeIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  StarIcon,
+  DocumentTextIcon,
+  LockOpenIcon,
   CalendarIcon
 } from '@heroicons/vue/24/outline'
 
@@ -233,22 +232,40 @@ const phases = [
   }
 ]
 
-// Enhanced benefits of this structured approach
+// What the customer actually gets out of the three phases above.
+//
+// These are promises about terms, not about architecture, and each one has to
+// survive a buyer whose situation is the opposite of the default:
+//   - Hardware: "bought outright, nothing leased" lost the room every time the
+//     buyer needed this off the capital budget. Plenty of schools, churches, and
+//     franchises can only do opex. The real promise is standard, named equipment
+//     that isn't crippled to force a renewal -- which is true whether they buy
+//     it or lease it, so the card now says both.
+//   - Middle card: this slot held a pricing promise twice -- "No per-door
+//     billing", then a flat per-account fee -- and both were wrong. The first
+//     argued with a competitor's price sheet in front of a reader who may never
+//     have seen one. The second described a model we do not sell, and quietly
+//     tied 816tech's pitch to however stone-age.io happens to bill; the platform
+//     is a product we also run, not our rate card. Pricing belongs in the quote.
+//     Documentation is the honest third leg here, because it is what turns the
+//     lock-in card's "hand it to another integrator" into a real option.
+//   - Lock-in: same argument, less courtroom. It also now says we help with the
+//     handoff, which is the part that makes the claim credible.
 const approachBenefits = [
   {
-    iconComponent: CurrencyDollarIcon,
-    title: 'You own the hardware',
-    description: 'The panels, readers, cameras, and switches are yours, bought outright. Nothing is leased, and nothing stops working because a subscription lapsed.'
+    iconComponent: CubeIcon,
+    title: 'The equipment is standard',
+    description: 'Panels, readers, cameras, and switches named at the part-number level, so you can price them anywhere. Buy them outright or lease them and keep the spend on the operating budget, whichever your books prefer.'
   },
   {
-    iconComponent: ClockIcon,
-    title: 'No per-door billing',
-    description: 'One flat monthly fee for the account, however many doors, cameras, or credentials you add. Add a door next year and the monthly fee stays where it is.'
+    iconComponent: DocumentTextIcon,
+    title: 'It gets written down',
+    description: 'As-builts, part numbers, addresses, and administrator credentials, handed over in writing when the job closes. Whoever works on it next starts from a document instead of a guess, whether that is you, us, or somebody else.'
   },
   {
-    iconComponent: StarIcon,
-    title: 'Nobody gets locked in',
-    description: 'The software is open source. Take it in house or hand it to another integrator and it keeps working, with your data intact.'
+    iconComponent: LockOpenIcon,
+    title: 'Staying is your choice',
+    description: 'The software is open source. Run it in house or hand it to another integrator and it keeps working, with your configuration and history intact. We will help with that handoff if it comes to it.'
   }
 ]
 </script>

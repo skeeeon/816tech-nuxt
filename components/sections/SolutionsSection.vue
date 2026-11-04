@@ -94,6 +94,11 @@ const { scrollToSection } = useNavigation()
 //      Notably removed: "24/7 monitoring and support". The SLA is remote response
 //      next business day with on-site billed T&M, and "monitoring" is a licensed
 //      activity in several states -- we say notifications.
+//   3. State the capability, not one job's architecture. These cards say what we
+//      are good at; the particular design belongs in the proposal. That is why
+//      the access and camera cards no longer lead with local-only decisions and
+//      on-prem-only recording -- plenty of customers want off-site recording or
+//      backup, and the card should not argue them out of it before we talk.
 //
 // Physical security leads because it's the deepest specialty, but the range is
 // deliberate: adjacent network and software work is what fills the months while
@@ -104,24 +109,24 @@ const solutions = [
     iconComponent: ShieldCheckIcon,
     color: '#2563eb', // Primary blue
     title: 'Access Control & Physical Security',
-    description: 'Card and fob entry that keeps working when the internet goes down, because the doors decide locally.',
+    description: 'Doors, gates, elevators, and intercoms — new systems, expansions, and panels another company put in.',
     capabilities: [
-      'Doors unlock on site, not in a data center',
+      'Card, fob, PIN, mobile, and biometric credentials',
       'Add or revoke a credential in seconds',
-      'Schedules, holidays, and after-hours rules',
-      'Every entry logged, searchable, and yours to keep'
+      'Schedules, holidays, lockdown, and after-hours rules',
+      'Entry history you can search, export, and keep'
     ]
   },
   {
     iconComponent: VideoCameraIcon,
     color: '#059669', // Green
     title: 'Cameras & Video',
-    description: 'New camera systems or additions to what you have, recording on site rather than in somebody\'s cloud.',
+    description: 'New camera systems or additions to what you already have, indoors, outdoors, and across the parking lot.',
     capabilities: [
       'ONVIF cameras, no proprietary lock-in',
-      'On-site recording, nothing streamed out by default',
-      'Badge events linked to the footage',
-      'Motion and object detection on the local box'
+      'Recording on site, off site, or both',
+      'Retention and backup sized to what you have to keep',
+      'Badge events linked to the footage'
     ]
   },
   {
@@ -133,7 +138,7 @@ const solutions = [
       'Structured cabling, clean terminations, tidy racks',
       'Switching, PoE, and VLANs sized for the building',
       'Wireless coverage surveys and access points',
-      'Camera and door networks kept off your office LAN'
+      'Fiber and point-to-point links between buildings'
     ]
   },
   {
@@ -164,10 +169,10 @@ const solutions = [
     iconComponent: WrenchScrewdriverIcon,
     color: '#0891b2', // Cyan
     title: 'Service & Support',
-    description: 'One flat monthly fee covers the software, hosting, and remote help.',
+    description: 'Somewhere to call after the install, for systems we put in and systems we inherited.',
     capabilities: [
       'Request service in one tap from your phone',
-      'Remote response next business day, included',
+      'Remote response next business day',
       'We see equipment faults before you call',
       'On-site work quoted and billed by the hour'
     ]
