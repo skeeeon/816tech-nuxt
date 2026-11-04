@@ -7,7 +7,7 @@
         <div class="error-icon mx-auto" 
              :style="{ 
                color: error.statusCode === 404 ? 'var(--color-warning)' : 'var(--color-error)',
-               backgroundColor: (error.statusCode === 404 ? 'var(--color-warning)' : 'var(--color-error)') + '15'
+               backgroundColor: `color-mix(in srgb, ${error.statusCode === 404 ? 'var(--color-warning)' : 'var(--color-error)'} 15%, transparent)`
              }">
           <MagnifyingGlassIcon v-if="error.statusCode === 404" class="w-10 h-10" />
           <ExclamationTriangleIcon v-else class="w-10 h-10" />

@@ -41,7 +41,7 @@
         <div v-else-if="error" class="text-center max-w-2xl mx-auto">
           <div class="error-icon mx-auto mb-6"
                :style="{
-                 backgroundColor: 'var(--color-error)' + '15',
+                 backgroundColor: 'color-mix(in srgb, var(--color-error) 15%, transparent)',
                  color: 'var(--color-error)'
                }">
             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">

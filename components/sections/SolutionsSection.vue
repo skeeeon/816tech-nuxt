@@ -39,7 +39,7 @@
                 :key="`cap-${index}-${capIndex}`"
                 class="flex items-start text-sm capability-item">
               <div class="capability-bullet mr-3 mt-1 flex-shrink-0" 
-                   :style="{ backgroundColor: 'var(--color-success)' + '15' }">
+                   :style="{ backgroundColor: 'color-mix(in srgb, var(--color-success) 15%, transparent)' }">
                 <CheckIcon class="w-3 h-3" 
                            :style="{ color: 'var(--color-success)' }" />
               </div>

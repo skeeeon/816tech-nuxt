@@ -1,19 +1,8 @@
 User-agent: *
 Allow: /
-
-# Sitemap location
-Sitemap: https://816tech.com/sitemap.xml
-
-# Optimize crawling
-Crawl-delay: 1
-
-# Block development/staging environments
-User-agent: *
+# The RSS feed is the one API route meant for the public.
+Allow: /api/feed.xml
 Disallow: /api/
-Disallow: /_nuxt/
 Disallow: /admin/
 
-# Allow search engines to index all public content
-Allow: /images/
-Allow: /css/
-Allow: /js/
+Sitemap: https://www.816tech.com/sitemap.xml

@@ -19,7 +19,7 @@
         <div class="error-icon mx-auto mb-6" 
              :style="{ 
                color: 'var(--color-warning)',
-               backgroundColor: 'var(--color-warning)' + '15'
+               backgroundColor: 'color-mix(in srgb, var(--color-warning) 15%, transparent)'
              }">
           <MagnifyingGlassIcon class="w-12 h-12" />
         </div>

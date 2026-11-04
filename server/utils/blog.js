@@ -10,6 +10,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { marked } from 'marked'
 import hljs from 'highlight.js'
+import { getImageSize } from './image-size'
 
 /**
  * Configure marked with custom renderer and options
@@ -18,10 +19,33 @@ import hljs from 'highlight.js'
 function configureMarked() {
   const renderer = new marked.Renderer()
   
-  // Customize heading rendering to add IDs for anchor links
-  renderer.heading = function({ text, depth }) {
+  // Customize heading rendering to add IDs for anchor links. The id is still
+  // built from the raw text so existing #links keep working; the content is
+  // rendered, so `code` and *emphasis* in a heading no longer show their markup.
+  renderer.heading = function({ text, depth, tokens }) {
     const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
-    return `<h${depth} id="${escapedText}">${text}</h${depth}>`
+    const content = this.parser.parseInline(tokens)
+    const anchor = depth > 1
+      ? `<a class="heading-anchor" href="#${escapedText}" aria-label="Link to this section">#</a>`
+      : ''
+    return `<h${depth} id="${escapedText}">${content}${anchor}</h${depth}>`
+  }
+
+  // Images carry their pixel size so the page doesn't jump while they load,
+  // and every image after the first (usually the lead image, above the fold)
+  // loads lazily.
+  let imageCount = 0
+  renderer.image = function({ href, title, text }) {
+    const size = getImageSize(href)
+    const attrs = [
+      `src="${escapeHtml(href)}"`,
+      `alt="${escapeHtml(text || '')}"`,
+      title ? `title="${escapeHtml(title)}"` : '',
+      size ? `width="${size.width}" height="${size.height}"` : '',
+      imageCount++ === 0 ? 'fetchpriority="high"' : 'loading="lazy"',
+      'decoding="async"'
+    ]
+    return `<img ${attrs.filter(Boolean).join(' ')}>`
   }
   
   // Customize code block rendering with syntax highlighting
@@ -79,11 +103,29 @@ function escapeHtml(text) {
 }
 
 /**
+ * Turn standalone images into figures. An image on its own line followed by a
+ * paragraph that is entirely italic becomes <figure> + <figcaption>, which is
+ * how posts already write captions:
+ *
+ *   ![alt](/images/blog/x.png)
+ *
+ *   *The caption.*
+ */
+function wrapFigures(html) {
+  return html
+    .replace(
+      /<p>(<img [^>]+>)<\/p>\s*<p><em>((?:(?!<\/em>)[\s\S])*)<\/em><\/p>/g,
+      '<figure>$1<figcaption>$2</figcaption></figure>'
+    )
+    .replace(/<p>(<img [^>]+>)<\/p>/g, '<figure>$1</figure>')
+}
+
+/**
  * Parse markdown string to HTML
  */
 function parseMarkdown(markdown) {
   configureMarked()
-  return marked.parse(markdown)
+  return wrapFigures(marked.parse(markdown))
 }
 
 /**
@@ -93,6 +135,14 @@ function getReadingTime(content) {
   const wordsPerMinute = 200
   const words = content.trim().split(/\s+/).length
   return Math.ceil(words / wordsPerMinute)
+}
+
+/**
+ * A post with `draft: true` in its frontmatter renders in `nuxt dev` and is
+ * left out everywhere else: the listing, the feed, the sitemap and its own URL.
+ */
+function isVisible(draft) {
+  return !draft || import.meta.dev
 }
 
 /**
@@ -129,6 +179,7 @@ async function readPostFile(filename) {
       tags: Array.isArray(data.tags) ? data.tags : [],
       image: data.image || null,  // Social media image path
       imageAlt: data.imageAlt || data.title,  // Image alt text for accessibility
+      draft: Boolean(data.draft),
       content: htmlContent,
       readingTime
     }
@@ -151,8 +202,8 @@ export async function getAllPosts() {
     const posts = await Promise.all(
       mdFiles.map(async (filename) => {
         const post = await readPostFile(filename)
-        if (!post) return null
-        
+        if (!post || !isVisible(post.draft)) return null
+
         // Return only metadata (no content) for listing
         return {
           title: post.title,
@@ -195,6 +246,7 @@ export async function getPostBySlug(slug) {
         const { data } = matter(fileContents)
         
         if (data.slug === slug) {
+          if (!isVisible(data.draft)) return null
           // Found the matching post, get full content
           const post = await readPostFile(filename)
           return post
@@ -224,7 +276,7 @@ export async function getAllPostSlugs() {
         const fullPath = path.join(postsDir, filename)
         const fileContents = await fs.readFile(fullPath, 'utf8')
         const { data } = matter(fileContents)
-        return data.slug
+        return isVisible(data.draft) ? data.slug : null
       })
     )
     

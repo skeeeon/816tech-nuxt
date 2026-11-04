@@ -17,7 +17,8 @@ export default defineNuxtConfig({
         '/cards',
         '/cards/brian',
         '/blog',
-	'/api/feed.xml'
+        '/api/feed.xml',
+        '/sitemap.xml'
       ],
       // Crawl all links to discover routes automatically
       crawlLinks: true
@@ -118,7 +119,6 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'canonical', href: 'https://816tech.com' },
       ],
       script: [
         {
@@ -155,7 +155,9 @@ export default defineNuxtConfig({
   // Runtime config for environment variables
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://816tech.com',
+      // The host the site is served from; the apex redirects here, so links
+      // and canonicals that name the apex cost every crawler a redirect.
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.816tech.com',
       gtmId: process.env.NUXT_PUBLIC_GTM_ID || ''
     }
   },

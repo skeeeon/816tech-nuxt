@@ -115,7 +115,7 @@
                 <div class="benefit-icon" 
                      :style="{ 
                        color: 'var(--color-primary)',
-                       backgroundColor: 'var(--color-primary)' + '15'
+                       backgroundColor: 'color-mix(in srgb, var(--color-primary) 15%, transparent)'
                      }">
                   <component :is="benefit.iconComponent" class="w-6 h-6" />
                 </div>

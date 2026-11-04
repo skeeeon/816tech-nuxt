@@ -32,7 +32,7 @@
           <div class="error-icon mx-auto mb-4" 
                :style="{ 
                  color: 'var(--color-error)',
-                 backgroundColor: 'var(--color-error)' + '15'
+                 backgroundColor: 'color-mix(in srgb, var(--color-error) 15%, transparent)'
                }">
             <ExclamationTriangleIcon class="w-10 h-10" />
           </div>
@@ -66,7 +66,7 @@
                 <div class="text-center mb-6">
                   <div class="card-avatar mx-auto mb-4" 
                        :style="{ 
-                         backgroundColor: 'var(--color-primary)' + '15',
+                         backgroundColor: 'color-mix(in srgb, var(--color-primary) 15%, transparent)',
                          color: 'var(--color-primary)'
                        }">
                     <img v-if="resolveImagePath(card.image)" 

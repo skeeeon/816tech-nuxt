@@ -19,7 +19,7 @@
           <div class="error-icon mx-auto mb-6" 
                :style="{ 
                  color: 'var(--color-error)',
-                 backgroundColor: 'var(--color-error)' + '15'
+                 backgroundColor: 'color-mix(in srgb, var(--color-error) 15%, transparent)'
                }">
             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -43,7 +43,8 @@
       </div>
 
       <!-- Post content -->
-      <article v-else-if="post" class="max-w-7xl mx-auto">
+      <!-- A text column of about 75 characters; figures widen past it -->
+      <article v-else-if="post" class="max-w-3xl mx-auto">
         <!-- Post header -->
         <header class="mb-12">
           <!-- Back to blog link - use regular anchor for full page load -->
@@ -79,8 +80,8 @@
             <span v-for="tag in post.tags" 
                   :key="tag"
                   class="text-sm px-3 py-1 rounded-full"
-                  :style="{ 
-                    backgroundColor: 'var(--color-primary)' + '15',
+                  :style="{
+                    backgroundColor: 'color-mix(in srgb, var(--color-primary) 15%, transparent)',
                     color: 'var(--color-primary)'
                   }">
               {{ tag }}
@@ -96,7 +97,7 @@
         </header>
 
         <!-- Post content with enhanced prose styles -->
-        <div class="prose prose-lg max-w-none" v-html="post.content"></div>
+        <div class="prose prose-lg max-w-none" v-html="post.content" @click="openLightbox"></div>
         
         <!-- Post footer -->
         <footer class="mt-16 pt-8 border-t" 
@@ -145,6 +146,26 @@
         </footer>
       </article>
     </div>
+
+    <!-- Lightbox: a post image at full size. Pinch to zoom on a phone. -->
+    <Teleport to="body">
+      <div v-if="lightbox"
+           class="lightbox"
+           role="dialog"
+           aria-modal="true"
+           :aria-label="lightbox.alt || 'Image'"
+           @click="closeLightbox">
+        <button class="lightbox-close" aria-label="Close" @click.stop="closeLightbox">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        <div class="lightbox-frame">
+          <img :src="lightbox.src" :alt="lightbox.alt">
+        </div>
+        <p v-if="lightbox.caption" class="lightbox-caption" v-html="lightbox.caption"></p>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -186,16 +207,44 @@ const formatDate = (dateString) => {
   })
 }
 
+// Lightbox for post images. One click handler on the content (it is v-html,
+// so the images have no bindings of their own) opens whichever image was hit.
+const lightbox = ref(null)
+
+const onLightboxKey = (e) => {
+  if (e.key === 'Escape') closeLightbox()
+}
+
+const openLightbox = (e) => {
+  const img = e.target.closest('figure img')
+  if (!img) return
+  lightbox.value = {
+    src: img.currentSrc || img.src,
+    alt: img.alt,
+    caption: img.closest('figure').querySelector('figcaption')?.innerHTML || ''
+  }
+  document.documentElement.style.overflow = 'hidden'
+  window.addEventListener('keydown', onLightboxKey)
+}
+
+const closeLightbox = () => {
+  lightbox.value = null
+  document.documentElement.style.overflow = ''
+  window.removeEventListener('keydown', onLightboxKey)
+}
+
+onBeforeUnmount(closeLightbox)
+
 // Get full post URL for sharing
 const getPostUrl = () => {
-  const baseUrl = config.public.siteUrl || 'https://816tech.com'
+  const baseUrl = config.public.siteUrl
   return `${baseUrl}/blog/${slug}`
 }
 
 // Enhanced SEO with social media image support
 watchEffect(() => {
   if (post.value) {
-    const baseUrl = config.public.siteUrl || 'https://816tech.com'
+    const baseUrl = config.public.siteUrl
     
     // Determine the social media image
     // Priority: post.image -> default blog card
@@ -437,6 +486,67 @@ watchEffect(() => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/*
+ * Figures are wider than the text column, so screenshots get room on a wide
+ * screen while paragraphs keep a readable line length. Tapping one opens the
+ * lightbox (see openLightbox).
+ */
+.prose figure {
+  width: min(70rem, calc(100vw - 2rem));
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 2.5em 0;
+}
+
+.prose figure img {
+  display: block;
+  width: 100%;
+  margin: 0;
+  cursor: zoom-in;
+}
+
+.prose figcaption {
+  max-width: 48rem;
+  margin: 0.875em auto 0;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--color-content-tertiary);
+}
+
+.prose figcaption code {
+  font-size: 0.8125rem;
+}
+
+/* A # link beside each heading, shown on hover or keyboard focus */
+.prose .heading-anchor {
+  margin-left: 0.4em;
+  border-bottom: none;
+  color: var(--color-content-tertiary);
+  font-weight: 400;
+  opacity: 0;
+  text-decoration: none;
+}
+
+.prose h2:hover .heading-anchor,
+.prose h3:hover .heading-anchor,
+.prose h4:hover .heading-anchor,
+.prose .heading-anchor:focus {
+  opacity: 1;
+}
+
+.prose .heading-anchor:hover {
+  background: none;
+  color: var(--color-primary);
+}
+
+/* Jumping to a heading leaves room for the sticky site header */
+.prose [id] {
+  scroll-margin-top: 6rem;
+}
+
 /* Horizontal rules */
 .prose hr {
   border: none;
@@ -495,6 +605,86 @@ watchEffect(() => {
 
 .prose sub {
   bottom: -0.25em;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3.5rem 1rem 1.5rem;
+  background: rgba(2, 6, 23, 0.97);
+  backdrop-filter: blur(6px);
+  cursor: zoom-out;
+}
+
+.lightbox-frame {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  max-height: calc(100% - 4rem);
+  min-height: 0;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/*
+ * On a phone a wide screenshot fitted to the screen is no bigger than it was
+ * in the post. Size it by height instead and let it scroll sideways, so a
+ * 1920px screenshot reads at about 1200px; pinch zoom still works on top.
+ */
+@media (max-width: 640px) {
+  .lightbox-frame {
+    justify-content: flex-start;
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior: contain;
+  }
+
+  .lightbox img {
+    width: auto;
+    height: 70vh;
+    max-width: none;
+    max-height: none;
+    margin: 0 auto;
+  }
+}
+
+.lightbox-caption {
+  max-width: 48rem;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: center;
+  color: #cbd5e1;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 /* Share buttons */

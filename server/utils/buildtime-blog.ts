@@ -35,7 +35,8 @@ async function extractSlugFromFile(filename: string): Promise<string | null> {
     // Parse frontmatter only (no need to parse full markdown)
     const { data } = matter(fileContents)
     
-    // Return slug if it exists, otherwise null
+    // Return slug if it exists, otherwise null. Drafts are never prerendered.
+    if (data.draft) return null
     return data.slug || null
   } catch (error) {
     console.error(`[buildtime-blog] Error extracting slug from ${filename}:`, error)

@@ -16,6 +16,12 @@
 // Initialize theme on app startup
 const { initTheme } = useTheme()
 
+const route = useRoute()
+const config = useRuntimeConfig()
+const canonicalUrl = computed(() =>
+  config.public.siteUrl + (route.path === '/' ? '' : route.path.replace(/\/$/, ''))
+)
+
 // Initialize theme when app mounts
 onMounted(() => {
   initTheme()
@@ -28,6 +34,9 @@ useHead({
   },
   link: [
     { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    // Each page is its own canonical URL. A single site-wide canonical told
+    // search engines every blog post was a copy of the homepage.
+    { rel: 'canonical', href: canonicalUrl },
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }
   ],

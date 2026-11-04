@@ -71,7 +71,7 @@ useSeoMeta({
   ogImage: '/images/816tech-og-image.jpg',
   ogImageWidth: '1200',
   ogImageHeight: '630',
-  ogUrl: 'https://816tech.com',
+  ogUrl: 'https://www.816tech.com',
   ogType: 'website',
   ogSiteName: '816tech',
   ogLocale: 'en_US',
