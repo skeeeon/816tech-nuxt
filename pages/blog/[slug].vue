@@ -1,6 +1,8 @@
 <template>
   <div class="blog-post-page py-16">
-    <div class="container mx-auto px-4">
+    <!-- Full width rather than .container, so the table of contents has the
+         margin to sit in on a wide screen -->
+    <div class="mx-auto px-4">
       <!-- Loading state -->
       <div v-if="pending" class="min-h-[60vh] flex items-center justify-center">
         <div class="text-center">
@@ -43,8 +45,24 @@
       </div>
 
       <!-- Post content -->
-      <!-- A text column of about 75 characters; figures widen past it -->
-      <article v-else-if="post" class="max-w-3xl mx-auto">
+      <div v-else-if="post" class="post-layout">
+        <!-- Table of contents in the left margin on wide screens -->
+        <aside v-if="toc.length >= 3" class="post-toc" aria-label="On this page">
+          <nav class="post-toc-inner">
+            <p class="post-toc-title">On this page</p>
+            <ul>
+              <li v-for="item in toc" :key="item.id">
+                <a :href="`#${item.id}`"
+                   :class="{ active: item.id === activeSection, nested: item.depth > tocTopDepth }">
+                  {{ item.text }}
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+
+      <!-- A text column of about 85 characters at every width; figures widen past it -->
+      <article class="post-column">
         <!-- Post header -->
         <header class="mb-12">
           <!-- Back to blog link - use regular anchor for full page load -->
@@ -145,6 +163,7 @@
           </div>
         </footer>
       </article>
+      </div>
     </div>
 
     <!-- Lightbox: a post image at full size. Pinch to zoom on a phone. -->
@@ -206,6 +225,37 @@ const formatDate = (dateString) => {
     timeZone: 'UTC'
   })
 }
+
+// Table of contents. Posts head their sections with ## or ###, so nesting is
+// relative to the shallowest level the post uses.
+const toc = computed(() => post.value?.toc || [])
+const tocTopDepth = computed(() => Math.min(...toc.value.map(item => item.depth)))
+const activeSection = ref('')
+
+// The current section is the last heading above a line 30% down the screen.
+// A scroll handler rather than an IntersectionObserver: dragging the scrollbar
+// can carry a heading across an observer's band without it ever firing.
+let headings = []
+let frame = 0
+const updateActiveSection = () => {
+  frame = 0
+  const line = window.innerHeight * 0.3
+  const current = headings.filter(h => h.getBoundingClientRect().top < line).pop()
+  activeSection.value = current ? current.id : ''
+}
+const onScroll = () => {
+  if (!frame) frame = requestAnimationFrame(updateActiveSection)
+}
+onMounted(() => {
+  if (toc.value.length < 3) return
+  headings = toc.value.map(item => document.getElementById(item.id)).filter(Boolean)
+  window.addEventListener('scroll', onScroll, { passive: true })
+  updateActiveSection()
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  cancelAnimationFrame(frame)
+})
 
 // Lightbox for post images. One click handler on the content (it is v-html,
 // so the images have no bindings of their own) opens whichever image was hit.
@@ -605,6 +655,116 @@ watchEffect(() => {
 
 .prose sub {
   bottom: -0.25em;
+}
+
+/*
+ * Post layout. The text column keeps about 85 characters a line at every
+ * width; on a big screen the type and the column grow together, so the page
+ * fills out without the lines getting longer.
+ */
+.post-column {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 1280px) {
+  .post-column {
+    max-width: 49rem;
+  }
+
+  .prose {
+    font-size: 1.1875rem;
+  }
+
+  .prose figcaption {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .post-column {
+    max-width: 52rem;
+  }
+
+  .prose {
+    font-size: 1.25rem;
+  }
+}
+
+/*
+ * Table of contents, in the left margin once there is room for it beside a
+ * figure: figures overhang the column by 9rem, and the 10.5rem gap keeps the
+ * sticky list clear of them as they scroll past.
+ */
+.post-toc {
+  display: none;
+}
+
+@media (min-width: 1680px) {
+  .post-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 52rem minmax(0, 1fr);
+    column-gap: 10.5rem;
+  }
+
+  .post-layout .post-column {
+    grid-column: 2;
+    max-width: none;
+    margin: 0;
+  }
+
+  .post-toc {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    width: 14rem;
+  }
+}
+
+.post-toc-inner {
+  position: sticky;
+  top: 7rem;
+  max-height: calc(100vh - 9rem);
+  overflow-y: auto;
+}
+
+.post-toc-title {
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-content-tertiary);
+}
+
+.post-toc ul {
+  border-left: 1px solid var(--color-border-primary);
+}
+
+.post-toc a {
+  display: block;
+  margin-left: -1px;
+  padding: 0.3rem 0 0.3rem 0.875rem;
+  border-left: 2px solid transparent;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--color-content-tertiary);
+}
+
+.post-toc a.nested {
+  padding-left: 1.625rem;
+  font-size: 0.8125rem;
+}
+
+.post-toc a:hover {
+  color: var(--color-content-primary);
+}
+
+.post-toc a.active {
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 500;
 }
 
 /* Lightbox */

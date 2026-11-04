@@ -18,13 +18,19 @@ import { getImageSize } from './image-size'
  */
 function configureMarked() {
   const renderer = new marked.Renderer()
-  
+
+  // The post's sections, for the table of contents beside the text
+  const toc = []
+
   // Customize heading rendering to add IDs for anchor links. The id is still
   // built from the raw text so existing #links keep working; the content is
   // rendered, so `code` and *emphasis* in a heading no longer show their markup.
   renderer.heading = function({ text, depth, tokens }) {
     const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
     const content = this.parser.parseInline(tokens)
+    if (depth === 2 || depth === 3) {
+      toc.push({ id: escapedText, depth, text: text.replace(/[`*_]/g, '') })
+    }
     const anchor = depth > 1
       ? `<a class="heading-anchor" href="#${escapedText}" aria-label="Link to this section">#</a>`
       : ''
@@ -86,6 +92,8 @@ function configureMarked() {
     smartypants: true,
     xhtml: false
   })
+
+  return { toc }
 }
 
 /**
@@ -124,8 +132,8 @@ function wrapFigures(html) {
  * Parse markdown string to HTML
  */
 function parseMarkdown(markdown) {
-  configureMarked()
-  return wrapFigures(marked.parse(markdown))
+  const { toc } = configureMarked()
+  return { html: wrapFigures(marked.parse(markdown)), toc }
 }
 
 /**
@@ -165,7 +173,7 @@ async function readPostFile(filename) {
     const { data, content } = matter(fileContents)
     
     // Parse markdown to HTML
-    const htmlContent = parseMarkdown(content)
+    const { html: htmlContent, toc } = parseMarkdown(content)
     
     // Calculate reading time
     const readingTime = getReadingTime(content)
@@ -181,6 +189,7 @@ async function readPostFile(filename) {
       imageAlt: data.imageAlt || data.title,  // Image alt text for accessibility
       draft: Boolean(data.draft),
       content: htmlContent,
+      toc,
       readingTime
     }
   } catch (error) {
