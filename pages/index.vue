@@ -3,8 +3,10 @@
     <HeroSection />
     <SolutionsSection />
     <ApproachSection />
-    <AboutSection />
-    
+
+    <!-- Contact comes right after "How a Job Goes", when a reader is most
+         ready to call. About follows for anyone who wants the story first;
+         the footer below it carries the phone number and email. -->
     <!-- Enhanced Contact section with proper styling -->
     <section id="contact" class="section bg-blue-600 text-white">
       <div class="container mx-auto px-4 text-center">
@@ -36,6 +38,8 @@
         </div>
       </div>
     </section>
+
+    <AboutSection />
   </div>
 </template>
 

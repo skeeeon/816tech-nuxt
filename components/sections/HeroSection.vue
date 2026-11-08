@@ -1,6 +1,6 @@
 <template>
   <section 
-    class="hero-section py-16 sm:py-20 md:py-28 lg:py-32 relative overflow-hidden"
+    class="hero-section py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden"
   >
     <!-- Background image -->
     <div class="absolute inset-0 z-0">
@@ -37,9 +37,12 @@
     <!-- Content -->
     <div class="container mx-auto px-4 relative z-20">
       <div class="max-w-4xl">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight text-white">
-          Technology Integration<br>
-          <span class="text-blue-400">Built on Systems You Own</span>
+        <!-- Line height rides on each size (/tight): text-5xl and text-6xl set
+             line-height 1 themselves, which overrode a separate leading-tight
+             and crowded the two lines together on desktop. -->
+        <h1 class="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight lg:text-6xl/tight font-bold mb-4 sm:mb-6 text-white text-balance">
+          Technology Integration
+          <span class="block text-blue-400">Built on Systems You Own</span>
         </h1>
         <p class="text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl text-gray-200">
           A Kansas City integrator for physical security, networks, and the software that connects
@@ -90,10 +93,9 @@ const { scrollToSection, navigateToContact } = useNavigation()
   max-width: 1280px;
 }
 
-/* Hero section specific styles */
-.hero-section {
-  min-height: 600px;
-}
+/* No min-height: the padding and the content set the hero's height. A fixed
+   600/700px floor left empty skyline under the buttons and ignored any
+   padding change. */
 
 /* Light variant button for better contrast on dark background */
 .btn-secondary-light {
@@ -113,12 +115,5 @@ const { scrollToSection, navigateToContact } = useNavigation()
 /* Ensure proper image loading and display */
 .hero-section img {
   filter: brightness(0.9);
-}
-
-/* Media query for larger screens */
-@media (min-width: 768px) {
-  .hero-section {
-    min-height: 700px;
-  }
 }
 </style>

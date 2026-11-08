@@ -234,6 +234,99 @@ body {
   }
 }
 
+/* Tighter vertical padding for a section that follows the hero directly. */
+.section-tight {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-tight {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-tight {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/*
+ * Plain section header: a left-aligned title with a rule underneath, on the
+ * same edge as the content below it.
+ *
+ *   <header class="section-header">
+ *     <h2 class="section-title">What we do</h2>
+ *   </header>
+ */
+.section-header {
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.section-header .section-title {
+  margin: 0;
+  text-align: left;
+}
+
+/*
+ * Inline lead-in section header: one run of left-aligned text at one size.
+ * The title is bold and ends with a period; the subtitle continues it in the
+ * muted color; a rule underneath closes the header. The title has to read as
+ * the start of a sentence. Keep the space between the two tags on one line
+ * ({{ ' ' }} in Vue): Vue drops whitespace between tags when it holds a
+ * newline, which runs the words together.
+ *
+ *   <header class="section-header-inline">
+ *     <h2 class="section-title">What we do.</h2>{{ ' ' }}
+ *     <p class="section-subtitle">We start with…</p>
+ *   </header>
+ */
+.section-header-inline {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  text-align: left;
+  text-wrap: balance;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+@media (min-width: 640px) {
+  .section-header-inline {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-header-inline {
+    font-size: 1.75rem;
+    line-height: 1.35;
+  }
+}
+
+.section-header-inline .section-title,
+.section-header-inline .section-subtitle {
+  display: inline;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  max-width: none;
+  text-align: inherit;
+}
+
+.section-header-inline .section-title {
+  font-weight: 700;
+}
+
+.section-header-inline .section-subtitle {
+  font-weight: 500;
+}
+
 /* Utility classes */
 .theme-transition {
   transition-property: background-color, border-color, color, fill, stroke;

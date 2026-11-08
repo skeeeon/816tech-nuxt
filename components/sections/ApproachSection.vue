@@ -132,28 +132,9 @@
           </div>
         </div>
       </div>
-      
-      <!-- Enhanced call to action -->
-      <div class="text-center mt-16 md:mt-20">
-        <div class="max-w-3xl mx-auto p-8 rounded-2xl"
-             :style="{ backgroundColor: 'var(--color-surface-secondary)' }">
-          <h3 class="text-2xl font-semibold mb-4" 
-              :style="{ color: 'var(--color-content-primary)' }">
-            Want a number for your job?
-          </h3>
-          <p class="text-base mb-8 leading-relaxed"
-             :style="{ color: 'var(--color-content-secondary)' }">
-            Tell us what you need and we'll come look at it. Scoping the job and quoting it
-            don't cost anything.
-          </p>
-          <button
-            @click="navigateToContact('approach-discovery-call')"
-            class="btn btn-primary inline-flex items-center text-lg px-8 py-4">
-            <CalendarIcon class="w-5 h-5 mr-3" />
-            Request a meeting
-          </button>
-        </div>
-      </div>
+      <!-- No call-to-action card here: the Contact section follows this one
+           directly on the home page and says the same thing ("scoping the job
+           and quoting it are free"). -->
     </div>
   </section>
 </template>
@@ -176,12 +157,8 @@ import {
   CheckIcon,
   CubeIcon,
   DocumentTextIcon,
-  LockOpenIcon,
-  CalendarIcon
+  LockOpenIcon
 } from '@heroicons/vue/24/outline'
-
-// Use centralized navigation logic
-const { navigateToContact } = useNavigation()
 
 // Three-phase methodology with enhanced styling
 // Kept the three-phase structure; replaced the abstractions. Every "deliverable"

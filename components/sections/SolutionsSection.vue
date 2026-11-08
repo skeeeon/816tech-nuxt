@@ -1,15 +1,16 @@
 <template>
-  <section id="solutions" class="section" 
+  <section id="solutions" class="section section-tight"
            :style="{ backgroundColor: 'var(--color-surface-primary)' }">
     <div class="container mx-auto px-4">
-      <h2 class="section-title text-center">What We Do</h2>
-      <p class="section-subtitle text-center">
-        We start with the software and the integration, then handle the physical systems that
-        depend on it. Access control and cameras are the specialty, and we service equipment
-        another company installed.
-      </p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 md:mt-16">
+      <!-- Heading only: the cards speak for themselves. The subtitle that sat
+           here restated the hero (software first, access control and video
+           deepest) and the cards (service on others' installs). The heading
+           stays as the landmark the nav's "Solutions" link lands on. -->
+      <header class="section-header">
+        <h2 class="section-title">What we do</h2>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div v-for="(solution, index) in solutions" :key="`solution-${index}`" 
              class="solution-card group">
           
