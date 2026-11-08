@@ -1,15 +1,22 @@
 <template>
+  <!-- Lighter background than What we do above it, so the two sections don't
+       run together; the benefit cards below flip to the darker surface. -->
   <section id="approach" class="section"
-           :style="{ backgroundColor: 'var(--color-surface-primary)' }">
+           :style="{ backgroundColor: 'var(--color-surface-secondary)' }">
     <div class="container mx-auto px-4">
-      <h2 class="section-title text-center">How a Job Goes</h2>
-      <p class="section-subtitle text-center">
-        Three steps, with something concrete delivered at the end of each one. The process is
-        the same for eight doors, a camera retrofit, or a software integration.
-      </p>
-      
+      <!-- The subtitle stays because it says what the steps can't: the same
+           process covers jobs of every size. "Three steps" was dropped; the
+           numbered steps below show that themselves. -->
+      <header class="section-header">
+        <h2 class="section-title">How a Job Goes</h2>
+        <p class="section-subtitle">
+          The same process for eight doors, a camera retrofit, or a software integration, with
+          something concrete delivered at the end of each step.
+        </p>
+      </header>
+
       <!-- Enhanced three phase methodology -->
-      <div class="relative mt-12 md:mt-16">
+      <div class="relative mt-10 md:mt-12">
         <!-- Progress line background (desktop only) -->
         <div class="progress-track hidden lg:block absolute top-[30px] h-1">
           <!-- Background line -->
@@ -101,16 +108,16 @@
       </div>
       
       <!-- Enhanced why this approach works -->
-      <div class="mt-20 md:mt-24">
-        <div class="max-w-5xl mx-auto text-center">
-          <h3 class="text-2xl md:text-3xl font-bold mb-8" 
+      <div class="mt-12 md:mt-16">
+        <div>
+          <h3 class="text-2xl md:text-3xl font-bold mb-6"
               :style="{ color: 'var(--color-content-primary)' }">
             What You Get Working With Us
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div v-for="(benefit, index) in approachBenefits" :key="`benefit-${index}`" 
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div v-for="(benefit, index) in approachBenefits" :key="`benefit-${index}`"
                  class="approach-benefit p-6 rounded-xl"
-                 :style="{ backgroundColor: 'var(--color-surface-secondary)' }">
+                 :style="{ backgroundColor: 'var(--color-surface-primary)' }">
               <div class="benefit-icon-container mb-6">
                 <div class="benefit-icon" 
                      :style="{ 

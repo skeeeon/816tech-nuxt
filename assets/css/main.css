@@ -255,11 +255,17 @@ body {
 }
 
 /*
- * Plain section header: a left-aligned title with a rule underneath, on the
- * same edge as the content below it.
+ * Section header for content sections: a left-aligned title, an optional
+ * muted subtitle directly beneath it, and a rule underneath, all on the same
+ * edge as the content below. Content sections use this; the Contact band
+ * stays centered on purpose, so the one place the page asks for something
+ * looks different from the rest.
+ *
+ * Add a subtitle only when it says something the content below does not.
  *
  *   <header class="section-header">
- *     <h2 class="section-title">What we do</h2>
+ *     <h2 class="section-title">How a Job Goes</h2>
+ *     <p class="section-subtitle">…</p>
  *   </header>
  */
 .section-header {
@@ -271,6 +277,13 @@ body {
 .section-header .section-title {
   margin: 0;
   text-align: left;
+}
+
+.section-header .section-subtitle {
+  margin: 0.5rem 0 0;
+  max-width: 48rem;
+  text-align: left;
+  text-wrap: pretty;
 }
 
 /*

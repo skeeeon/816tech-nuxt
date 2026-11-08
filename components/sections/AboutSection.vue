@@ -2,15 +2,16 @@
   <section id="about" class="section"
            :style="{ backgroundColor: 'var(--color-surface-secondary)' }">
     <div class="container mx-auto px-4">
-      <h2 class="section-title text-center">About 816tech</h2>
-      <p class="section-subtitle text-center">
-        A Kansas City technology integrator. We design the systems, write the software that
-        connects them, and stay on the hook for both.
-      </p>
-      
+      <!-- Heading only. The subtitle that sat here ("a Kansas City integrator…
+           we write the software…") was the hero's third retelling, and both
+           columns below open with headings of their own. -->
+      <header class="section-header">
+        <h2 class="section-title">About 816tech</h2>
+      </header>
+
       <!-- Story and differentiators side by side; each column carries a heading so the
            two align at the top. -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 mt-12 md:mt-16">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
         <!-- Left column: how we got here -->
         <div>
           <h3 class="text-2xl font-bold mb-6"
