@@ -1,6 +1,6 @@
 ---
 title: "One Row Is the Device, Its Login, and Its Keys"
-date: "2026-10-19"
+date: "2026-11-11"
 author: "Brian Miller"
 slug: "stone-age-platform"
 excerpt: "An MIT-licensed multi-tenant IoT platform where a device's inventory row, its NATS user, and its Nebula certificate are the same record"
@@ -12,7 +12,7 @@ imageAlt: "Stone-Age.io platform"
 
 NATS is so hot right now. We keep finding it in places it wasn't a year ago, and more of the people showing up are putting real workloads on it rather than kicking the tires. Maybe that's just the algorithm feeding us back our own echo chamber. Either way, we love to see it.
 
-Last November we [wrote up the pattern underneath this](https://www.816tech.com/blog/pocketbase-nats-pattern): PocketBase minting NATS account and user credentials straight from database records. That post ended by saying the libraries were the foundation of a platform we were building. This is that platform.
+In November last year we [wrote up the pattern underneath this](https://www.816tech.com/blog/pocketbase-nats-pattern): PocketBase minting NATS account and user credentials straight from database records. That post ended by saying the libraries were the foundation of a platform we were building. This is that platform.
 
 [Stone-Age.io](https://stone-age.io) is an MIT-licensed multi-tenant control plane for fleets of equipment and the software that runs alongside it. The equipment we had in mind fills a building or a warehouse: video servers, access control panels, cameras, door readers, freezer probes, power meters, and the small Linux boxes at each site doing the actual talking. Integrators and managed service providers run one Stone-Age.io deployment with a tenant per customer. If the fleet is your own, it's the same deployment with one tenant in it.
 
