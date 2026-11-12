@@ -18,7 +18,7 @@ Last November we [wrote up the pattern underneath this](https://www.816tech.com/
 
 ![A cold-chain dashboard in the demo console with live freezer temperatures, reefer gauges, a site map and shipment events](/images/blog/stone-age-cold-chain-dashboard.png)
 
-*A tenant in the demo: a cold-chain distributor's freezers, reefers, sites and shipment events, live on its own NATS account. The dashboard is ours, built in the console on top of the seeded records; running the same demo is covered at the end.*
+*A tenant in the demo: a cold-chain distributor's freezers, reefers, sites and shipment events, live on its own NATS account. The dashboard ships with the demo as a console export you can import; running the same demo is covered at the end.*
 
 One row in its inventory is the thing's record, its login, its messaging identity and its certificate on a private network, all at once. If you keep an asset inventory in one system, a device registry in another, certificates in a third, and a job somewhere holding the three together, you already know the problem this is built to remove.
 
@@ -68,7 +68,7 @@ The agent on a box like that one never gets a credential file copied to it. It s
 The platform is built in layers, and each layer is a complete working system by itself. You can stop at any of them:
 
 1. A multi-tenant inventory. Things, Locations, types, a REST API, a console, floor plans and maps. No messaging, no mesh.
-2. Identities. Organizations get NATS accounts and Nebula CAs, Things get users and host certs, and you write your own consumers.
+2. Identities. Organizations get NATS accounts and Nebula CAs, Things get users and host certs. The console's dashboards arrive with them, because a browser is just another NATS client: eighteen widget types over a WebSocket, subscribed as the member looking at them, including a location's floor plan with its things as live markers. Past that, you write your own consumers.
 3. A contract layer. Thing Types declare a subject prefix, and their operations declare a capability and a suffix, so another team can work out a device's subjects from the records themselves.
 4. Everything that consumes the bus: rule-router, the agent, a stream processor, Telegraf into whatever TSDB you like.
 
@@ -84,7 +84,7 @@ PocketBase is what the control plane is built on: identity, inventory, SQLite, R
 
 NATS is the bus, and it carries more than that word suggests. Pub/sub and request/reply, native MQTT for devices that speak nothing else, JetStream for anything that has to survive a restart, KV and object buckets, a microservice framework in the clients with discovery and stats built in, and leaf nodes so a site keeps running when the WAN drops. A broker, a cache, a job queue and a service registry collapse into one binary you can run on a Raspberry Pi. That's why we build on NATS rather than on a broker and three other things we'd also have to run.
 
-What we've built on top is the glue holding everything together: the console; [rule-router](https://www.816tech.com/blog/rule-router-six-months-later) for the YAML automation across NATS, HTTP and cron; the `stone` CLI for pulling a tenant's records into YAML you can diff and apply from CI; and the agent, which is how any of this reaches edge hardware. It's a service on Linux, Windows or FreeBSD that can run the device's Nebula host in process and, on a site gateway, host the leaf node too.
+What we've built on top is the glue holding everything together: the console; [rule-router](https://www.816tech.com/blog/rule-router-six-months-later) for the YAML automation across NATS, HTTP and cron; the `stone` CLI for pulling a tenant's records into YAML you can diff and apply from CI; and the agent, which is how any of this reaches edge hardware. It's a service on Linux, Windows or FreeBSD that can run the device's Nebula host in process and, on a site gateway, host the leaf node too. Beside it are a few small services that live inside a tenant's account: watchdog, which reports when a thing stops sending, and creds-keeper, which pulls a service's `.creds` from the platform the way the agent does, so Regenerate and Revoke reach a process that isn't the agent.
 
 ![Terminal recording of the stone CLI: switching to a tenant, listing things, a live NATS subscription, a KV read, and pulling the tenant to YAML](/images/blog/stone-cli.gif)
 
@@ -131,6 +131,8 @@ That builds three tenants, a type taxonomy, locations on a real map, a fleet of 
 
 The seed writes records, not traffic, so dashboards stay empty until something publishes. The rule-router files in [`demo/rules/`](https://github.com/stone-age-io/platform/tree/main/demo/rules) put live telemetry on the seeded subjects. Run one rule-router per organization, pointed at that organization's folder: each tenant is its own NATS account, so one process can't publish for all three. That's what drives the cold-chain dashboard at the top.
 
+The dashboard itself is a console export in [`demo/dashboards/`](https://github.com/stone-age-io/platform/tree/main/demo/dashboards). Open Dashboard in the console, then Import on the Local tab, and the screenshot at the top is what you get.
+
 If you'd rather not download anything, there's a single container that runs `init` and `serve --nats` on first boot. The [docs](https://docs.stone-age.io/doc/platform/getting-started) have the one-line `docker run`.
 
 It's early, and we'd rather hear where it breaks than have it starred. If you run NATS in production and think we've got the account provisioning wrong, that's the feedback we want most.
@@ -139,6 +141,7 @@ If you'd rather see it running before you install anything, [ask us for a read-o
 
 * Platform: [github.com/stone-age-io/platform](https://github.com/stone-age-io/platform)
 * Agent: [github.com/stone-age-io/agent](https://github.com/stone-age-io/agent)
+* Services: [github.com/stone-age-io/services](https://github.com/stone-age-io/services)
 * Rule engine: [github.com/skeeeon/rule-router](https://github.com/skeeeon/rule-router)
 * CLI: [github.com/stone-age-io/stone-cli](https://github.com/stone-age-io/stone-cli)
 * Docs: [docs.stone-age.io](https://docs.stone-age.io)
